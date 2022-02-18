@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "199030687804",
+    "project_id": "leco-ace60",
+    "storage_bucket": "leco-ace60.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:199030687804:android:1aaa648f68c1c5d5771b39",
+        "android_client_info": {
+          "package_name": "com.reve74_leco.leco_flutter"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "199030687804-4dit02l8tt8kdq90pa86kvjkfvqimen4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDQeZr-FOssXWOae3kZSQd_aYatpVyvmEM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "199030687804-4dit02l8tt8kdq90pa86kvjkfvqimen4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
