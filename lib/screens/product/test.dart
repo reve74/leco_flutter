@@ -17,7 +17,6 @@ class _TestState extends State<Test> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     getCurrentUser();
   }
