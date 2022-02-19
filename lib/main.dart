@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:leco_flutter/screens/login/login_screen.dart';
+import 'package:firebase_core/firebase_core.dart';
 
-void main() {
+void main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(); // 비동기 방식으로 initializeApp 메서드 실행
   runApp(const MyApp());
 }
 
