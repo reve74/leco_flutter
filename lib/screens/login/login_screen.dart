@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -143,6 +144,8 @@ class _LoginScreenState extends State<LoginScreen> {
                           final newUser =
                               await _authentication.signInWithEmailAndPassword(
                                   email: userEmail, password: userPassword);
+
+
                           if (newUser.user != null) {
                             Get.snackbar(
                               'LECO',
@@ -150,10 +153,10 @@ class _LoginScreenState extends State<LoginScreen> {
                               backgroundColor: Colors.white,
                               duration: const Duration(seconds: 2),
                             );
-                            Get.to(() => Test());
                             setState(() {
                               showSpinner = false;
                             });
+                            Get.to(() => Test());
                           }
                         } catch (e) {
                           print(e);
