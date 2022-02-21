@@ -24,7 +24,7 @@ class SignupImagewithText extends StatelessWidget {
                   bottomRight: Radius.circular(30),
                 ),
                 child: Image.asset(
-                  'images/login_img.jpg',
+                  'assets/images/login_img.jpg',
                   fit: BoxFit.cover,
                 ),
               ),

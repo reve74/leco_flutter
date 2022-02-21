@@ -1,10 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:leco_flutter/constraints.dart';
 import 'package:leco_flutter/screens/login/components/signupimage_with_text.dart';
-import 'package:leco_flutter/screens/login/login_screen.dart';
-import 'package:leco_flutter/screens/product/test.dart';
+import 'package:leco_flutter/screens/login/signgin_screen.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'components/login_textformfield.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -144,8 +142,8 @@ class _SignupScreenState extends State<SignupScreen> {
 
                           await FirebaseFirestore.instance
                               .collection('user')
-                              .doc(newUser.user!.uid)
-                              .set({'userName': userName, 'email': userEmail});
+                              .doc(newUser.user!.email) //newUser.user!.uid
+                              .set({'userName': userName, 'userEmail': userEmail, 'userPassword' : userPassword});
 
                           if(newUser.user != null) {
                             Get.snackbar('LECO', '회원가입이 완료되었습니다!',
@@ -154,16 +152,28 @@ class _SignupScreenState extends State<SignupScreen> {
                             setState(() {
                               showSpinner = false;
                             });
-                            Get.to(()=>LoginScreen());
+                            Get.to(()=>SignInScreen());
 
                           }
-                        }catch(e){ // 이메일 중복 유효성 검사 기능 추가!
+                        }on FirebaseAuthException catch(e){ // 이메일 중복 유효성 검사 기능 추가!
                           print(e);
                           setState(() {
                             showSpinner = false;
                           });
-                          Get.snackbar('LECO', '회원가입 형식을 확인해주세요!', backgroundColor: Colors.white,
-                            duration: const Duration(seconds: 2),);
+                          if(e.code == 'unknown') {
+                            print('회원가입 형식을 확인해주세요');
+                            Get.snackbar('LECO', '회원가입 형식을 확인해주세요!', backgroundColor: Colors.white,
+                              duration: const Duration(seconds: 2),);
+                          }else if(e.code == 'email-already-in-use'){
+                            print('이미 사용중인 이메일 입니다!');
+                            Get.snackbar('LECO', '이미 사용중인 이메일 입니다!', backgroundColor: Colors.white,
+                              duration: const Duration(seconds: 2),);
+                            print(e.code.toString());
+                          }else {
+                            print(e.code.toString());
+                        }
+                          // Get.snackbar('LECO', '회원가입 형식을 확인해주세요!', backgroundColor: Colors.white,
+                          //   duration: const Duration(seconds: 2),);
                         }
                         // print(userName);
                         // print(userEmail);

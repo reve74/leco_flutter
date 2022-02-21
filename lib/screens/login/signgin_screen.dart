@@ -3,19 +3,21 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:leco_flutter/constraints.dart';
+import 'package:leco_flutter/repository/google_login.dart';
 import 'package:leco_flutter/screens/login/signup_screen.dart';
-import 'package:leco_flutter/screens/product/test.dart';
+import 'package:leco_flutter/screens/main/app.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'components/login_textformfield.dart';
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({Key? key}) : super(key: key);
+class SignInScreen extends StatefulWidget {
+  const SignInScreen({Key? key}) : super(key: key);
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  State<SignInScreen> createState() => _SignInScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _SignInScreenState extends State<SignInScreen> {
+  GoogleLogin googleLogin = GoogleLogin();
   final _formKey = GlobalKey<FormState>();
   final _authentication = FirebaseAuth.instance;
   String userName = '';
@@ -59,7 +61,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             bottomRight: Radius.circular(30),
                           ),
                           child: Image.asset(
-                            'images/login_img.jpg',
+                            'assets/images/login_img.jpg',
                             fit: BoxFit.cover,
                           ),
                         ),
@@ -124,7 +126,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     ],
                   ),
-                  Container(
+                  SizedBox(
                     height: 50,
                     width: 150,
                     child: ElevatedButton(
@@ -145,7 +147,6 @@ class _LoginScreenState extends State<LoginScreen> {
                               await _authentication.signInWithEmailAndPassword(
                                   email: userEmail, password: userPassword);
 
-
                           if (newUser.user != null) {
                             Get.snackbar(
                               'LECO',
@@ -156,9 +157,9 @@ class _LoginScreenState extends State<LoginScreen> {
                             setState(() {
                               showSpinner = false;
                             });
-                            Get.to(() => Test());
+                            Get.to(() => App());
                           }
-                        } catch (e) {
+                        } on FirebaseAuthException catch (e) {
                           print(e);
                           setState(() {
                             showSpinner = false;
@@ -180,8 +181,18 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     ),
                   ),
+                  TextButton(
+                    // 구글 로그인
+                    onPressed: googleLogin.signInWithGoogle,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(20),
+                      child: Image.asset(
+                        'assets/images/google_login.png',
+                        width: 180,
+                      ),
+                    ),
+                  ),
                   Container(
-                    margin: const EdgeInsets.all(kDefaultPadding),
                     padding: const EdgeInsets.all(kDefaultPadding),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,

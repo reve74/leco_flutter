@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:leco_flutter/screens/login/login_screen.dart';
+import 'package:leco_flutter/screens/login/signgin_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
+
+import 'binding/init_binding.dart';
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
@@ -14,10 +16,11 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const GetMaterialApp(
+    return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Leco',
-      home: LoginScreen(),
+      initialBinding: InitBinding(),
+      home: SignInScreen(),
     );
   }
 }
