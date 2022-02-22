@@ -53,7 +53,7 @@ class BottomNavController extends GetxController {
         context: Get.context!,
         builder: (context) => MessagePopUp(
           message: '종료하시겠습니까',
-          title: '시스템',
+          title: 'LECO',
           okCallback: () {
             exit(0);
           },

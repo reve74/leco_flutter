@@ -36,12 +36,13 @@ class _TestState extends State<Test> {
       print(e);
     }
   }
-
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('메인화면'),
+        title: Text(''),
+        centerTitle: true,
         actions: [
           IconButton(
             onPressed: () {

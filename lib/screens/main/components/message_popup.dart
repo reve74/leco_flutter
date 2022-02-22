@@ -25,28 +25,28 @@ class MessagePopUp extends StatelessWidget {
           ClipRRect(
             borderRadius: BorderRadius.circular(6),
             child: Container(
-              width: Get.width * 0.7,
+              width: Get.width * 0.6,
               color: Colors.white,
-              padding: EdgeInsets.symmetric(horizontal: 40, vertical: 15),
+              padding: EdgeInsets.symmetric(horizontal: 30, vertical: 15),
               child: Column(
                 children: [
                   Text(
                     title!,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 17.0,
                       color: Colors.black,
                     ),
                   ),
-                  SizedBox(height: 7,),
+                  const SizedBox(height: 7,),
                   Text(
                     message!,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 14.0,
                       color: Colors.black,
                     ),
                   ),
-                  SizedBox(height: 10,),
+                  const SizedBox(height: 10,),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -54,12 +54,12 @@ class MessagePopUp extends StatelessWidget {
                         onPressed: okCallback, // (){okCallback();} => 키 안먹음
                         child: Text('확인'),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         width: 10.0,
                       ),
                       ElevatedButton(
                         onPressed: cancelCallback,
-                        child: Text('취소'),
+                        child: const Text('취소'),
                         style: ElevatedButton.styleFrom(
                           primary: Colors.grey,
                         ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:leco_flutter/controller/bottom_nav_controller.dart';
+import 'package:leco_flutter/screens/main/test.dart';
 
 import 'components/image_data.dart';
 import 'home.dart';
@@ -14,31 +15,24 @@ class App extends GetView<BottomNavController> {
       // 첫번째 화면에서 뒤로가기 클릭 시 앱 종료 여부 설정 -> 컨트롤러로 관리
       onWillPop: controller.willPopAction,
       child: Obx(
-            () => Scaffold(
+        () => Scaffold(
           body: IndexedStack(
             // 페이지별로 화면 출력
             index: controller.pageIndex.value,
             children: [
-              Home(),
+              const Home(),
               // const Search(),
+              Center(
+                  child: Text(
+                'upload',
+              ),),
               Container(
                 child: Center(
                     child: Text(
-                      'upload',
-                    )),
+                  'activity',
+                ),),
               ),
-              Container(
-                child: Center(
-                    child: Text(
-                      'activity',
-                    )),
-              ),
-              Container(
-                child: Center(
-                    child: Text(
-                      'mypage',
-                    )),
-              ),
+              const Test(),
             ],
           ),
           bottomNavigationBar: BottomNavigationBar(
@@ -62,15 +56,16 @@ class App extends GetView<BottomNavController> {
                   activeIcon: ImageData(IconsPath.activeOn),
                   label: 'home'),
               BottomNavigationBarItem(
-                icon:
-                Container(
-                  width: 30,
-                  height: 30,
-                  decoration: const BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Colors.grey,
-                  ),
-                ),
+                icon:  Icon(Icons.account_circle_rounded),
+                activeIcon: Icon(Icons.account_circle_rounded, color: Colors.black,),
+                // Container(
+                //   width: 30,
+                //   height: 30,
+                //   decoration: const BoxDecoration(
+                //     shape: BoxShape.circle,
+                //     color: Colors.grey,
+                //   ),
+                // ),
                 label: 'home',
               ),
             ],

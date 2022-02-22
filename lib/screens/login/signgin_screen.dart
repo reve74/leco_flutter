@@ -1,11 +1,11 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:leco_flutter/constraints.dart';
-import 'package:leco_flutter/repository/google_login.dart';
 import 'package:leco_flutter/screens/login/signup_screen.dart';
 import 'package:leco_flutter/screens/main/app.dart';
+import 'package:leco_flutter/screens/main/home.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'components/login_textformfield.dart';
 
@@ -17,7 +17,6 @@ class SignInScreen extends StatefulWidget {
 }
 
 class _SignInScreenState extends State<SignInScreen> {
-  GoogleLogin googleLogin = GoogleLogin();
   final _formKey = GlobalKey<FormState>();
   final _authentication = FirebaseAuth.instance;
   String userName = '';
@@ -25,13 +24,65 @@ class _SignInScreenState extends State<SignInScreen> {
   String userPassword = '';
   bool showSpinner = false;
 
+  Future<UserCredential> signInWithGoogle() async {
+    // Trigger the authentication flow
+    final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+
+    if(googleUser != null) {
+      print(googleUser);
+    }
+
+    // Obtain the auth details from the request
+    final GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
+
+    // Create a new credential
+    final credential = GoogleAuthProvider.credential(
+      accessToken: googleAuth?.accessToken,
+      idToken: googleAuth?.idToken,
+    );
+
+    // Once signed in, return the UserCredential
+    return await FirebaseAuth.instance.signInWithCredential(credential);
+  } // 구글 로그인
+
   void _tryValidation() {
     final isValid = _formKey.currentState!.validate();
     print(isValid);
     if (isValid) {
       _formKey.currentState!.save();
     }
-  }
+  } // validation 체크
+
+  void _trySignin() async {
+    try {
+      final newUser = await _authentication.signInWithEmailAndPassword(
+          email: userEmail, password: userPassword);
+
+      if (newUser.user != null) {
+        Get.snackbar(
+          'LECO',
+          '로그인이 완료되었습니다!',
+          backgroundColor: Colors.white,
+          duration: const Duration(seconds: 2),
+        );
+        setState(() {
+          showSpinner = false;
+        });
+        Get.to(() => App());
+      }
+    } on FirebaseAuthException catch (e) {
+      print(e);
+      setState(() {
+        showSpinner = false;
+      });
+      Get.snackbar(
+        'LECO',
+        '이메일 및 비밀번호를 확인해 주세요!',
+        backgroundColor: Colors.white,
+        duration: const Duration(seconds: 2),
+      );
+    }
+  } // signin 메소드
 
   @override
   Widget build(BuildContext context) {
@@ -137,40 +188,12 @@ class _SignInScreenState extends State<SignInScreen> {
                           borderRadius: BorderRadius.circular(20),
                         ),
                       ),
-                      onPressed: () async {
+                      onPressed: () {
                         setState(() {
                           showSpinner = true;
                         });
                         _tryValidation();
-                        try {
-                          final newUser =
-                              await _authentication.signInWithEmailAndPassword(
-                                  email: userEmail, password: userPassword);
-
-                          if (newUser.user != null) {
-                            Get.snackbar(
-                              'LECO',
-                              '로그인이 완료되었습니다!',
-                              backgroundColor: Colors.white,
-                              duration: const Duration(seconds: 2),
-                            );
-                            setState(() {
-                              showSpinner = false;
-                            });
-                            Get.to(() => App());
-                          }
-                        } on FirebaseAuthException catch (e) {
-                          print(e);
-                          setState(() {
-                            showSpinner = false;
-                          });
-                          Get.snackbar(
-                            'LECO',
-                            '이메일 및 비밀번호를 확인해 주세요!',
-                            backgroundColor: Colors.white,
-                            duration: const Duration(seconds: 2),
-                          );
-                        }
+                        _trySignin();
                       },
                       child: const Text(
                         'Sign in',
@@ -183,7 +206,10 @@ class _SignInScreenState extends State<SignInScreen> {
                   ),
                   TextButton(
                     // 구글 로그인
-                    onPressed: googleLogin.signInWithGoogle,
+                    onPressed: () {
+                      signInWithGoogle();
+                      Get.to(const App());
+                    },
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(20),
                       child: Image.asset(
