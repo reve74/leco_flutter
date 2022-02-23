@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:leco_flutter/controller/bottom_nav_controller.dart';
+import 'package:leco_flutter/screens/main/components/homescreen_top.dart';
 import 'package:leco_flutter/screens/main/test.dart';
 
 import 'components/image_data.dart';
@@ -20,7 +21,7 @@ class App extends GetView<BottomNavController> {
             // 페이지별로 화면 출력
             index: controller.pageIndex.value,
             children: [
-              const Home(),
+              Home(),
               // const Search(),
               Center(
                   child: Text(

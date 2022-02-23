@@ -1,20 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:leco_flutter/screens/main/components/homescreen_top.dart';
+import 'package:leco_flutter/screens/main/components/review_card.dart';
 
-import 'components/post_widget.dart';
 
 class Home extends StatelessWidget {
   const Home({Key? key}) : super(key: key);
-
-  Widget _postList() { // 게시물 위젯
-    return Column(
-      children: List.generate(
-        20,
-            (index) => PostWidget(),
-      ).toList(),
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -23,12 +14,16 @@ class Home extends StatelessWidget {
     return SingleChildScrollView(
       child: Column(
         children: [
-          HomeScreenTop(),
-          // ListView(
-          //   children: [
-          //     _postList(),
-          //   ],
-          // ),
+          HomeScreenTop(
+          ),
+          Column(
+            children: List.generate(
+              20,
+              (index) => ReviewCard(
+                number: index,
+              ),
+            ).toList(),
+          ),
         ],
       ),
     );
