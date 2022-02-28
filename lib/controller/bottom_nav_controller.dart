@@ -7,6 +7,7 @@ import 'package:leco_flutter/screens/main/components/message_popup.dart';
 enum PageName { HOME, SEARCH, ACTIVITY, MYPAGE } // 페이지별로 화면 처리
 
 class BottomNavController extends GetxController {
+  static BottomNavController get to => Get.find();
   RxInt pageIndex = 0.obs; // TODO: obs ?
   List<int> bottomHistory = [0]; // 페이지 히스토리를 관리하는 리스트
 

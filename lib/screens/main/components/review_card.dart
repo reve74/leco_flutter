@@ -39,9 +39,7 @@ class _ReviewCardState extends State<ReviewCard> {
   Widget image() {
     return CachedNetworkImage(
         imageUrl:
-            'https://scontent-gmp1-1.cdninstagram.com/v/t51.2885-15/174010856_4093295590728427_4130152430486936423_n.jpg?'
-            'stp=dst-jpg_e35&_nc_ht=scontent-gmp1-1.cdninstagram.com&_nc_cat=107&_nc_ohc=LQE-Av8W6esAX9VPxet&tn=FCP4G1gh97hnN3re&edm=ALQROFkBAAAA&ccb'
-            '=7-4&ig_cache_key=MjU2MDM3MDc2NDIxMTMyODIyNQ%3D%3D.2-ccb7-4&oh=00_AT9nKSmDKnpjTp5wl1yNPLuBDqJAiPWf9M3DlBqUw0MEqA&oe=621D5DF3&_nc_sid=30a2ef');
+            'https://www.lego.com/cdn/cs/set/assets/blt62f99776b13a8e94/10297.png?fit=bounds&format=png&width=1500&height=1500&dpr=1');
   }
 
   Widget _infoDescription() {
@@ -114,17 +112,19 @@ class _ReviewCardState extends State<ReviewCard> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10.0),
             child: Row(
-              children: [ImageData(
-                IconsPath.likeOffIcon,
-                width: 65,
-              ),
+              children: [
+                ImageData(
+                  IconsPath.likeOffIcon,
+                  width: 65,
+                ),
                 const SizedBox(
                   width: 10,
                 ),
                 ImageData(
                   IconsPath.replyIcon,
                   width: 60,
-                ),],
+                ),
+              ],
             ),
           ),
           _infoDescription(),

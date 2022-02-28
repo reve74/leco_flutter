@@ -100,7 +100,7 @@ class _HomeScreenTopState extends State<HomeScreenTop> with TickerProviderStateM
   PreferredSizeWidget _brick() {
     // 탭 위젯
     return PreferredSize(
-      preferredSize: Size.fromHeight(MediaQuery.of(context).size.height * 0.4),
+      preferredSize: Size.fromHeight(MediaQuery.of(context).size.height * 0.8),
       child: Column(
         children: [
           TabBar(
@@ -222,12 +222,12 @@ class _HomeScreenTopState extends State<HomeScreenTop> with TickerProviderStateM
                       height: height * 0.05,
                     ),
                     _brick(),
+                    _body(),
                   ],
                 ),
               ),
             ],
-          ),
-          // _body(),
+          ), // _body(),
         ],
       ),
 

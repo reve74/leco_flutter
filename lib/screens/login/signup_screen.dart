@@ -42,7 +42,8 @@ class _SignupScreenState extends State<SignupScreen> {
           .set({
         'userName': userName,
         'userEmail': userEmail,
-        'userPassword': userPassword
+        'userPassword': userPassword,
+        'uid' : newUser.user!.uid,
       });
 
       if (newUser.user != null) {

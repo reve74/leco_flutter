@@ -27,7 +27,7 @@ class MessagePopUp extends StatelessWidget {
             child: Container(
               width: Get.width * 0.6,
               color: Colors.white,
-              padding: EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+              padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
               child: Column(
                 children: [
                   Text(
@@ -52,7 +52,7 @@ class MessagePopUp extends StatelessWidget {
                     children: [
                       ElevatedButton(
                         onPressed: okCallback, // (){okCallback();} => 키 안먹음
-                        child: Text('확인'),
+                        child: const Text('확인'),
                       ),
                       const SizedBox(
                         width: 10.0,
