@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:leco_flutter/constraints.dart';
+import 'package:leco_flutter/controller/user_controller.dart';
 import 'package:leco_flutter/screens/login/signup_screen.dart';
 import 'package:leco_flutter/screens/main/app.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
@@ -16,33 +16,14 @@ class SignInScreen extends StatefulWidget {
 }
 
 class _SignInScreenState extends State<SignInScreen> {
+  final userController = Get.put(UserController());
+
   final _formKey = GlobalKey<FormState>();
   final _authentication = FirebaseAuth.instance;
   String userName = '';
   String userEmail = '';
   String userPassword = '';
   bool showSpinner = false;
-
-  Future<UserCredential> signInWithGoogle() async {
-    // Trigger the authentication flow
-    final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
-
-    if(googleUser != null) {
-      print(googleUser);
-    }
-
-    // Obtain the auth details from the request
-    final GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
-
-    // Create a new credential
-    final credential = GoogleAuthProvider.credential(
-      accessToken: googleAuth?.accessToken,
-      idToken: googleAuth?.idToken,
-    );
-
-    // Once signed in, return the UserCredential
-    return await FirebaseAuth.instance.signInWithCredential(credential);
-  } // 구글 로그인
 
   void _tryValidation() {
     final isValid = _formKey.currentState!.validate();
@@ -98,6 +79,7 @@ class _SignInScreenState extends State<SignInScreen> {
             },
             child: SingleChildScrollView(
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -118,13 +100,14 @@ class _SignInScreenState extends State<SignInScreen> {
                       ),
                       Container(
                         margin: const EdgeInsets.symmetric(
-                            horizontal: 20, vertical: 10),
+                            horizontal: 40, vertical: 10),
                         child: const Text(
-                          'Welcome to LECO',
+                          'LECO',
                           style: TextStyle(
                               fontSize: 30,
+                              fontFamily: 'Jua',
                               fontWeight: FontWeight.bold,
-                              color: Colors.blueAccent),
+                              color: Colors.black),
                         ),
                       ),
                       Form(
@@ -144,7 +127,7 @@ class _SignInScreenState extends State<SignInScreen> {
                               onSaved: (value) {
                                 userEmail = value;
                               },
-                              text: 'Email',
+                              text: '이메일',
                               icon: Icons.email_outlined,
                               keyboard: TextInputType.emailAddress,
                             ),
@@ -164,7 +147,7 @@ class _SignInScreenState extends State<SignInScreen> {
                               onSaved: (value) {
                                 userPassword = value;
                               },
-                              text: 'Password',
+                              text: '비밀번호',
                               icon: Icons.lock_open_rounded,
                               obscureText: true,
                             ),
@@ -176,9 +159,9 @@ class _SignInScreenState extends State<SignInScreen> {
                       ),
                     ],
                   ),
-                  SizedBox(
+                  Container(
                     height: 50,
-                    width: 150,
+                    padding: const EdgeInsets.symmetric(horizontal: 30),
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         primary: Colors.yellow,
@@ -195,51 +178,71 @@ class _SignInScreenState extends State<SignInScreen> {
                         _trySignin();
                       },
                       child: const Text(
-                        'Sign in',
+                        '로그인',
                         style: TextStyle(
+                          fontFamily: 'Jua',
                           fontSize: 25,
                           color: Colors.black,
                         ),
                       ),
                     ),
                   ),
-                  TextButton(
-                    // 구글 로그인
-                    onPressed: () {
-                      signInWithGoogle();
-                      Get.to(const App());
-                    },
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(20),
-                      child: Image.asset(
-                        'assets/images/google_login.png',
-                        width: 180,
+                  const SizedBox(height: 10,),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          userController.signInWithGoogle();
+                          print('구글로그인');
+                          // Get.to(() => App);
+                        },
+                        child: Image.asset(
+                          'assets/images/google.png',
+                          width: 50,
+                          height: 50,
+                        ),
                       ),
-                    ),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          Get.to(() => App);
+                        },
+                        child: Image.asset(
+                          'assets/images/facebook.png',
+                          width: 50,
+                          height: 50,
+                        ),
+                      ),
+                    ],
                   ),
-                  Container(
-                    padding: const EdgeInsets.all(kDefaultPadding),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Text(
-                          'Don\'t have an account?  ',
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Text(
+                        '계정이 없으신가요? ',
+                        style: TextStyle(
+                          fontFamily: 'Jua',
+                          fontSize: 15,
+                        ),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          Get.to(() => const SignupScreen());
+                        },
+                        child: const Text(
+                          '가입하기',
                           style: TextStyle(
+                            color: Colors.black,
+                            fontFamily: 'Jua',
                             fontSize: 15,
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
-                        GestureDetector(
-                          onTap: () {
-                            Get.to(() => SignupScreen());
-                          },
-                          child: const Text(
-                            'Create',
-                            style: TextStyle(
-                                fontSize: 15, fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ],
               ),

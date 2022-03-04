@@ -23,6 +23,7 @@ class _ReviewCardState extends State<ReviewCard> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           AvatarWidget(
+            type: AvatarType.TYPE3,
             nickName: 'jian_chae',
             thumbPath:
                 'https://scontent-gmp1-1.cdninstagram.com/v/t51.2885-19/271273721_342832727381466_8822539606297120930_n.jpg?stp'

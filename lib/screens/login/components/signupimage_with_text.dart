@@ -47,14 +47,15 @@ class SignupImagewithText extends StatelessWidget {
           ],
         ),
         Container(
-          margin: const EdgeInsets.symmetric(
-              horizontal: 20, vertical: 10),
+          margin: const EdgeInsets.symmetric(horizontal: 40, vertical: 10),
           child: const Text(
-            'Signup to LECO',
+            '회원가입',
             style: TextStyle(
-                fontSize: 30,
-                fontWeight: FontWeight.bold,
-                color: Colors.black),
+              fontFamily: 'Jua',
+              fontSize: 30,
+              fontWeight: FontWeight.bold,
+              color: Colors.blueAccent,
+            ),
           ),
         ),
       ],

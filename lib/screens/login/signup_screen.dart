@@ -102,6 +102,7 @@ class _SignupScreenState extends State<SignupScreen> {
             },
             child: SingleChildScrollView(
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   Column(
                     children: [
@@ -123,7 +124,7 @@ class _SignupScreenState extends State<SignupScreen> {
                               onSaved: (value) {
                                 userName = value;
                               },
-                              text: 'Username',
+                              text: '이름',
                               icon: Icons.account_circle,
                             ),
                             const SizedBox(
@@ -142,7 +143,7 @@ class _SignupScreenState extends State<SignupScreen> {
                               onSaved: (value) {
                                 userEmail = value;
                               },
-                              text: 'Email',
+                              text: '이메일',
                               icon: Icons.email_outlined,
                               keyboard: TextInputType.emailAddress,
                             ),
@@ -162,7 +163,7 @@ class _SignupScreenState extends State<SignupScreen> {
                               onSaved: (value) {
                                 userPassword = value;
                               },
-                              text: 'Password',
+                              text: '비밀번호',
                               icon: Icons.lock_open_rounded,
                               obscureText: true,
                             ),
@@ -176,7 +177,7 @@ class _SignupScreenState extends State<SignupScreen> {
                   ),
                   Container(
                     height: 50,
-                    width: 150,
+                    padding: const EdgeInsets.symmetric(horizontal: 30),
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         primary: Colors.yellow,
@@ -193,8 +194,9 @@ class _SignupScreenState extends State<SignupScreen> {
                         _trySignup();
                       },
                       child: const Text(
-                        'Sign up',
+                        '가입하기',
                         style: TextStyle(
+                          fontFamily: 'Jua',
                           fontSize: 25,
                           color: Colors.black,
                         ),

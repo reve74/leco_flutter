@@ -7,9 +7,11 @@ class AvatarWidget extends StatelessWidget {
   String? thumbPath;
   String? nickName;
   double? size;
+  AvatarType type;
 
   AvatarWidget({
     Key? key,
+    required this.type,
     required this.thumbPath,
     this.nickName,
     this.size = 60,
@@ -78,6 +80,16 @@ class AvatarWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return type3Widget();
+    switch (type) {
+      case AvatarType.TYPE1:
+        return type1Widget();
+        break;
+      case AvatarType.TYPE2:
+        return type2Widget();
+      case AvatarType.TYPE3:
+        return type3Widget();
+        break;
+    }
+    return Container();
   }
 }

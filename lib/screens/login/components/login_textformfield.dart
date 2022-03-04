@@ -17,7 +17,7 @@ class LoginTextFormfield extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 30),
       child: Container(
         decoration: BoxDecoration(
           color: Colors.white,
@@ -60,6 +60,7 @@ class LoginTextFormfield extends StatelessWidget {
             ),
             hintText: text,
             hintStyle: const TextStyle(
+              fontFamily: 'Jua',
               color: Colors.black38,
               fontSize: 14,
             ),

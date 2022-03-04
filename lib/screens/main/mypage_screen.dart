@@ -54,7 +54,8 @@ class _MypageScreenState extends State<MypageScreen> {
             Text(
               title!,
               style: const TextStyle(
-                fontSize: 18,
+                fontSize: 15,
+                fontFamily: 'Jua',
               ),
             ),
             Icon(
@@ -84,7 +85,6 @@ class _MypageScreenState extends State<MypageScreen> {
         Get.back();
       },
     );
-
   }
 
   @override
@@ -92,17 +92,16 @@ class _MypageScreenState extends State<MypageScreen> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color(0xfffffd600),
-        leading: const SizedBox(
-          width: 5,
-        ),
+        automaticallyImplyLeading: false,
         elevation: 0,
         title: const Text(
-          '마이페이지',
+          '마이 페이지',
           style: TextStyle(
+            fontFamily: 'Jua',
+            fontSize: 25,
             color: Colors.black,
           ),
         ),
-        centerTitle: true,
       ),
       body: Column(
         children: [
@@ -120,8 +119,9 @@ class _MypageScreenState extends State<MypageScreen> {
                     Row(
                       children: [
                         AvatarWidget(
+                          type: AvatarType.TYPE3,
                           thumbPath:
-                          'https://scontent-gmp1-1.cdninstagram.com/v/t51.2885-19/271273721_342832727381466_8822539606297120930_n.jpg?stp'
+                              'https://scontent-gmp1-1.cdninstagram.com/v/t51.2885-19/271273721_342832727381466_8822539606297120930_n.jpg?stp'
                               '=dst-jpg_s320x320&_nc_ht=scontent-gmp1-1.cdninstagram.com&_nc_cat=106&_nc_ohc=tUJpO96uCj0AX_2vN_a&edm=ABfd0MgBAAAA&ccb=7-4&oh='
                               '00_AT9D20ikGtzzApZDlgiyMwqZXKfECbXFhtGnCLCfaZGjFw&oe=621D005F&_nc_sid=7bff83',
                         ),
@@ -150,6 +150,7 @@ class _MypageScreenState extends State<MypageScreen> {
                               '내 게시물',
                               style: TextStyle(
                                 fontSize: 18,
+                                fontFamily: 'Jua',
                               ),
                             ),
                           ],
@@ -167,6 +168,7 @@ class _MypageScreenState extends State<MypageScreen> {
                               '내가 쓴 댓글',
                               style: TextStyle(
                                 fontSize: 18,
+                                fontFamily: 'Jua',
                               ),
                             ),
                           ],
@@ -184,6 +186,7 @@ class _MypageScreenState extends State<MypageScreen> {
                               '구독 목록',
                               style: TextStyle(
                                 fontSize: 18,
+                                fontFamily: 'Jua',
                               ),
                             ),
                           ],
@@ -215,9 +218,10 @@ class _MypageScreenState extends State<MypageScreen> {
                   thickness: 0.5,
                 ),
               ),
-              _mppageTab( // 팝업 추가 필요
+              _mppageTab(
+                // 팝업 추가 필요
                 title: '회원탈퇴',
-                onTap: () async{
+                onTap: () async {
                   await FirebaseFirestore.instance
                       .collection('user')
                       .doc(loggedUser!.email!)

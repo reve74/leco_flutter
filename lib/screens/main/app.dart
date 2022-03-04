@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:leco_flutter/controller/bottom_nav_controller.dart';
 import 'package:leco_flutter/screens/main/home/home_screen.dart';
+import 'package:leco_flutter/screens/main/home/review_screen.dart';
 import 'package:leco_flutter/screens/main/mypage_screen.dart';
 import 'package:leco_flutter/screens/main/search_screen.dart';
 import 'package:leco_flutter/screens/main/test.dart';
@@ -16,7 +17,6 @@ import 'package:leco_flutter/model/user.dart';
 
 class App extends GetView<BottomNavController> {
   const App({Key? key}) : super(key: key);
-
 
   // saveUserInfoToFirestore() async {
   //   final GoogleSignInAccount gCurrentUser = googleSignIn.currentUser!;
@@ -35,8 +35,6 @@ class App extends GetView<BottomNavController> {
   //
   // }
 
-
-
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -49,45 +47,46 @@ class App extends GetView<BottomNavController> {
             index: controller.pageIndex.value,
             children: [
               HomeScreen(),
-              // const Search(),
               SearchScreen(),
-              Container(
-                child: Center(
-                  child: Text(
-                    'activity',
-                  ),
-                ),
-              ),
+              ReviewScreen(),
               MypageScreen(),
             ],
           ),
           bottomNavigationBar: BottomNavigationBar(
+            selectedLabelStyle: const TextStyle(fontFamily: 'Jua'),
+            unselectedLabelStyle: const TextStyle(fontFamily: 'Jua'),
             type: BottomNavigationBarType.fixed,
-            showSelectedLabels: false,
-            showUnselectedLabels: false,
+            showSelectedLabels: true,
+            showUnselectedLabels: true,
             currentIndex: controller.pageIndex.value,
             elevation: 0,
             onTap: controller.changeBottomNav,
+            // selectedLabelStyle: TextStyle(fontSize: 14),
+            selectedItemColor: Colors.black,
             items: [
               BottomNavigationBarItem(
-                  icon: ImageData(IconsPath.homeOff),
-                  activeIcon: ImageData(IconsPath.homeOn),
-                  label: 'home'),
+                icon: ImageData(IconsPath.homeOff),
+                activeIcon: ImageData(IconsPath.homeOn),
+                label: 'Home',
+              ),
               BottomNavigationBarItem(
                   icon: ImageData(IconsPath.searchOff),
                   activeIcon: ImageData(IconsPath.searchOn),
-                  label: 'search'),
-              BottomNavigationBarItem(
-                  icon: ImageData(IconsPath.activeOff),
-                  activeIcon: ImageData(IconsPath.activeOn),
-                  label: 'like'),
+                  label: 'Search'),
+              const BottomNavigationBarItem(
+                  icon: Icon(Icons.article_outlined),
+                  activeIcon: Icon(
+                    Icons.article_outlined,
+                    color: Colors.black,
+                  ),
+                  label: 'Review'),
               const BottomNavigationBarItem(
                 icon: Icon(Icons.account_circle_rounded),
                 activeIcon: Icon(
                   Icons.account_circle_rounded,
                   color: Colors.black,
                 ),
-                label: 'mypage',
+                label: 'Mypage',
               ),
             ],
           ),

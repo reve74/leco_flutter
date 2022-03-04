@@ -24,6 +24,8 @@ dependencies:
   cached_network_image: ^3.2.0
   expandable_text: ^2.2.0
   quiver: ^3.0.1+1
+  http: ^0.13.4
+  html: ^0.15.0
 
 dev_dependencies:
   flutter_test:
@@ -50,6 +52,12 @@ flutter:
    - family: Hi
      fonts:
        - asset: fonts/HiMelody-Regular.ttf
+   - family: Jua
+     fonts:
+       - asset: fonts/Jua-Regular.ttf
+
+
+
 
   #         weight: 700
   #
