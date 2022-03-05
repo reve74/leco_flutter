@@ -3,16 +3,17 @@ import 'package:flutter/material.dart';
 
 class LoginTextFormfield extends StatelessWidget {
   const LoginTextFormfield({
-    Key? key,this.icon, this.text, this.keyboard, this.validator,this.onChanged, this.onSaved, this.obscureText=false
+    Key? key,this.icon, this.hint, this.keyboard, this.validator,this.controller
   }) : super(key: key);
 
-  final String? text;
+  final String? hint;
   final IconData? icon;
   final TextInputType? keyboard;
-  final FormFieldValidator<String>? validator;
-  final FormFieldSetter? onSaved;
-  final ValueChanged? onChanged;
-  final bool? obscureText;
+  final validator;
+  // final FormFieldSetter? onSaved;
+  // final ValueChanged? onChanged;
+  // final bool? obscureText;
+  final controller;
 
   @override
   Widget build(BuildContext context) {
@@ -31,11 +32,12 @@ class LoginTextFormfield extends StatelessWidget {
           ],
         ),
         child: TextFormField(
-          obscureText: obscureText!,
+          controller: controller,
+          obscureText: hint == "비밀번호" ? true : false,
           key: ValueKey(4),
           validator: validator,
-          onChanged: onChanged,
-          onSaved: onSaved,
+          // onChanged: onChanged,
+          // onSaved: onSaved,
           keyboardType: keyboard,
           decoration: InputDecoration(
             prefixIcon: Icon(
@@ -58,7 +60,7 @@ class LoginTextFormfield extends StatelessWidget {
                 Radius.circular(35.0),
               ),
             ),
-            hintText: text,
+            hintText: '$hint',
             hintStyle: const TextStyle(
               fontFamily: 'Jua',
               color: Colors.black38,

@@ -36,7 +36,7 @@ class _TestState extends State<Test> {
       print(e);
     }
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -68,13 +68,13 @@ class _TestState extends State<Test> {
                 }
                 return null;
               },
-              onChanged: (value) {
-                userName = value;
-              },
-              onSaved: (value) {
-                userName = value;
-              },
-              text: 'Username',
+              // onChanged: (value) {
+              //   userName = value;
+              // },
+              // onSaved: (value) {
+              //   userName = value;
+              // },
+              hint: '이름',
               icon: Icons.account_circle,
             ),
             const SizedBox(
@@ -87,15 +87,14 @@ class _TestState extends State<Test> {
                 }
                 return null;
               },
-              onChanged: (value) {
-                userPassword = value;
-              },
-              onSaved: (value) {
-                userPassword = value;
-              },
-              text: 'Password',
+              // onChanged: (value) {
+              //   userPassword = value;
+              // },
+              // onSaved: (value) {
+              //   userPassword = value;
+              // },
+              hint: '비밀번호',
               icon: Icons.lock_open_rounded,
-              obscureText: true,
             ),
             ElevatedButton( // 회원정보 update 버튼
               onPressed: () async{

@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:google_sign_in/google_sign_in.dart';
+import 'package:leco_flutter/controller/auth_controller.dart';
 import 'package:leco_flutter/controller/user_controller.dart';
 import 'package:leco_flutter/screens/login/signup_screen.dart';
 import 'package:leco_flutter/screens/main/app.dart';
@@ -20,9 +20,9 @@ class _SignInScreenState extends State<SignInScreen> {
 
   final _formKey = GlobalKey<FormState>();
   final _authentication = FirebaseAuth.instance;
-  String userName = '';
-  String userEmail = '';
-  String userPassword = '';
+
+  final email = TextEditingController();
+  final password = TextEditingController();
   bool showSpinner = false;
 
   void _tryValidation() {
@@ -33,36 +33,36 @@ class _SignInScreenState extends State<SignInScreen> {
     }
   } // validation 체크
 
-  void _trySignin() async {
-    try {
-      final newUser = await _authentication.signInWithEmailAndPassword(
-          email: userEmail, password: userPassword);
-
-      if (newUser.user != null) {
-        Get.snackbar(
-          'LECO',
-          '로그인이 완료되었습니다!',
-          backgroundColor: Colors.white,
-          duration: const Duration(seconds: 2),
-        );
-        setState(() {
-          showSpinner = false;
-        });
-        Get.to(() => App());
-      }
-    } on FirebaseAuthException catch (e) {
-      print(e);
-      setState(() {
-        showSpinner = false;
-      });
-      Get.snackbar(
-        'LECO',
-        '이메일 및 비밀번호를 확인해 주세요!',
-        backgroundColor: Colors.white,
-        duration: const Duration(seconds: 2),
-      );
-    }
-  } // signin 메소드
+  // void _trySignin() async {
+  //   try {
+  //     final newUser = await _authentication.signInWithEmailAndPassword(
+  //         email: email, password: password);
+  //
+  //     if (newUser.user != null) {
+  //       Get.snackbar(
+  //         'LECO',
+  //         '로그인이 완료되었습니다!',
+  //         backgroundColor: Colors.white,
+  //         duration: const Duration(seconds: 2),
+  //       );
+  //       setState(() {
+  //         showSpinner = false;
+  //       });
+  //       Get.to(() => App());
+  //     }
+  //   } on FirebaseAuthException catch (e) {
+  //     print(e);
+  //     setState(() {
+  //       showSpinner = false;
+  //     });
+  //     Get.snackbar(
+  //       'LECO',
+  //       '이메일 및 비밀번호를 확인해 주세요!',
+  //       backgroundColor: Colors.white,
+  //       duration: const Duration(seconds: 2),
+  //     );
+  //   }
+  // } // signin 메소드
 
   @override
   Widget build(BuildContext context) {
@@ -115,19 +115,20 @@ class _SignInScreenState extends State<SignInScreen> {
                         child: Column(
                           children: [
                             LoginTextFormfield(
+                              controller: email,
                               validator: (value) {
                                 if (value!.isEmpty || !value.contains('@')) {
                                   return '        이메일 형식을 맞춰주세요';
                                 }
                                 return null;
                               },
-                              onChanged: (value) {
-                                userEmail = value;
-                              },
-                              onSaved: (value) {
-                                userEmail = value;
-                              },
-                              text: '이메일',
+                              // onChanged: (value) {
+                              //   email = value;
+                              // },
+                              // onSaved: (value) {
+                              //   email = value;
+                              // },
+                              hint: '이메일',
                               icon: Icons.email_outlined,
                               keyboard: TextInputType.emailAddress,
                             ),
@@ -135,21 +136,21 @@ class _SignInScreenState extends State<SignInScreen> {
                               height: 10,
                             ),
                             LoginTextFormfield(
+                              controller: password,
                               validator: (value) {
                                 if (value!.isEmpty || value.length < 6) {
                                   return '        6자리 이상 입력해주세요';
                                 }
                                 return null;
                               },
-                              onChanged: (value) {
-                                userPassword = value;
-                              },
-                              onSaved: (value) {
-                                userPassword = value;
-                              },
-                              text: '비밀번호',
+                              // onChanged: (value) {
+                              //   password = value;
+                              // },
+                              // onSaved: (value) {
+                              //   password = value;
+                              // },
+                              hint: '비밀번호',
                               icon: Icons.lock_open_rounded,
-                              obscureText: true,
                             ),
                             const SizedBox(
                               height: 30,
@@ -175,7 +176,7 @@ class _SignInScreenState extends State<SignInScreen> {
                           showSpinner = true;
                         });
                         _tryValidation();
-                        _trySignin();
+                        UserController.to.login(email.text.trim(), password.text.trim());
                       },
                       child: const Text(
                         '로그인',

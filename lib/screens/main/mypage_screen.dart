@@ -1,8 +1,7 @@
-import 'dart:math';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:leco_flutter/controller/user_controller.dart';
 import 'package:leco_flutter/screens/login/signgin_screen.dart';
 import 'package:leco_flutter/screens/main/components/avatar_widget.dart';
 import 'package:leco_flutter/screens/main/components/message_popup.dart';
@@ -242,8 +241,9 @@ class _MypageScreenState extends State<MypageScreen> {
               _mppageTab(
                 title: '로그아웃',
                 onTap: () {
-                  _authentication.signOut();
-                  Get.offAll(const SignInScreen());
+                  UserController.to.signOut();
+                  // _authentication.signOut();
+                  // Get.offAll(const SignInScreen());
                 },
               ),
             ],
