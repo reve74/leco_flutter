@@ -3,11 +3,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:leco_flutter/model/user.dart';
 import 'package:leco_flutter/settings/firebase.dart';
 
 class UserController extends GetxController {
   static UserController get to => Get.find();
-  FirebaseAuth auth = FirebaseAuth.instance;
 
   //구글 로그인
   Future<UserCredential?> signInWithGoogle() async {
@@ -29,36 +29,47 @@ class UserController extends GetxController {
     );
 
     // Once signed in, return the UserCredential
-    UserCredential userCredential = await FirebaseAuth.instance.signInWithCredential(credential);
-    try{
+    UserCredential userCredential =
+        await FirebaseAuth.instance.signInWithCredential(credential);
+    try {
       await FirebaseFirestore.instance
-      // .collection('user')
-          .doc('/user/${userCredential.user!.email}') //newUser.user!.uid
+          // .collection('user')
+          .doc('/users/${userCredential.user!.email}') //newUser.user!.uid
           .set({
         // 'username': username,
         'email': userCredential.user!.email,
         // 'password': password,
         'uid': userCredential.user!.uid,
       });
-    }catch (e){
+    } catch (e) {
       print(e);
     }
   }
 
   //회원가입
-  Future<void> register(String username, String email, password) async {
+  Future<void> register(String username, email, password) async {
     try {
-      final newUser = await auth.createUserWithEmailAndPassword(
+      UserCredential userCredential = await auth.createUserWithEmailAndPassword(
           email: email, password: password);
-      await FirebaseFirestore.instance
-          // .collection('user')
-          .doc('/users/${newUser.user!.email}') //newUser.user!.uid
-          .set({
-        'username': username,
-        'email': email,
-        'password': password,
-        'uid': newUser.user!.uid,
-      });
+      UserModel _newUser = UserModel(
+        uid: userCredential.user!.uid,
+        email: email,
+        password: password,
+        username: username,
+        photoUrl: "photoUrl",
+      );
+      await firebaseFirestore
+          .doc('/users/${userCredential.user!.uid}')
+          .set(_newUser.toJson());
+
+      // await firebaseFirestore  // .collection('user')
+      //     .doc('/users/${userCredential.user!.email}') //newUser.user!.uid
+      //     .set({
+      //   'username': username,
+      //   'email': email,
+      //   'password': password,
+      //   'uid': userCredential.user!.uid,
+      // });
     } on FirebaseAuthException catch (e) {
       print(e.code);
       if (e.code == 'unknown') {
@@ -100,7 +111,8 @@ class UserController extends GetxController {
   // 로그인
   Future<void> login(String email, password) async {
     try {
-      await auth.signInWithEmailAndPassword(email: email, password: password);
+      await auth.signInWithEmailAndPassword(
+          email: email.toString(), password: password.toString());
     } on FirebaseAuthException catch (e) {
       Get.snackbar(
         'LECO',
@@ -122,5 +134,24 @@ class UserController extends GetxController {
   // 로그아웃
   Future<void> signOut() async {
     await auth.signOut();
+  }
+
+  Future<void> updateUserDetail(String username, password) async {
+    final loggedUser = auth.currentUser;
+    print(loggedUser);
+    try {
+      // UserModel userModel = UserModel(
+      //   password: password,
+      //   username: username,
+      //   photoUrl: "photoUrl",
+      // );
+      await firebaseFirestore.doc('/users/${loggedUser!.uid}').update({
+        'username': username,
+        'password': password,
+        // 'photoUrl': "photoUrl",
+      });
+    } on FirebaseAuthException catch (e) {
+      e.toString();
+    }
   }
 }

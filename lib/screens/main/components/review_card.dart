@@ -26,9 +26,8 @@ class _ReviewCardState extends State<ReviewCard> {
             type: AvatarType.TYPE3,
             nickName: 'jian_chae',
             thumbPath:
-                'https://scontent-gmp1-1.cdninstagram.com/v/t51.2885-19/271273721_342832727381466_8822539606297120930_n.jpg?stp'
-                '=dst-jpg_s320x320&_nc_ht=scontent-gmp1-1.cdninstagram.com&_nc_cat=106&_nc_ohc=tUJpO96uCj0AX_2vN_a&edm=ABfd0MgBAAAA&ccb=7-4&oh='
-                '00_AT9D20ikGtzzApZDlgiyMwqZXKfECbXFhtGnCLCfaZGjFw&oe=621D005F&_nc_sid=7bff83',
+                'https://mblogthumb-phinf.pstatic.net/MjAxOTExMTJfNDgg/MDAxNTczNTM4MDA3NTg0.9TlIFX298qmFgshn'
+                    'aDaEzIbsjbCv3Vv--lVKXYDncJUg.FDj0vS33LWuKyQGof7MZ0wNHFgCPYTkgtyhGq8fVsLIg.JPEG.b-seol/67169559_300723540773498_6905365256298412426_n.jpg?type=w800',
             size: 30,
           ),
           Text('2022-02-23'),

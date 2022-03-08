@@ -1,18 +1,18 @@
 class UserModel {
   final String? uid;
   final String? email;
-  final String? name;
-  final String? nickname;
+  final String? password;
+  final String? username;
   final String? photoUrl;
 
-  UserModel({this.uid, this.email, this.name, this.nickname, this.photoUrl});
+  UserModel({this.uid, this.email,this.password, this.username, this.photoUrl});
 
   factory UserModel.fromMap(Map data) {
     return UserModel(
       uid: data['uid'],
       email: data['email'] ?? '',
-      name: data['name'] ?? '',
-      nickname: data['nickname'] ?? '',
+      password: data['password'] ?? '',
+      username: data['username'] ?? '',
       photoUrl: data['photoUrl'] ?? '',
     );
   }
@@ -20,8 +20,8 @@ class UserModel {
   Map<String, dynamic> toJson() => {
     "uid": uid,
     "email": email,
-    "name": name,
-    "nickname": nickname,
+    "password": password,
+    "username": username,
     "photoUrl": photoUrl
   };
 }

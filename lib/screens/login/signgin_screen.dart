@@ -21,9 +21,9 @@ class _SignInScreenState extends State<SignInScreen> {
   final _formKey = GlobalKey<FormState>();
   final _authentication = FirebaseAuth.instance;
 
-  final email = TextEditingController();
-  final password = TextEditingController();
-  bool showSpinner = false;
+  final _email = TextEditingController();
+  final _password = TextEditingController();
+  bool _showSpinner = false;
 
   void _tryValidation() {
     final isValid = _formKey.currentState!.validate();
@@ -71,7 +71,7 @@ class _SignInScreenState extends State<SignInScreen> {
     double height = size.height;
     return Scaffold(
       body: ModalProgressHUD(
-        inAsyncCall: showSpinner,
+        inAsyncCall: _showSpinner,
         child: SafeArea(
           child: GestureDetector(
             onTap: () {
@@ -115,7 +115,7 @@ class _SignInScreenState extends State<SignInScreen> {
                         child: Column(
                           children: [
                             LoginTextFormfield(
-                              controller: email,
+                              controller: _email,
                               validator: (value) {
                                 if (value!.isEmpty || !value.contains('@')) {
                                   return '        이메일 형식을 맞춰주세요';
@@ -136,7 +136,7 @@ class _SignInScreenState extends State<SignInScreen> {
                               height: 10,
                             ),
                             LoginTextFormfield(
-                              controller: password,
+                              controller: _password,
                               validator: (value) {
                                 if (value!.isEmpty || value.length < 6) {
                                   return '        6자리 이상 입력해주세요';
@@ -173,10 +173,13 @@ class _SignInScreenState extends State<SignInScreen> {
                       ),
                       onPressed: () {
                         setState(() {
-                          showSpinner = true;
+                          _showSpinner = true;
                         });
                         _tryValidation();
-                        UserController.to.login(email.text.trim(), password.text.trim());
+                        UserController.to.login(_email.text.trim(), _password.text.trim());
+                        setState(() {
+                          _showSpinner = false;
+                        });
                       },
                       child: const Text(
                         '로그인',

@@ -1,10 +1,7 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:leco_flutter/controller/auth_controller.dart';
 import 'package:leco_flutter/controller/user_controller.dart';
 import 'package:leco_flutter/screens/login/components/signupimage_with_text.dart';
-import 'package:leco_flutter/screens/login/signgin_screen.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'components/login_textformfield.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -20,9 +17,10 @@ class _SignupScreenState extends State<SignupScreen> {
   final _formKey = GlobalKey<FormState>();
   final _authentication = FirebaseAuth.instance;
 
-  final username = TextEditingController();
-  final email = TextEditingController();
-  final password = TextEditingController();
+
+  final _email = TextEditingController();
+  final _username = TextEditingController();
+  final _password = TextEditingController();
 
   // String username = '';
   // String email = '';
@@ -118,7 +116,7 @@ class _SignupScreenState extends State<SignupScreen> {
                         child: Column(
                           children: [
                             LoginTextFormfield(
-                              controller: username,
+                              controller: _username,
                               validator: (value) {
                                 if (value!.isEmpty || value.length < 2) {
                                   return '        2자리 이상 입력해주세요';
@@ -132,7 +130,7 @@ class _SignupScreenState extends State<SignupScreen> {
                               height: 10,
                             ),
                             LoginTextFormfield(
-                              controller: email,
+                              controller: _email,
                               validator: (value) {
                                 if (value!.isEmpty || !value.contains('@')) {
                                   return '        이메일 형식을 맞춰주세요';
@@ -147,7 +145,7 @@ class _SignupScreenState extends State<SignupScreen> {
                               height: 10,
                             ),
                             LoginTextFormfield(
-                              controller: password,
+                              controller: _password,
                               validator: (value) {
                                 if (value!.isEmpty || value.length < 6) {
                                   return '        6자리 이상 입력해주세요';
@@ -181,8 +179,8 @@ class _SignupScreenState extends State<SignupScreen> {
                           showSpinner = true;
                         });
                         _tryValidation();
-                        UserController.to.register(username.text.trim(),
-                            email.text.trim(), password.text.trim());
+                        UserController.to.register(_username.text.trim(),
+                            _email.text.trim(), _password.text.trim());
                         setState(() {
                           showSpinner = false;
                         });

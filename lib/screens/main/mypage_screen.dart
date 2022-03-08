@@ -1,41 +1,38 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:leco_flutter/controller/auth_controller.dart';
 import 'package:leco_flutter/controller/user_controller.dart';
+import 'package:leco_flutter/model/user.dart';
 import 'package:leco_flutter/screens/login/signgin_screen.dart';
 import 'package:leco_flutter/screens/main/components/avatar_widget.dart';
 import 'package:leco_flutter/screens/main/components/message_popup.dart';
 import 'package:leco_flutter/screens/main/test.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:leco_flutter/settings/firebase.dart';
 
-class MypageScreen extends StatefulWidget {
-  const MypageScreen({Key? key}) : super(key: key);
+class MypageScreen extends StatelessWidget {
+  // final _authentication = FirebaseAuth.instance;
+  // User? loggedUser;
+  // UserModel user = Get.arguments;
+  // AuthController a = Get.put(AuthController());
 
-  @override
-  _MypageScreenState createState() => _MypageScreenState();
-}
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   getCurrentUser();
+  // }
 
-class _MypageScreenState extends State<MypageScreen> {
-  final _authentication = FirebaseAuth.instance;
-  User? loggedUser;
-
-  @override
-  void initState() {
-    super.initState();
-    getCurrentUser();
-  }
-
-  void getCurrentUser() {
-    try {
-      final user = _authentication.currentUser;
-      if (user != null) {
-        loggedUser = user;
-        print(loggedUser!.email);
-      }
-    } catch (e) {
-      print(e);
-    }
-  }
+  // void getCurrentUser() {
+  //   try {
+  //     final user = _authentication.currentUser;
+  //     if (user != null) {
+  //       loggedUser = user;
+  //       print(loggedUser!.email);
+  //     }
+  //   } catch (e) {
+  //     print(e);
+  //   }
+  // }
 
   // void UserStream() async{
   //   await for(var snapshot in _authentication.collection())
@@ -75,7 +72,7 @@ class _MypageScreenState extends State<MypageScreen> {
       okCallback: () async {
         await FirebaseFirestore.instance
             .collection('user')
-            .doc(loggedUser!.email!)
+            .doc(auth.currentUser!.email!)
             .delete();
         print('회원삭제');
         Get.offAll(const SignInScreen());
@@ -88,6 +85,8 @@ class _MypageScreenState extends State<MypageScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // UserModel user = Get.arguments;
+    AuthController a = Get.put(AuthController());
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color(0xfffffd600),
@@ -98,7 +97,7 @@ class _MypageScreenState extends State<MypageScreen> {
           style: TextStyle(
             fontFamily: 'Jua',
             fontSize: 25,
-            color: Colors.black,
+            color: Colors.black54,
           ),
         ),
       ),
@@ -109,10 +108,6 @@ class _MypageScreenState extends State<MypageScreen> {
               Container(
                 margin: const EdgeInsets.all(5),
                 padding: const EdgeInsets.all(5),
-                // decoration: BoxDecoration(
-                //   border: Border.all(color: Colors.black),
-                //   borderRadius: BorderRadius.circular(10),
-                // ),
                 child: Column(
                   children: [
                     Row(
@@ -120,14 +115,13 @@ class _MypageScreenState extends State<MypageScreen> {
                         AvatarWidget(
                           type: AvatarType.TYPE3,
                           thumbPath:
-                              'https://scontent-gmp1-1.cdninstagram.com/v/t51.2885-19/271273721_342832727381466_8822539606297120930_n.jpg?stp'
-                              '=dst-jpg_s320x320&_nc_ht=scontent-gmp1-1.cdninstagram.com&_nc_cat=106&_nc_ohc=tUJpO96uCj0AX_2vN_a&edm=ABfd0MgBAAAA&ccb=7-4&oh='
-                              '00_AT9D20ikGtzzApZDlgiyMwqZXKfECbXFhtGnCLCfaZGjFw&oe=621D005F&_nc_sid=7bff83',
+                              'https://mblogthumb-phinf.pstatic.net/MjAxOTExMTJfNDgg/MDAxNTczNTM4MDA3NTg0.9TlIFX298qmFgshn'
+                              'aDaEzIbsjbCv3Vv--lVKXYDncJUg.FDj0vS33LWuKyQGof7MZ0wNHFgCPYTkgtyhGq8fVsLIg.JPEG.b-seol/67169559_300723540773498_6905365256298412426_n.jpg?type=w800',
                         ),
                         const SizedBox(
                           width: 10,
                         ),
-                        Text(loggedUser!.email!),
+                        Text(auth.currentUser!.email!),
                       ],
                     ),
                     const SizedBox(
@@ -155,7 +149,7 @@ class _MypageScreenState extends State<MypageScreen> {
                           ],
                         ),
                         Column(
-                          children: [
+                          children: const [
                             Icon(
                               Icons.message,
                               size: 20,
@@ -173,7 +167,7 @@ class _MypageScreenState extends State<MypageScreen> {
                           ],
                         ),
                         Column(
-                          children: [
+                          children: const [
                             Icon(
                               Icons.thumb_up,
                               size: 20,
@@ -223,9 +217,9 @@ class _MypageScreenState extends State<MypageScreen> {
                 onTap: () async {
                   await FirebaseFirestore.instance
                       .collection('user')
-                      .doc(loggedUser!.email!)
+                      .doc(auth.currentUser!.email!)
                       .delete();
-                  _authentication.currentUser!.delete();
+                  auth.currentUser!.delete();
                   print('회원삭제');
                   Get.offAll(const SignInScreen());
                 },
@@ -245,6 +239,16 @@ class _MypageScreenState extends State<MypageScreen> {
                   // _authentication.signOut();
                   // Get.offAll(const SignInScreen());
                 },
+              ),
+              Obx(
+                () => Column(
+                  children: [
+                    Text("회원 유저네임 : ${a.firestoreUser.value!.username!}"),
+                    Text("회원 비밀번호 : ${a.firestoreUser.value!.password!}"),
+                    Text("회원 이메일 : ${a.firestoreUser.value!.email!}"),
+                  ],
+                ),
+
               ),
             ],
           ),

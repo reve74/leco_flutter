@@ -8,6 +8,7 @@ import 'package:leco_flutter/screens/main/home/review_screen.dart';
 import 'package:leco_flutter/screens/main/mypage_screen.dart';
 import 'package:leco_flutter/screens/main/search_screen.dart';
 import 'package:leco_flutter/screens/main/test.dart';
+import 'package:leco_flutter/screens/main/test1.dart';
 import 'components/image_data.dart';
 import 'package:leco_flutter/model/user.dart';
 
