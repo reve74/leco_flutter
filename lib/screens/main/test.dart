@@ -91,17 +91,17 @@ class _TestState extends State<Test> {
             const SizedBox(
               height: 10,
             ),
-            LoginTextFormfield(
-              controller: password,
-              // validator: (value) {
-              //   if (value!.isEmpty || value.length < 6) {
-              //     return '        6자리 이상 입력해주세요';
-              //   }
-              //   return null;
-              // },
-              hint: '비밀번호',
-              icon: Icons.lock_open_rounded,
-            ),
+            // LoginTextFormfield(
+            //   controller: password,
+            //   // validator: (value) {
+            //   //   if (value!.isEmpty || value.length < 6) {
+            //   //     return '        6자리 이상 입력해주세요';
+            //   //   }
+            //   //   return null;
+            //   // },
+            //   hint: '비밀번호',
+            //   icon: Icons.lock_open_rounded,
+            // ),
             Container(
               height: 50,
               padding: const EdgeInsets.symmetric(horizontal: 30),
@@ -115,7 +115,7 @@ class _TestState extends State<Test> {
                 ),
                 onPressed: () {
                   UserController.to.updateUserDetail(
-                      username.text.trim(), password.text.trim());
+                      username.text, password.text);
                   Get.back();
                 },
                 child: const Text(

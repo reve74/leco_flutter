@@ -3,9 +3,9 @@ class UserModel {
   final String? email;
   final String? password;
   final String? username;
-  final String? photoUrl;
+  // final String? photoUrl;
 
-  UserModel({this.uid, this.email,this.password, this.username, this.photoUrl});
+  UserModel({this.uid, this.email,this.password, this.username});
 
   factory UserModel.fromMap(Map data) {
     return UserModel(
@@ -13,7 +13,7 @@ class UserModel {
       email: data['email'] ?? '',
       password: data['password'] ?? '',
       username: data['username'] ?? '',
-      photoUrl: data['photoUrl'] ?? '',
+      // photoUrl: data['photoUrl'] ?? '',
     );
   }
 
@@ -22,6 +22,6 @@ class UserModel {
     "email": email,
     "password": password,
     "username": username,
-    "photoUrl": photoUrl
+    // "photoUrl": photoUrl
   };
 }

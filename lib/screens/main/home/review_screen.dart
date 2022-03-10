@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:leco_flutter/controller/post_controller.dart';
 import 'package:leco_flutter/screens/main/components/review_card.dart';
 import 'package:leco_flutter/screens/main/home/create/write_screen.dart';
 
 class ReviewScreen extends StatelessWidget {
-  const ReviewScreen({Key? key}) : super(key: key);
+  ReviewScreen({Key? key}) : super(key: key);
+  PostController postController = Get.put(PostController());
 
   @override
   Widget build(BuildContext context) {

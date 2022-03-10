@@ -8,6 +8,7 @@ import 'package:leco_flutter/screens/main/components/avatar_widget.dart';
 import 'package:leco_flutter/screens/main/components/message_popup.dart';
 import 'package:leco_flutter/screens/main/test.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:leco_flutter/screens/main/test1.dart';
 import 'package:leco_flutter/settings/firebase.dart';
 
 class MypageScreen extends StatelessWidget {
@@ -101,158 +102,161 @@ class MypageScreen extends StatelessWidget {
           ),
         ),
       ),
-      body: Column(
-        children: [
-          Column(
-            children: [
-              Container(
-                margin: const EdgeInsets.all(5),
-                padding: const EdgeInsets.all(5),
-                child: Column(
-                  children: [
-                    Row(
-                      children: [
-                        AvatarWidget(
-                          type: AvatarType.TYPE3,
-                          thumbPath:
-                              'https://mblogthumb-phinf.pstatic.net/MjAxOTExMTJfNDgg/MDAxNTczNTM4MDA3NTg0.9TlIFX298qmFgshn'
-                              'aDaEzIbsjbCv3Vv--lVKXYDncJUg.FDj0vS33LWuKyQGof7MZ0wNHFgCPYTkgtyhGq8fVsLIg.JPEG.b-seol/67169559_300723540773498_6905365256298412426_n.jpg?type=w800',
-                        ),
-                        const SizedBox(
-                          width: 10,
-                        ),
-                        Text(auth.currentUser!.email!),
-                      ],
-                    ),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        Column(
-                          children: const [
-                            Icon(
-                              Icons.article,
-                              size: 20,
-                            ),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            Text(
-                              '내 게시물',
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontFamily: 'Jua',
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Column(
+              children: [
+                Container(
+                  margin: const EdgeInsets.all(5),
+                  padding: const EdgeInsets.all(5),
+                  child: Column(
+                    children: [
+                      Row(
+                        children: [
+                          AvatarWidget(
+                            type: AvatarType.TYPE3,
+                            thumbPath:
+                                'https://mblogthumb-phinf.pstatic.net/MjAxOTExMTJfNDgg/MDAxNTczNTM4MDA3NTg0.9TlIFX298qmFgshn'
+                                'aDaEzIbsjbCv3Vv--lVKXYDncJUg.FDj0vS33LWuKyQGof7MZ0wNHFgCPYTkgtyhGq8fVsLIg.JPEG.b-seol/67169559_300723540773498_6905365256298412426_n.jpg?type=w800',
+                          ),
+                          const SizedBox(
+                            width: 10,
+                          ),
+                          Text(auth.currentUser!.email!),
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          Column(
+                            children: const [
+                              Icon(
+                                Icons.article,
+                                size: 20,
                               ),
-                            ),
-                          ],
-                        ),
-                        Column(
-                          children: const [
-                            Icon(
-                              Icons.message,
-                              size: 20,
-                            ),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            Text(
-                              '내가 쓴 댓글',
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontFamily: 'Jua',
+                              SizedBox(
+                                height: 10,
                               ),
-                            ),
-                          ],
-                        ),
-                        Column(
-                          children: const [
-                            Icon(
-                              Icons.thumb_up,
-                              size: 20,
-                            ),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            Text(
-                              '구독 목록',
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontFamily: 'Jua',
+                              Text(
+                                '내 게시물',
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  fontFamily: 'Jua',
+                                ),
                               ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ],
+                            ],
+                          ),
+                          Column(
+                            children: const [
+                              Icon(
+                                Icons.message,
+                                size: 20,
+                              ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              Text(
+                                '내가 쓴 댓글',
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  fontFamily: 'Jua',
+                                ),
+                              ),
+                            ],
+                          ),
+                          Column(
+                            children: const [
+                              Icon(
+                                Icons.thumb_up,
+                                size: 20,
+                              ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              Text(
+                                '구독 목록',
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  fontFamily: 'Jua',
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            ],
-          ),
-          Container(
-            color: Colors.grey.withOpacity(0.2),
-            height: 5,
-          ),
-          Column(
-            children: [
-              _mppageTab(
-                title: '회원정보 수정',
-                onTap: () {
-                  Get.to(Test());
-                },
-              ),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10),
-                height: 4,
-                child: const Divider(
-                  color: Colors.black38,
-                  thickness: 0.5,
+              ],
+            ),
+            Container(
+              color: Colors.grey.withOpacity(0.2),
+              height: 5,
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                _mppageTab(
+                  title: '회원정보 수정',
+                  onTap: () {
+                    Get.to(Test());
+                  },
                 ),
-              ),
-              _mppageTab(
-                // 팝업 추가 필요
-                title: '회원탈퇴',
-                onTap: () async {
-                  await FirebaseFirestore.instance
-                      .collection('user')
-                      .doc(auth.currentUser!.email!)
-                      .delete();
-                  auth.currentUser!.delete();
-                  print('회원삭제');
-                  Get.offAll(const SignInScreen());
-                },
-              ),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10),
-                height: 4,
-                child: const Divider(
-                  color: Colors.black38,
-                  thickness: 0.5,
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  height: 4,
+                  child: const Divider(
+                    color: Colors.black38,
+                    thickness: 0.5,
+                  ),
                 ),
-              ),
-              _mppageTab(
-                title: '로그아웃',
-                onTap: () {
-                  UserController.to.signOut();
-                  // _authentication.signOut();
-                  // Get.offAll(const SignInScreen());
-                },
-              ),
-              Obx(
-                () => Column(
-                  children: [
-                    Text("회원 유저네임 : ${a.firestoreUser.value!.username!}"),
-                    Text("회원 비밀번호 : ${a.firestoreUser.value!.password!}"),
-                    Text("회원 이메일 : ${a.firestoreUser.value!.email!}"),
-                  ],
+                _mppageTab(
+                  // 팝업 추가 필요
+                  title: '회원탈퇴',
+                  onTap: () async {
+                    await FirebaseFirestore.instance
+                        .collection('users')
+                        .doc(auth.currentUser!.uid)
+                        .delete();
+                    auth.currentUser!.delete();
+                    print('회원삭제');
+                    Get.offAll(const SignInScreen());
+                  },
                 ),
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  height: 4,
+                  child: const Divider(
+                    color: Colors.black38,
+                    thickness: 0.5,
+                  ),
+                ),
+                _mppageTab(
+                  title: '로그아웃',
+                  onTap: () {
+                    UserController.to.signOut();
+                    // _authentication.signOut();
+                    // Get.offAll(const SignInScreen());
+                  },
+                ),
+                Obx(
+                  () => Column(
+                    children: [
+                      Text("회원 유저네임 : ${a.firestoreUser.value!.username!}"),
+                      Text("회원 비밀번호 : ${a.firestoreUser.value!.password!}"),
+                      Text("회원 이메일 : ${a.firestoreUser.value!.email!}"),
+                    ],
+                  ),
 
-              ),
-            ],
-          ),
-        ],
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

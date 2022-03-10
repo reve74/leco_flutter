@@ -9,43 +9,6 @@ import 'package:leco_flutter/settings/firebase.dart';
 class UserController extends GetxController {
   static UserController get to => Get.find();
 
-  //구글 로그인
-  Future<UserCredential?> signInWithGoogle() async {
-    // Trigger the authentication flow
-    final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
-
-    if (googleUser != null) {
-      print(googleUser);
-    }
-
-    // Obtain the auth details from the request
-    final GoogleSignInAuthentication? googleAuth =
-        await googleUser?.authentication;
-
-    // Create a new credential
-    final credential = GoogleAuthProvider.credential(
-      accessToken: googleAuth?.accessToken,
-      idToken: googleAuth?.idToken,
-    );
-
-    // Once signed in, return the UserCredential
-    UserCredential userCredential =
-        await FirebaseAuth.instance.signInWithCredential(credential);
-    try {
-      await FirebaseFirestore.instance
-          // .collection('user')
-          .doc('/users/${userCredential.user!.email}') //newUser.user!.uid
-          .set({
-        // 'username': username,
-        'email': userCredential.user!.email,
-        // 'password': password,
-        'uid': userCredential.user!.uid,
-      });
-    } catch (e) {
-      print(e);
-    }
-  }
-
   //회원가입
   Future<void> register(String username, email, password) async {
     try {
@@ -56,7 +19,7 @@ class UserController extends GetxController {
         email: email,
         password: password,
         username: username,
-        photoUrl: "photoUrl",
+        // photoUrl: "photoUrl",
       );
       await firebaseFirestore
           .doc('/users/${userCredential.user!.uid}')
@@ -111,9 +74,12 @@ class UserController extends GetxController {
   // 로그인
   Future<void> login(String email, password) async {
     try {
-      await auth.signInWithEmailAndPassword(
-          email: email.toString(), password: password.toString());
+      await auth.signInWithEmailAndPassword(email: email, password: password);
     } on FirebaseAuthException catch (e) {
+      print(e);
+      if(e.code == 'The password is invalid or the user does not have a password.') {
+        print('시발');
+      }
       Get.snackbar(
         'LECO',
         'User message',
@@ -147,11 +113,50 @@ class UserController extends GetxController {
       // );
       await firebaseFirestore.doc('/users/${loggedUser!.uid}').update({
         'username': username,
-        'password': password,
+        // 'password': password,
         // 'photoUrl': "photoUrl",
       });
     } on FirebaseAuthException catch (e) {
       e.toString();
+    }
+  }
+
+
+
+  //구글 로그인
+  Future<UserCredential?> signInWithGoogle() async {
+    // Trigger the authentication flow
+    final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+
+    if (googleUser != null) {
+      print(googleUser);
+    }
+
+    // Obtain the auth details from the request
+    final GoogleSignInAuthentication? googleAuth =
+    await googleUser?.authentication;
+
+    // Create a new credential
+    final credential = GoogleAuthProvider.credential(
+      accessToken: googleAuth?.accessToken,
+      idToken: googleAuth?.idToken,
+    );
+
+    // Once signed in, return the UserCredential
+    UserCredential userCredential =
+    await FirebaseAuth.instance.signInWithCredential(credential);
+    try {
+      await FirebaseFirestore.instance
+      // .collection('user')
+          .doc('/users/${userCredential.user!.email}') //newUser.user!.uid
+          .set({
+        // 'username': username,
+        'email': userCredential.user!.email,
+        // 'password': password,
+        'uid': userCredential.user!.uid,
+      });
+    } catch (e) {
+      print(e);
     }
   }
 }

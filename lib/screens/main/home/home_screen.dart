@@ -83,7 +83,7 @@ class _HomeScreenState extends State<HomeScreen> {
       child: Row(
         children: [
           ...List.generate(
-            10,
+            5,
             (index) => _card(
               size: 100,
               thumbPath:

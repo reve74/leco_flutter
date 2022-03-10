@@ -9,13 +9,13 @@ class Test1 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     AuthController a = Get.put(AuthController());
-    // UserModel user = Get.arguments;
+    UserModel user = Get.arguments;
     return Scaffold(
       appBar: AppBar(),
       body: Obx(
         () => Column(
           children: [
-            // Text('회원 비밀번호 : ${user.username}'),
+            Text('회원 비밀번호 : ${user.username}'),
             Text("회원 이메일 : ${a.firestoreUser.value!.email}"),
             Text("회원 패스워드 : ${a.firestoreUser.value!.password}"),
           ],

@@ -9,8 +9,8 @@ import '../settings/firebase.dart';
 
 class AuthController extends GetxController {
   static AuthController get to => Get.find();
-  // FirebaseAuth auth = FirebaseAuth.instance;
-  // FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
+  FirebaseAuth auth = FirebaseAuth.instance;
+  FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
   // late Rx<User?> _user;
   //
   //
@@ -21,7 +21,7 @@ class AuthController extends GetxController {
   //   _user.bindStream(auth.authStateChanges());
   //   ever(_user, _initialScreen);
   // }
-
+  //
   // _initialScreen(User? user) {
   //   if (user == null) {
   //     print('longin page');
@@ -30,11 +30,6 @@ class AuthController extends GetxController {
   //     Get.off(() => App());
   //   }
   // }
-
-  // Sign out
-  Future<void> signOut() {
-    return auth.signOut();
-  }
 
   Rxn<User> firebaseUser = Rxn<User>();
   Rxn<UserModel> firestoreUser = Rxn<UserModel>();
