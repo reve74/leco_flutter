@@ -6,7 +6,8 @@ import 'package:leco_flutter/model/user.dart';
 import 'package:leco_flutter/screens/login/signgin_screen.dart';
 import 'package:leco_flutter/screens/main/components/avatar_widget.dart';
 import 'package:leco_flutter/screens/main/components/message_popup.dart';
-import 'package:leco_flutter/screens/main/test.dart';
+import 'package:leco_flutter/screens/main/mypage/change_password_screen.dart';
+import 'package:leco_flutter/screens/main/mypage/test.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:leco_flutter/screens/main/test1.dart';
 import 'package:leco_flutter/settings/firebase.dart';
@@ -123,7 +124,7 @@ class MypageScreen extends StatelessWidget {
                           const SizedBox(
                             width: 10,
                           ),
-                          Text(auth.currentUser!.email!),
+                          Obx(() => Text('${a.firestoreUser.value!.username}')),
                         ],
                       ),
                       const SizedBox(
@@ -215,8 +216,22 @@ class MypageScreen extends StatelessWidget {
                   ),
                 ),
                 _mppageTab(
+                  title: '비밀번호 변경',
+                  onTap: () {
+                    Get.to(() => ChangePasswordScreen());
+                  },
+                ),
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  height: 4,
+                  child: const Divider(
+                    color: Colors.black38,
+                    thickness: 0.5,
+                  ),
+                ),
+                _mppageTab(
                   // 팝업 추가 필요
-                  title: '회원탈퇴',
+                  title: '회원탈퇴  ',
                   onTap: () async {
                     await FirebaseFirestore.instance
                         .collection('users')
@@ -236,23 +251,23 @@ class MypageScreen extends StatelessWidget {
                   ),
                 ),
                 _mppageTab(
-                  title: '로그아웃',
+                  title: '로그아웃  ',
                   onTap: () {
                     UserController.to.signOut();
                     // _authentication.signOut();
                     // Get.offAll(const SignInScreen());
                   },
                 ),
-                Obx(
-                  () => Column(
-                    children: [
-                      Text("회원 유저네임 : ${a.firestoreUser.value!.username!}"),
-                      Text("회원 비밀번호 : ${a.firestoreUser.value!.password!}"),
-                      Text("회원 이메일 : ${a.firestoreUser.value!.email!}"),
-                    ],
-                  ),
-
-                ),
+                // Obx(
+                //   () => Column(
+                //     children: [
+                //       Text("회원 유저네임 : ${a.firestoreUser.value!.username!}"),
+                //       Text("회원 비밀번호 : ${a.firestoreUser.value!.password!}"),
+                //       Text("회원 이메일 : ${a.firestoreUser.value!.email!}"),
+                //     ],
+                //   ),
+                //
+                // ),
               ],
             ),
           ],

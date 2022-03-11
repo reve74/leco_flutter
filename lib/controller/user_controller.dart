@@ -77,7 +77,8 @@ class UserController extends GetxController {
       await auth.signInWithEmailAndPassword(email: email, password: password);
     } on FirebaseAuthException catch (e) {
       print(e);
-      if(e.code == 'The password is invalid or the user does not have a password.') {
+      if (e.code ==
+          'The password is invalid or the user does not have a password.') {
         print('시발');
       }
       Get.snackbar(
@@ -102,6 +103,7 @@ class UserController extends GetxController {
     await auth.signOut();
   }
 
+  // 정보 업데이트 (비밀번호 수정 불가);
   Future<void> updateUserDetail(String username, password) async {
     final loggedUser = auth.currentUser;
     print(loggedUser);
@@ -121,7 +123,23 @@ class UserController extends GetxController {
     }
   }
 
-
+  // 비밀번호 변경
+  Future<void> changePassword(String password) async {
+    final loggedUser = auth.currentUser;
+    // var newPassword = '';
+    try{
+      await loggedUser!.updatePassword(password);
+      await firebaseFirestore.doc('/users/${loggedUser.uid}').update({
+        'password': password,
+        // 'password': password,
+        // 'photoUrl': "photoUrl",
+      });
+      print('비밀번호 변경');
+      Get.back();
+    }on FirebaseAuthException catch (e) {
+      print(e.toString());
+    }
+  }
 
   //구글 로그인
   Future<UserCredential?> signInWithGoogle() async {
@@ -134,7 +152,7 @@ class UserController extends GetxController {
 
     // Obtain the auth details from the request
     final GoogleSignInAuthentication? googleAuth =
-    await googleUser?.authentication;
+        await googleUser?.authentication;
 
     // Create a new credential
     final credential = GoogleAuthProvider.credential(
@@ -144,10 +162,10 @@ class UserController extends GetxController {
 
     // Once signed in, return the UserCredential
     UserCredential userCredential =
-    await FirebaseAuth.instance.signInWithCredential(credential);
+        await FirebaseAuth.instance.signInWithCredential(credential);
     try {
       await FirebaseFirestore.instance
-      // .collection('user')
+          // .collection('user')
           .doc('/users/${userCredential.user!.email}') //newUser.user!.uid
           .set({
         // 'username': username,
