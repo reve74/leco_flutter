@@ -21,10 +21,6 @@ class _SignupScreenState extends State<SignupScreen> {
   final _email = TextEditingController();
   final _username = TextEditingController();
   final _password = TextEditingController();
-
-  // String username = '';
-  // String email = '';
-  // String password = '';
   bool showSpinner = false;
 
   void _tryValidation() {
@@ -35,67 +31,8 @@ class _SignupScreenState extends State<SignupScreen> {
     }
   }
 
-  // void _trySignup() async {
-  //   try {
-  //     final newUser = await _authentication.createUserWithEmailAndPassword(
-  //         email: email, password: password);
-  //
-  //     await FirebaseFirestore.instance
-  //         .collection('user')
-  //         .doc(newUser.user!.email) //newUser.user!.uid
-  //         .set({
-  //       'username': username,
-  //       'email': email,
-  //       'password': password,
-  //       'uid' : newUser.user!.uid,
-  //     });
-  //
-  //     if (newUser.user != null) {
-  //       Get.snackbar(
-  //         'LECO',
-  //         '회원가입이 완료되었습니다!',
-  //         backgroundColor: Colors.white,
-  //         duration: const Duration(seconds: 2),
-  //       );
-  //       setState(() {
-  //         showSpinner = false;
-  //       });
-  //       Get.to(() => SignInScreen());
-  //     }
-  //   } on FirebaseAuthException catch (e) {
-  //     // 이메일 중복 유효성 검사 기능 추가!
-  //     print(e);
-  //     setState(() {
-  //       showSpinner = false;
-  //     });
-  //     if (e.code == 'unknown') {
-  //       print('회원가입 형식을 확인해주세요');
-  //       Get.snackbar(
-  //         'LECO',
-  //         '회원가입 형식을 확인해주세요!',
-  //         backgroundColor: Colors.white,
-  //         duration: const Duration(seconds: 2),
-  //       );
-  //     } else if (e.code == 'email-already-in-use') {
-  //       print('이미 사용중인 이메일 입니다!');
-  //       Get.snackbar(
-  //         'LECO',
-  //         '이미 사용중인 이메일 입니다!',
-  //         backgroundColor: Colors.white,
-  //         duration: const Duration(seconds: 2),
-  //       );
-  //       print(e.code.toString());
-  //     } else {
-  //       print(e.code.toString());
-  //     }
-  //   }
-  // }
-
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
-    double width = size.width;
-    double height = size.height;
     return Scaffold(
       body: ModalProgressHUD(
         inAsyncCall: showSpinner,
@@ -110,7 +47,7 @@ class _SignupScreenState extends State<SignupScreen> {
                 children: [
                   Column(
                     children: [
-                      const SignupImagewithText(), // 이미지와 signup 타이틀
+                      SignupImagewithText(title: '회원가입', color: Colors.blueAccent), // 이미지와 signup 타이틀
                       Form(
                         key: _formKey,
                         child: Column(

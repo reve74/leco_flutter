@@ -1,5 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:leco_flutter/screens/main/home/main/category_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -14,10 +16,10 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    // tabController = TabController(length: 4, vsync: this);
   }
 
-  Widget _menuTab({String? title, Function()? onPressed}) { // 메뉴 탭
+  Widget _menuTab({String? title, Function()? onPressed}) {
+    // 메뉴 탭
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10),
       child: Row(
@@ -39,7 +41,8 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _card({String? thumbPath, double? size}) { // 제품 카드
+  Widget _card({String? thumbPath, double? size}) {
+    // 제품 카드
     return Column(
       children: [
         Container(
@@ -84,18 +87,20 @@ class _HomeScreenState extends State<HomeScreen> {
         children: [
           ...List.generate(
             5,
-            (index) => _card(
-              size: 100,
-              thumbPath:
+                (index) =>
+                _card(
+                  size: 100,
+                  thumbPath:
                   'https://www.lego.com/cdn/cs/set/assets/bltfb7085baebd9e2ca/ThemeImage-202107-Disney.jpg?fit=bounds&format=webply&quality=80&width=420&height=200&dpr=1',
-            ),
+                ),
           ),
         ],
       ),
     );
   }
 
-  Widget _news() { // 뉴스
+  Widget _news() {
+    // 뉴스
     return Column(
       children: [
         Padding(
@@ -143,7 +148,8 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _newsCard() { // 뉴스 카드
+  Widget _newsCard() {
+    // 뉴스 카드
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
@@ -195,13 +201,16 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _body() { // 제품 카테고리
+  Widget _body() {
+    // 제품 카테고리
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         _menuTab(
           title: '카테고리',
-          onPressed: () {},
+          onPressed: () {
+            // Get.to(() => CategoryScreen(selectedCategory: Utils.getMockedCategories()[0],));
+          },
         ),
         _menuCard(),
         _menuTab(
@@ -218,7 +227,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
+    Size size = MediaQuery
+        .of(context)
+        .size;
     double height = size.height;
 
     return Scaffold(
@@ -226,8 +237,6 @@ class _HomeScreenState extends State<HomeScreen> {
         elevation: 0,
         backgroundColor: const Color(0xfffffd600),
         automaticallyImplyLeading: false,
-        // centerTitle: true,
-        // leading: Container(),
         title: const Text(
           'LECO',
           style: TextStyle(

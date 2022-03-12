@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:leco_flutter/controller/auth_controller.dart';
 import 'package:leco_flutter/controller/user_controller.dart';
+import 'package:leco_flutter/screens/login/reset_email_screen.dart';
 import 'package:leco_flutter/screens/login/signup_screen.dart';
 import 'package:leco_flutter/screens/main/app.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
@@ -32,37 +33,6 @@ class _SignInScreenState extends State<SignInScreen> {
       _formKey.currentState!.save();
     }
   } // validation 체크
-
-  // void _trySignin() async {
-  //   try {
-  //     final newUser = await _authentication.signInWithEmailAndPassword(
-  //         email: email, password: password);
-  //
-  //     if (newUser.user != null) {
-  //       Get.snackbar(
-  //         'LECO',
-  //         '로그인이 완료되었습니다!',
-  //         backgroundColor: Colors.white,
-  //         duration: const Duration(seconds: 2),
-  //       );
-  //       setState(() {
-  //         showSpinner = false;
-  //       });
-  //       Get.to(() => App());
-  //     }
-  //   } on FirebaseAuthException catch (e) {
-  //     print(e);
-  //     setState(() {
-  //       showSpinner = false;
-  //     });
-  //     Get.snackbar(
-  //       'LECO',
-  //       '이메일 및 비밀번호를 확인해 주세요!',
-  //       backgroundColor: Colors.white,
-  //       duration: const Duration(seconds: 2),
-  //     );
-  //   }
-  // } // signin 메소드
 
   @override
   Widget build(BuildContext context) {
@@ -100,7 +70,7 @@ class _SignInScreenState extends State<SignInScreen> {
                       ),
                       Container(
                         margin: const EdgeInsets.symmetric(
-                            horizontal: 40, vertical: 10),
+                            horizontal: 40, vertical: 5),
                         child: const Text(
                           'LECO',
                           style: TextStyle(
@@ -122,12 +92,6 @@ class _SignInScreenState extends State<SignInScreen> {
                                 }
                                 return null;
                               },
-                              // onChanged: (value) {
-                              //   email = value;
-                              // },
-                              // onSaved: (value) {
-                              //   email = value;
-                              // },
                               hint: '이메일',
                               icon: Icons.email_outlined,
                               keyboard: TextInputType.emailAddress,
@@ -143,17 +107,29 @@ class _SignInScreenState extends State<SignInScreen> {
                                 }
                                 return null;
                               },
-                              // onChanged: (value) {
-                              //   password = value;
-                              // },
-                              // onSaved: (value) {
-                              //   password = value;
-                              // },
                               hint: '비밀번호',
                               icon: Icons.lock_open_rounded,
                             ),
-                            const SizedBox(
-                              height: 30,
+                            Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 6.0, horizontal: 30),
+                              child: Row(
+                                children: [
+                                  Expanded(child: Container()),
+                                  GestureDetector(
+                                    onTap: () {
+                                      Get.to(() => ResetEmailScreen());
+                                    },
+                                    child: const Text(
+                                      '비밀번호 찾기',
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                        fontFamily: 'Jua',
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
                           ],
                         ),
@@ -176,7 +152,8 @@ class _SignInScreenState extends State<SignInScreen> {
                           _showSpinner = true;
                         });
                         _tryValidation();
-                        UserController.to.login(_email.text.trim(), _password.text.trim());
+                        UserController.to
+                            .login(_email.text.trim(), _password.text.trim());
                         setState(() {
                           _showSpinner = false;
                         });
@@ -191,7 +168,9 @@ class _SignInScreenState extends State<SignInScreen> {
                       ),
                     ),
                   ),
-                  const SizedBox(height: 10,),
+                  const SizedBox(
+                    height: 10,
+                  ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [

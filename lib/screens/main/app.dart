@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:leco_flutter/controller/bottom_nav_controller.dart';
-import 'package:leco_flutter/screens/main/home/home_screen.dart';
+import 'package:leco_flutter/screens/main/home/main/home_screen.dart';
 import 'package:leco_flutter/screens/main/home/review_screen.dart';
 import 'package:leco_flutter/screens/main/mypage/mypage_screen.dart';
 import 'package:leco_flutter/screens/main/search_screen.dart';

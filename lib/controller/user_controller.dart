@@ -131,7 +131,6 @@ class UserController extends GetxController {
       await loggedUser!.updatePassword(password);
       await firebaseFirestore.doc('/users/${loggedUser.uid}').update({
         'password': password,
-        // 'password': password,
         // 'photoUrl': "photoUrl",
       });
       print('비밀번호 변경');
@@ -140,6 +139,17 @@ class UserController extends GetxController {
       print(e.toString());
     }
   }
+
+  Future<void> resetPassword(String email) async {
+    if(email != '') {
+      auth.sendPasswordResetEmail(email: email);
+    }else {
+      print('이메일을 확인해주세요');
+    }
+  }
+
+
+
 
   //구글 로그인
   Future<UserCredential?> signInWithGoogle() async {

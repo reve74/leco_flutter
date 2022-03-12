@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class SignupImagewithText extends StatelessWidget {
-  const SignupImagewithText({Key? key}) : super(key: key);
+  SignupImagewithText({Key? key, required this.title, this.color}) : super(key: key);
+
+  final String title;
+  final Color? color;
 
   @override
   Widget build(BuildContext context) {
@@ -48,13 +51,13 @@ class SignupImagewithText extends StatelessWidget {
         ),
         Container(
           margin: const EdgeInsets.symmetric(horizontal: 40, vertical: 10),
-          child: const Text(
-            '회원가입',
+          child:  Text(
+            '$title',
             style: TextStyle(
               fontFamily: 'Jua',
               fontSize: 30,
               fontWeight: FontWeight.bold,
-              color: Colors.blueAccent,
+              color: color,
             ),
           ),
         ),
