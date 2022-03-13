@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:leco_flutter/model/utils.dart';
 import 'package:leco_flutter/screens/main/home/main/category_screen.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -209,13 +210,15 @@ class _HomeScreenState extends State<HomeScreen> {
         _menuTab(
           title: '카테고리',
           onPressed: () {
-            // Get.to(() => CategoryScreen(selectedCategory: Utils.getMockedCategories()[0],));
+
           },
         ),
         _menuCard(),
         _menuTab(
           title: '신제품',
-          onPressed: () {},
+          onPressed: () {
+            Get.to(() => CategoryScreen(selectedCategory: Utils.getMockedCategories()[0],));
+          },
         ),
         _menuCard(),
         const SizedBox(

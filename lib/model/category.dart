@@ -6,8 +6,9 @@ import 'package:leco_flutter/model/subcategory.dart';
 class Category {
   String? name;
   String? imgName;
+  List<Category>? subCategories;
 
-  Category({this.name, this.imgName});
+  Category({this.name, this.imgName, this.subCategories});
 
   // factory Category.fromJson(Map<String, dynamic> json) {
   //   return Category(
