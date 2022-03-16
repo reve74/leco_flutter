@@ -5,16 +5,16 @@ class Utils {
   static List<Category> getMockedCategories() {
     return [
       Category(
-        name: 'Creater',
-        imgName: 'Creater',
+        name: 'Creator Expert',
+        imgName: 'creatorexpert',
         subCategories: [
           SubCategory(
             name: '레고® 베스파 125',
-            imgName: 'vespa'
+            imgName: 'vespa',
           ),
           SubCategory(
               name: '부티크 호텔',
-              imgName: 'boutique'
+              imgName: 'boutique',
           ),
           SubCategory(
               name: '캄 노우 – FC 바르셀로나',
@@ -25,25 +25,36 @@ class Utils {
               imgName: 'discovery'
           ),
           SubCategory(
-              name: '프렌즈 아파트',
-              imgName: 'friends'
+              name: '레고® 타이타닉',
+              imgName: 'titanic'
           ),
 
         ]
       ),
       Category(
-          name: 'Harrypotter',
-          imgName: 'Harrypotter',
+          name: 'Disney',
+          imgName: 'disney',
           subCategories: []
+
       ),
       Category(
-          name: 'Disney',
-          imgName: 'Disney',
+          name: 'Marvel',
+          imgName: 'marvel',
           subCategories: []
       ),
       Category(
           name: 'Starwars',
-          imgName: 'Starwars',
+          imgName: 'starwars',
+          subCategories: []
+      ),
+      Category(
+          name: 'Architecture',
+          imgName: 'architecture',
+          subCategories: []
+      ),
+      Category(
+          name: 'Minifigure',
+          imgName: 'minifigure',
           subCategories: []
       ),
     ];

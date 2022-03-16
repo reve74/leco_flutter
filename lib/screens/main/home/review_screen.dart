@@ -26,7 +26,7 @@ class ReviewScreen extends StatelessWidget {
               style: TextStyle(
                 fontFamily: 'Jua',
                 fontSize: 25,
-                color: Colors.black54,
+                color: Colors.black,
               ),
             ),
             floating: true,

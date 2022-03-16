@@ -1,18 +1,21 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:leco_flutter/model/category.dart';
 import 'package:leco_flutter/model/utils.dart';
 import 'package:leco_flutter/screens/main/home/main/category_screen.dart';
+import 'package:leco_flutter/screens/main/home/main/categorylist_screen.dart';
+import 'package:leco_flutter/screens/main/home/main/widgets/maincategorycard.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key? key}) : super(key: key);
-
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
   late TabController tabController;
+  List<Category>? categories = Utils.getMockedCategories();
 
   @override
   void initState() {
@@ -42,7 +45,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _card({String? thumbPath, double? size}) {
+  Widget _card({String? thumbPath}) {
     // 제품 카드
     return Column(
       children: [
@@ -55,10 +58,10 @@ class _HomeScreenState extends State<HomeScreen> {
             color: Colors.white,
           ),
           child: ClipRRect(
-            borderRadius: BorderRadius.circular(size!),
+            borderRadius: BorderRadius.circular(100),
             child: SizedBox(
-              width: size,
-              height: size,
+              width: 100,
+              height: 100,
               child: CachedNetworkImage(
                 imageUrl: thumbPath!,
                 fit: BoxFit.cover,
@@ -82,20 +85,21 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _menuCard() {
-    return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      child: Row(
-        children: [
-          ...List.generate(
-            5,
-                (index) =>
-                _card(
-                  size: 100,
-                  thumbPath:
-                  'https://www.lego.com/cdn/cs/set/assets/bltfb7085baebd9e2ca/ThemeImage-202107-Disney.jpg?fit=bounds&format=webply&quality=80&width=420&height=200&dpr=1',
-                ),
-          ),
-        ],
+    return SizedBox(
+      height: 140,
+      child: ListView.builder(
+        scrollDirection: Axis.horizontal,
+        // physics: const NeverScrollableScrollPhysics(),
+
+        shrinkWrap: true,
+        itemCount: categories!.length,
+        itemBuilder: (BuildContext context, int index) {
+          return MainCategoryCard(
+            category: categories![index],
+            onCardClick: () {
+              // Get.to(() => CategoryListScreen());
+            });
+        },
       ),
     );
   }
@@ -210,29 +214,26 @@ class _HomeScreenState extends State<HomeScreen> {
         _menuTab(
           title: '카테고리',
           onPressed: () {
-
+            Get.to(() => CategoryListScreen());
           },
         ),
         _menuCard(),
         _menuTab(
           title: '신제품',
           onPressed: () {
-            Get.to(() => CategoryScreen(selectedCategory: Utils.getMockedCategories()[0],));
+            // Get.to(() => CategoryScreen(
+            //       selectedCategory: Utils.getMockedCategories()[0],
+            //     ));
           },
         ),
         _menuCard(),
-        const SizedBox(
-          height: 10,
-        ),
       ],
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery
-        .of(context)
-        .size;
+    Size size = MediaQuery.of(context).size;
     double height = size.height;
 
     return Scaffold(

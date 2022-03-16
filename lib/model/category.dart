@@ -7,6 +7,7 @@ class Category {
   String? name;
   String? imgName;
   List<Category>? subCategories;
+  // String? url;
 
   Category({this.name, this.imgName, this.subCategories});
 

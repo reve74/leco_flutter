@@ -99,7 +99,7 @@ class MypageScreen extends StatelessWidget {
           style: TextStyle(
             fontFamily: 'Jua',
             fontSize: 25,
-            color: Colors.black54,
+            color: Colors.black,
           ),
         ),
       ),
