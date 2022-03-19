@@ -6,6 +6,7 @@ import 'package:leco_flutter/model/category.dart';
 import 'package:leco_flutter/model/utils.dart';
 import 'package:leco_flutter/screens/main/home/main/category_screen.dart';
 import 'package:leco_flutter/screens/main/home/main/categorylist_screen.dart';
+import 'package:leco_flutter/screens/main/home/main/selectedcategory_screen.dart';
 import 'package:leco_flutter/screens/main/home/main/widgets/maincategorycard.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -97,7 +98,7 @@ class _HomeScreenState extends State<HomeScreen> {
           return MainCategoryCard(
             category: categories![index],
             onCardClick: () {
-              // Get.to(() => CategoryListScreen());
+              Get.to(() => SelectedCategoryScreen(selectedCategory: categories![index],));
             });
         },
       ),

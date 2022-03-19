@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:leco_flutter/model/category.dart';
+import 'package:leco_flutter/screens/main/home/main/detailspage.dart';
 
 class SelectedCategoryScreen extends StatelessWidget {
   SelectedCategoryScreen({Key? key, this.selectedCategory}) : super(key: key);
@@ -31,28 +33,33 @@ class SelectedCategoryScreen extends StatelessWidget {
               children: List.generate(
                 selectedCategory!.subCategories!.length,
                 (index) {
-                  return Column(
-                    children: [
-                      ClipOval(
-                        child: Image.asset(
-                          'assets/category/' +
-                              selectedCategory!.subCategories![index].imgName! +
-                              '.png',
-                          width: 100,
-                          height: 100,
-                          fit: BoxFit.cover,
+                  return GestureDetector(
+                    onTap: () {
+                      Get.to(() => DetailsPage(subCategory: selectedCategory!.subCategories![index]));
+                    },
+                    child: Column(
+                      children: [
+                        ClipOval(
+                          child: Image.asset(
+                            'assets/category/' +
+                                selectedCategory!.subCategories![index].imgName! +
+                                '.png',
+                            width: 100,
+                            height: 100,
+                            fit: BoxFit.cover,
+                          ),
                         ),
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      Text(
-                        selectedCategory!.subCategories![index].name!,
-                        style: const TextStyle(
-                          fontFamily: 'Jua',
+                        const SizedBox(
+                          height: 10,
                         ),
-                      ),
-                    ],
+                        Text(
+                          selectedCategory!.subCategories![index].name!,
+                          style: const TextStyle(
+                            fontFamily: 'Jua',
+                          ),
+                        ),
+                      ],
+                    ),
                   );
                 },
               ),
