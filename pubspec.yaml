@@ -28,6 +28,10 @@ dependencies:
   html: ^0.15.0
   firebase_storage: ^10.2.9
   url_launcher: ^6.0.20
+  flutter_rating_bar: ^4.0.0
+  image_picker: ^0.8.4+11
+  intl: ^0.17.0
+  firebase_database: ^9.0.8
 
 dev_dependencies:
   flutter_test:

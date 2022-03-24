@@ -8,8 +8,9 @@ class SubCategory{
   String? modelNumber;
   String? brick;
   String? age;
+  String? url;
 
-  SubCategory({this.name, this.imgName, this.description, this.modelNumber, this.brick, this.age});
+  SubCategory({this.name, this.imgName, this.description, this.modelNumber, this.brick, this.age, this.url});
 }
 
 

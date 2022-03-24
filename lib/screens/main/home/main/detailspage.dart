@@ -1,13 +1,32 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:leco_flutter/controller/auth_controller.dart';
+import 'package:leco_flutter/controller/ProductCommentController.dart';
+import 'package:leco_flutter/model/productcomment.dart';
 import 'package:leco_flutter/model/subcategory.dart';
-import 'package:leco_flutter/screens/login/components/image_data.dart';
+import 'package:leco_flutter/settings/firebase.dart';
+import 'package:url_launcher/url_launcher.dart';
 
-class DetailsPage extends StatelessWidget {
+class DetailsPage extends StatefulWidget {
   SubCategory? subCategory;
 
   DetailsPage({this.subCategory});
+
+  @override
+  State<DetailsPage> createState() => _DetailsPageState();
+}
+
+class _DetailsPageState extends State<DetailsPage> {
+  double rating = 0;
+  final _stars = TextEditingController();
+  final _comment = TextEditingController();
+
+
+  ProductCommentController productCommentController =
+      Get.put(ProductCommentController());
 
   Widget _infoCard({String? number, String? title, String? image}) {
     return Expanded(
@@ -37,7 +56,7 @@ class DetailsPage extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           _infoCard(
-            number: subCategory!.modelNumber,
+            number: widget.subCategory!.modelNumber,
             image: 'tag',
             title: '제품명',
           ),
@@ -45,7 +64,7 @@ class DetailsPage extends StatelessWidget {
             width: 20,
           ),
           _infoCard(
-            number: subCategory!.brick,
+            number: widget.subCategory!.brick,
             image: 'brick',
             title: '부품수',
           ),
@@ -53,7 +72,7 @@ class DetailsPage extends StatelessWidget {
             width: 20,
           ),
           _infoCard(
-            number: subCategory!.age,
+            number: widget.subCategory!.age,
             image: 'cake',
             title: '연령',
           ),
@@ -61,6 +80,54 @@ class DetailsPage extends StatelessWidget {
       ),
     );
   }
+
+  Widget _comments() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 10.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Text('2022-03-20'),
+          Padding(
+            padding: EdgeInsets.symmetric(vertical: 5.0),
+            child: Text('마니아'),
+          ),
+          Container(
+            color: Colors.yellow,
+            height: 40,
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 5.0),
+            child: Text('너무 예뻐요'),
+          ),
+          Divider(
+            height: 2,
+            color: Colors.black54.withOpacity(0.6),
+            thickness: 0.3,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Stream<DocumentSnapshot> _stream() {
+    return firebaseFirestore
+        .collection('productComments')
+        .doc(widget.subCategory!.modelNumber!)
+        .snapshots();
+  }
+
+  Future<List<QueryDocumentSnapshot<ProductComment>>> findAll() async =>
+      await firebaseFirestore
+          .collection('productComments')
+          .doc(widget.subCategory!.modelNumber!)
+          .collection('comments')
+          .withConverter<ProductComment>(
+              fromFirestore: ((snapshot, options) =>
+                  ProductComment.fromJson(snapshot.data()!)),
+              toFirestore: (productComment, options) => productComment.toJson())
+          .get()
+          .then((snapshot) => snapshot.docs);
 
   @override
   Widget build(BuildContext context) {
@@ -76,7 +143,7 @@ class DetailsPage extends StatelessWidget {
                     decoration: BoxDecoration(
                       image: DecorationImage(
                           image: AssetImage('assets/category/' +
-                              subCategory!.imgName! +
+                              widget.subCategory!.imgName! +
                               '.png'),
                           fit: BoxFit.cover),
                     ),
@@ -101,7 +168,7 @@ class DetailsPage extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.only(top: 10),
                       child: Text(
-                        subCategory!.name!,
+                        widget.subCategory!.name!,
                         style: const TextStyle(
                           fontSize: 25,
                           fontWeight: FontWeight.bold,
@@ -118,7 +185,10 @@ class DetailsPage extends StatelessWidget {
                                 elevation: 0,
                                 primary: const Color(0xfffffd600),
                               ),
-                              onPressed: () {},
+                              onPressed: () async {
+                                await launch(widget.subCategory!.url!,
+                                    forceWebView: false, forceSafariVC: false);
+                              },
                               child: const Text(
                                 '공식 홈페이지',
                                 style: TextStyle(color: Colors.black),
@@ -129,7 +199,9 @@ class DetailsPage extends StatelessWidget {
                             width: 10,
                           ),
                           IconButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              // Get.to(() => Stars());
+                            },
                             icon: const Icon(
                               Icons.favorite_border_outlined,
                               color: Colors.blue,
@@ -140,21 +212,91 @@ class DetailsPage extends StatelessWidget {
                     ),
                     _infoCardList(),
                     Container(
-                      child: Text(subCategory!.description!),
+                      child: Text(widget.subCategory!.description!),
                     ),
-                    Container(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: const [
-                          Text(
-                            '상품평',
-                            style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        const Text(
+                          '상품평',
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            RatingBar.builder(
+                              updateOnDrag: true,
+                              itemBuilder: (context, _) => const Icon(
+                                Icons.star,
+                                color: Colors.amber,
+                              ),
+                              onRatingUpdate: (rating) => setState(
+                                () {
+                                  this.rating = rating;
+                                  print(rating);
+                                },
+                              ),
+                            ),
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: TextField(
+                                    controller: _comment,
+                                    decoration: const InputDecoration(
+                                      hintText: ('제품을 평가해주세요!'),
+                                    ),
+                                  ),
+                                ),
+                                ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                      primary: Colors.blueAccent),
+                                  onPressed: () {
+                                    productCommentController.insert(
+                                      comment: _comment.text.trim(),
+                                      user: AuthController.to.firestoreUser()!,
+                                      modelNumber:
+                                          widget.subCategory!.modelNumber!,
+                                    );
+                                  },
+                                  child: Text('등록'),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                        // ...List.generate(
+                        //   5,
+                        //   (index) => _comments(),
+                        // ),
+                        Obx(
+                          () => RefreshIndicator(
+                            onRefresh: () async {
+                              await findAll();
+                            },
+                            child: ListView.separated(
+                              physics: const NeverScrollableScrollPhysics(),
+                              shrinkWrap: true,
+                              itemBuilder: (context, index) {
+                                return ListTile(
+                                  onTap: () {
+                                    findAll();
+                                  },
+                                  title: Text(productCommentController
+                                      .pc[index].comment
+                                      .toString()),
+                                );
+                              },
+                              separatorBuilder: (context, index) {
+                                return Divider();
+                              },
+                              itemCount: productCommentController.pc.length,
                             ),
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
                     SizedBox(
                       height: 100,

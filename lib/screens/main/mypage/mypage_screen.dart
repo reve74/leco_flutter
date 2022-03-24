@@ -118,13 +118,15 @@ class MypageScreen extends StatelessWidget {
                           AvatarWidget(
                             type: AvatarType.TYPE3,
                             thumbPath:
-                                'https://mblogthumb-phinf.pstatic.net/MjAxOTExMTJfNDgg/MDAxNTczNTM4MDA3NTg0.9TlIFX298qmFgshn'
+                            'https://mblogthumb-phinf.pstatic.net/MjAxOTExMTJfNDgg/MDAxNTczNTM4MDA3NTg0.9TlIFX298qmFgshn'
                                 'aDaEzIbsjbCv3Vv--lVKXYDncJUg.FDj0vS33LWuKyQGof7MZ0wNHFgCPYTkgtyhGq8fVsLIg.JPEG.b-seol/67169559_300723540773498_6905365256298412426_n.jpg?type=w800',
                           ),
                           const SizedBox(
                             width: 10,
                           ),
-                          // Obx(() => Text('${a.firestoreUser.value!.username}')),
+                          // Obx(() =>
+                          //     Text('${a.firestoreUser.value!.username}'),
+                          // ),
                         ],
                       ),
                       const SizedBox(
