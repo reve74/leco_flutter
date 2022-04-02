@@ -1,5 +1,4 @@
 import 'package:firebase_database/firebase_database.dart';
-import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:leco_flutter/controller/post_controller.dart';
@@ -48,28 +47,28 @@ class _ReviewScreenState extends State<ReviewScreen> {
             delegate: SliverChildBuilderDelegate((context, index) {
               return Column(
                 children: [
-                  Expanded(
-                      child: FirebaseAnimatedList(
-                    physics: NeverScrollableScrollPhysics(),
-                    shrinkWrap: false,
-                    query: dbRef.child('Pst List'),
-                    itemBuilder: (BuildContext context, DataSnapshot snapshot,
-                        Animation<double> animation, int index) {
-                      return Column(
-                        // children: [
-                        //   FadeInImage.assetNetwork(
-                        //       placeholder: 'assets/images/spiderman.png',
-                        //       image: snapshot.value['image'])
-                        // ],
-                      );
-                    },
-                  ))
+                  // Expanded(
+                  //     child: FirebaseAnimatedList(
+                  //   physics: NeverScrollableScrollPhysics(),
+                  //   shrinkWrap: false,
+                  //   query: dbRef.child('Pst List'),
+                  //   itemBuilder: (BuildContext context, DataSnapshot snapshot,
+                  //       Animation<double> animation, int index) {
+                  //     return Column(
+                  //       children: [
+                  //         FadeInImage.assetNetwork(
+                  //             placeholder: 'assets/images/spiderman.png',
+                  //             image: snapshot.value['image'])
+                  //       ],
+                  //     );
+                  //   },
+                  // ))
 
-                  // ...List.generate(1,
-                  //       (index) => ReviewCard(
-                  //     number: index,
-                  //   ),
-                  // ).toList(),
+                  ...List.generate(1,
+                        (index) => ReviewCard(
+                      number: index,
+                    ),
+                  ).toList(),
                 ],
               );
             }, childCount: 1),

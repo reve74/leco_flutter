@@ -181,7 +181,7 @@ class MypageScreen extends StatelessWidget {
                                 height: 10,
                               ),
                               Text(
-                                '구독 목록',
+                                '좋아요',
                                 style: TextStyle(
                                   fontSize: 18,
                                   fontFamily: 'Jua',

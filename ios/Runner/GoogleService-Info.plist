@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>199030687804-he7u2ngd7l018cmqihqovo5nnn0s6hmj.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.199030687804-he7u2ngd7l018cmqihqovo5nnn0s6hmj</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>199030687804-79qt97ukjvhsaft2etaadff6ofg3o2if.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyCPb0nTT4-vPnCLaGX6tWq8Ws47pZvtLZg</string>
+	<key>GCM_SENDER_ID</key>
+	<string>199030687804</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.reve74leco.lecoFlutter</string>
+	<key>PROJECT_ID</key>
+	<string>leco-ace60</string>
+	<key>STORAGE_BUCKET</key>
+	<string>leco-ace60.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:199030687804:ios:1be0a0c92d4325b5771b39</string>
+	<key>DATABASE_URL</key>
+	<string>https://leco-ace60-default-rtdb.firebaseio.com</string>
+</dict>
+</plist>
