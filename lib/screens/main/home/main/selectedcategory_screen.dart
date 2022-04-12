@@ -5,7 +5,6 @@ import 'package:leco_flutter/screens/main/home/main/detailspage.dart';
 
 class SelectedCategoryScreen extends StatelessWidget {
   SelectedCategoryScreen({Key? key, this.selectedCategory}) : super(key: key);
-
   Category? selectedCategory;
 
   @override

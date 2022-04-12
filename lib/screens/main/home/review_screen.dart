@@ -2,7 +2,9 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:leco_flutter/controller/post_controller.dart';
+import 'package:leco_flutter/controller/upload_controller.dart';
 import 'package:leco_flutter/screens/main/components/review_card.dart';
+import 'package:leco_flutter/screens/main/home/create/upload_screen.dart';
 import 'package:leco_flutter/screens/main/home/create/write_screen.dart';
 
 class ReviewScreen extends StatefulWidget {
@@ -22,7 +24,9 @@ class _ReviewScreenState extends State<ReviewScreen> {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Get.to(WriteScreen());
+          Get.to(WriteScreen(), binding: BindingsBuilder(() {
+            Get.put(UploadController());
+          }));
         },
         backgroundColor: Color(0xfffffd600),
         child: Icon(Icons.add),

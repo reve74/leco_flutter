@@ -12,8 +12,9 @@ import 'package:url_launcher/url_launcher.dart';
 
 class DetailsPage extends StatefulWidget {
   SubCategory? subCategory;
+  final snap;
 
-  DetailsPage({this.subCategory});
+  DetailsPage({this.subCategory, this.snap});
 
   @override
   State<DetailsPage> createState() => _DetailsPageState();
@@ -21,12 +22,33 @@ class DetailsPage extends StatefulWidget {
 
 class _DetailsPageState extends State<DetailsPage> {
   double rating = 0;
-  final _stars = TextEditingController();
   final _comment = TextEditingController();
+  bool isComment = false;
 
-
+  AuthController a = Get.put(AuthController());
   ProductCommentController productCommentController =
       Get.put(ProductCommentController());
+
+  @override
+  void initState() {
+    super.initState();
+    getComments();
+  }
+
+  void getComments() async {
+    try {
+      QuerySnapshot snap = await firebaseFirestore
+          .collection('productComments')
+          .doc(widget.subCategory!.modelNumber)
+          .collection('comments')
+          .get();
+
+      // isComment = postSnap.
+    } catch (e) {
+      print(e.toString());
+    }
+    setState(() {});
+  }
 
   Widget _infoCard({String? number, String? title, String? image}) {
     return Expanded(
@@ -81,16 +103,16 @@ class _DetailsPageState extends State<DetailsPage> {
     );
   }
 
-  Widget _comments() {
+  Widget _comments({final snap}) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 10.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Text('2022-03-20'),
+          Text(widget.snap['created'].toDate()),
           Padding(
-            padding: EdgeInsets.symmetric(vertical: 5.0),
-            child: Text('마니아'),
+            padding: const EdgeInsets.symmetric(vertical: 5.0),
+            child: Text(widget.snap['username']),
           ),
           Container(
             color: Colors.yellow,
@@ -98,7 +120,7 @@ class _DetailsPageState extends State<DetailsPage> {
           ),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 5.0),
-            child: Text('너무 예뻐요'),
+            child: Text(widget.snap['comment']),
           ),
           Divider(
             height: 2,
@@ -106,6 +128,23 @@ class _DetailsPageState extends State<DetailsPage> {
             thickness: 0.3,
           ),
         ],
+      ),
+    );
+  }
+
+  Widget ratingBar({double rating = 0}) {
+    return RatingBar.builder(
+      updateOnDrag: true,
+      itemBuilder: (context, _) => const Icon(
+        Icons.star,
+        color: Colors.amber,
+      ),
+      onRatingUpdate: (rating) => setState(
+        () {
+          this.rating = rating;
+          print(rating);
+          setState(() {});
+        },
       ),
     );
   }
@@ -224,78 +263,114 @@ class _DetailsPageState extends State<DetailsPage> {
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: [
-                            RatingBar.builder(
-                              updateOnDrag: true,
-                              itemBuilder: (context, _) => const Icon(
-                                Icons.star,
-                                color: Colors.amber,
-                              ),
-                              onRatingUpdate: (rating) => setState(
-                                () {
-                                  this.rating = rating;
-                                  print(rating);
-                                },
-                              ),
-                            ),
-                            Row(
-                              children: [
-                                Expanded(
-                                  child: TextField(
-                                    controller: _comment,
-                                    decoration: const InputDecoration(
-                                      hintText: ('제품을 평가해주세요!'),
+                        isComment
+                            ? Container()
+                            : Column(
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                                children: [
+                                  RatingBar.builder(
+                                    updateOnDrag: true,
+                                    itemBuilder: (context, _) => const Icon(
+                                      Icons.star,
+                                      color: Colors.amber,
+                                    ),
+                                    onRatingUpdate: (rating) => setState(
+                                      () {
+                                        this.rating = rating;
+                                      },
                                     ),
                                   ),
-                                ),
-                                ElevatedButton(
-                                  style: ElevatedButton.styleFrom(
-                                      primary: Colors.blueAccent),
-                                  onPressed: () {
-                                    productCommentController.insert(
-                                      comment: _comment.text.trim(),
-                                      user: AuthController.to.firestoreUser()!,
-                                      modelNumber:
-                                          widget.subCategory!.modelNumber!,
-                                    );
-                                  },
-                                  child: Text('등록'),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
+                                  Row(
+                                    children: [
+                                      Expanded(
+                                        child: TextField(
+                                          controller: _comment,
+                                          decoration: const InputDecoration(
+                                            hintText: ('제품을 평가해주세요!'),
+                                          ),
+                                        ),
+                                      ),
+                                      ElevatedButton(
+                                        style: ElevatedButton.styleFrom(
+                                            primary: Colors.blueAccent),
+                                        onPressed: () {
+                                          productCommentController.insert(
+                                            username: a
+                                                .firestoreUser.value!.username!,
+                                            uid: auth.currentUser!.uid,
+                                            starCount: rating,
+                                            comment: _comment.text.trim(),
+                                            user: AuthController.to
+                                                .firestoreUser()!,
+                                            modelNumber: widget
+                                                .subCategory!.modelNumber!,
+                                          );
+                                          setState(() {
+                                            _comment.text = "";
+                                            isComment = true;
+                                          });
+                                        },
+                                        child: Text('등록'),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                        StreamBuilder(
+                          stream: firebaseFirestore
+                              .collection('productComments')
+                              .doc(widget.subCategory!.modelNumber!)
+                              .collection('comments')
+                              .orderBy('created', descending: false)
+                              .snapshots(),
+                          builder: (context, snapshot) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              return const Center(
+                                child: CircularProgressIndicator(),
+                              );
+                            }
+                            return ListView.builder(
+                              physics: const NeverScrollableScrollPhysics(),
+                              shrinkWrap: true,
+                              itemBuilder: (context, index) => _comments(
+                                  snap: (snapshot.data! as dynamic)
+                                      .docs[index]
+                                      .data()),
+                              itemCount:
+                                  (snapshot.data! as dynamic).docs.length,
+                            );
+                          },
+                        )
                         // ...List.generate(
                         //   5,
                         //   (index) => _comments(),
                         // ),
-                        Obx(
-                          () => RefreshIndicator(
-                            onRefresh: () async {
-                              await findAll();
-                            },
-                            child: ListView.separated(
-                              physics: const NeverScrollableScrollPhysics(),
-                              shrinkWrap: true,
-                              itemBuilder: (context, index) {
-                                return ListTile(
-                                  onTap: () {
-                                    findAll();
-                                  },
-                                  title: Text(productCommentController
-                                      .pc[index].comment
-                                      .toString()),
-                                );
-                              },
-                              separatorBuilder: (context, index) {
-                                return Divider();
-                              },
-                              itemCount: productCommentController.pc.length,
-                            ),
-                          ),
-                        ),
+                        // Obx(
+                        //   () => RefreshIndicator(
+                        //     onRefresh: () async {
+                        //       await findAll();
+                        //     },
+                        //     child: ListView.separated(
+                        //       physics: const NeverScrollableScrollPhysics(),
+                        //       shrinkWrap: true,
+                        //       itemBuilder: (context, index) {
+                        //         return ListTile(
+                        //           onTap: () {
+                        //             findAll();
+                        //           },
+                        //           title: Text(productCommentController
+                        //               .pc[index].comment
+                        //               .toString()),
+                        //         );
+                        //       },
+                        //       separatorBuilder: (context, index) {
+                        //         return Divider();
+                        //       },
+                        //       itemCount: productCommentController.pc.length,
+                        //     ),
+                        //   ),
+                        // ),
                       ],
                     ),
                     SizedBox(

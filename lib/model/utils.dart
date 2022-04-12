@@ -29,7 +29,7 @@ class Utils {
             name: '부티크 호텔',
             imgName: 'boutique',
             description: '부티크',
-            modelNumber: '10298',
+            modelNumber: '10297',
             brick: '1106',
             age: '18 +',
             url: 'https://www.lego.com/ko-kr/product/boutique-hotel-10297',

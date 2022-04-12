@@ -11,6 +11,8 @@ class BottomNavController extends GetxController {
   RxInt pageIndex = 0.obs; // TODO: obs ?
   List<int> bottomHistory = [0]; // 페이지 히스토리를 관리하는 리스트
 
+
+
   void changeBottomNav(int value, {bool hasGesture = true}) {
     // =>app 쪽 Scaffold를 obx로 감싸줘야함
     var page = PageName.values[value];
@@ -73,4 +75,10 @@ class BottomNavController extends GetxController {
       return false;
     }
   }
+
+  void deleteBottomHistory() {
+    bottomHistory.clear();
+    print(bottomHistory);
+  }
+
 }

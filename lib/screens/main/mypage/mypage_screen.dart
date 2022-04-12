@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:leco_flutter/controller/auth_controller.dart';
+import 'package:leco_flutter/controller/bottom_nav_controller.dart';
 import 'package:leco_flutter/controller/user_controller.dart';
 import 'package:leco_flutter/model/user.dart';
 import 'package:leco_flutter/screens/login/signgin_screen.dart';
@@ -9,10 +10,11 @@ import 'package:leco_flutter/screens/main/components/message_popup.dart';
 import 'package:leco_flutter/screens/main/mypage/change_password_screen.dart';
 import 'package:leco_flutter/screens/main/mypage/test.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:leco_flutter/screens/main/test1.dart';
+
 import 'package:leco_flutter/settings/firebase.dart';
 
 class MypageScreen extends StatelessWidget {
+  BottomNavController b = Get.put(BottomNavController());
   // final _authentication = FirebaseAuth.instance;
   // User? loggedUser;
   // UserModel user = Get.arguments;
@@ -256,6 +258,7 @@ class MypageScreen extends StatelessWidget {
                   title: '로그아웃  ',
                   onTap: () {
                     UserController.to.signOut();
+                    b.deleteBottomHistory();
                     // _authentication.signOut();
                     // Get.offAll(const SignInScreen());
                   },
