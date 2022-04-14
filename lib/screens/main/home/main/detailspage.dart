@@ -296,12 +296,12 @@ class _DetailsPageState extends State<DetailsPage> {
                                         onPressed: () {
                                           productCommentController.insert(
                                             username: a
-                                                .firestoreUser.value!.username!,
+                                                .firestoreUser.value.username!,
                                             uid: auth.currentUser!.uid,
                                             starCount: rating,
                                             comment: _comment.text.trim(),
                                             user: AuthController.to
-                                                .firestoreUser()!,
+                                                .firestoreUser(),
                                             modelNumber: widget
                                                 .subCategory!.modelNumber!,
                                           );

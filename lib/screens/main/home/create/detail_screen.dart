@@ -4,7 +4,6 @@ import 'package:leco_flutter/controller/bottom_nav_controller.dart';
 import 'package:leco_flutter/screens/login/components/image_data.dart';
 import 'package:leco_flutter/screens/main/app.dart';
 import 'package:leco_flutter/screens/main/home/create/update_screen.dart';
-import 'package:leco_flutter/screens/main/home/create_screen.dart';
 import 'package:leco_flutter/screens/main/home/main/home_screen.dart';
 
 class DetailScreen extends GetView<BottomNavController> {

@@ -16,8 +16,8 @@ class Test1 extends StatelessWidget {
         () => Column(
           children: [
             Text('회원 비밀번호 : ${user.username}'),
-            Text("회원 이메일 : ${a.firestoreUser.value!.email}"),
-            Text("회원 패스워드 : ${a.firestoreUser.value!.password}"),
+            // Text("회원 이메일 : ${a.firestoreUser.value.email}"),
+            // Text("회원 패스워드 : ${a.firestoreUser.value.password}"),
           ],
         ),
       ),

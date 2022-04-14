@@ -7,12 +7,12 @@ class UserModel {
 
   UserModel({this.uid, this.email,this.password, this.username});
 
-  factory UserModel.fromMap(Map data) {
+  factory UserModel.fromMap(Map<String, dynamic> json) {
     return UserModel(
-      uid: data['uid'],
-      email: data['email'] ?? '',
-      password: data['password'] ?? '',
-      username: data['username'] ?? '',
+      uid: json['uid']== null ? '' : json['uid'] as String,
+      email: json['email'] == null ? '' : json['uid'] as String,
+      password: json['password'] == null ? '' : json['uid'] as String,
+      username: json['username'] == null ? '' : json['uid'] as String,
       // photoUrl: data['photoUrl'] ?? '',
     );
   }

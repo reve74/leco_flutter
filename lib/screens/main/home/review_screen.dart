@@ -1,11 +1,13 @@
+import 'dart:typed_data';
+
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:leco_flutter/controller/post_controller.dart';
 import 'package:leco_flutter/controller/upload_controller.dart';
 import 'package:leco_flutter/screens/main/components/review_card.dart';
 import 'package:leco_flutter/screens/main/home/create/upload_screen.dart';
-import 'package:leco_flutter/screens/main/home/create/write_screen.dart';
 
 class ReviewScreen extends StatefulWidget {
   ReviewScreen({Key? key}) : super(key: key);
@@ -19,12 +21,13 @@ class _ReviewScreenState extends State<ReviewScreen> {
 
   final dbRef = FirebaseDatabase.instance.reference().child('posts');
 
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Get.to(WriteScreen(), binding: BindingsBuilder(() {
+          Get.to(UploadScreen(), binding: BindingsBuilder(() {
             Get.put(UploadController());
           }));
         },
@@ -68,8 +71,9 @@ class _ReviewScreenState extends State<ReviewScreen> {
                   //   },
                   // ))
 
-                  ...List.generate(1,
-                        (index) => ReviewCard(
+                  ...List.generate(
+                    1,
+                    (index) => ReviewCard(
                       number: index,
                     ),
                   ).toList(),
