@@ -38,10 +38,10 @@ class UploadDescription extends GetView<UploadController> {
                 borderSide: BorderSide(width: 2, color: Colors.amber),
               ),
               border: OutlineInputBorder(),
-              hintStyle: TextStyle(
-                  color: Colors.grey, fontWeight: FontWeight.normal),
-              labelStyle: TextStyle(
-                  color: Colors.grey, fontWeight: FontWeight.normal),
+              hintStyle:
+                  TextStyle(color: Colors.grey, fontWeight: FontWeight.normal),
+              labelStyle:
+                  TextStyle(color: Colors.grey, fontWeight: FontWeight.normal),
             ),
           ),
           const SizedBox(height: 20),
@@ -49,7 +49,8 @@ class UploadDescription extends GetView<UploadController> {
             maxLines: null,
             controller: controller.content,
             decoration: const InputDecoration(
-              contentPadding: EdgeInsets.symmetric(vertical: 40 ,horizontal: 10),
+              contentPadding:
+                  EdgeInsets.symmetric(vertical: 40, horizontal: 10),
               hintText: '글 내용',
               enabledBorder: OutlineInputBorder(
                 borderSide: BorderSide(
@@ -61,10 +62,10 @@ class UploadDescription extends GetView<UploadController> {
                 borderSide: BorderSide(width: 2, color: Colors.amber),
               ),
               border: OutlineInputBorder(),
-              hintStyle: TextStyle(
-                  color: Colors.grey, fontWeight: FontWeight.normal),
-              labelStyle: TextStyle(
-                  color: Colors.grey, fontWeight: FontWeight.normal),
+              hintStyle:
+                  TextStyle(color: Colors.grey, fontWeight: FontWeight.normal),
+              labelStyle:
+                  TextStyle(color: Colors.grey, fontWeight: FontWeight.normal),
             ),
           ),
         ],
@@ -121,7 +122,6 @@ class UploadDescription extends GetView<UploadController> {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     _description(context),
-
                   ],
                 ),
               ),

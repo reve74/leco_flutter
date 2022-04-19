@@ -18,9 +18,9 @@ class PostController extends GetxController {
   //   toFirestore: (post, options) => post.toJson(),
   // );
 
-  final postRef = FirebaseDatabase.instance.reference().child('posts');
-  firebase_storage.FirebaseStorage storage =
-      firebase_storage.FirebaseStorage.instance;
+  // final postRef = FirebaseDatabase.instance.ref().child('post');
+  // firebase_storage.FirebaseStorage storage =
+  //     firebase_storage.FirebaseStorage.instance;
 
   // Future<void> insert(
   //     {required String title,
@@ -29,9 +29,8 @@ class PostController extends GetxController {
   //   Post post = Post(
   //     title: title,
   //     content: content,
-  //     user: user,
+  //     userModel: user,
   //     created: DateTime.now(),
-  //     updated: DateTime.now(),
   //   );
   //   await postRef.add(post);
   // }

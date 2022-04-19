@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:leco_flutter/controller/product_comment_controller.dart';
 import 'package:leco_flutter/model/category.dart';
 import 'package:leco_flutter/model/utils.dart';
 import 'package:leco_flutter/screens/main/home/main/selectedcategory_screen.dart';
@@ -46,10 +47,11 @@ class CategoryListScreen extends StatelessWidget {
                 return CategoryCard(
                   onCardClick: () {
                     Get.to(
-                      () => SelectedCategoryScreen(
-                        selectedCategory: categories![index],
-                      ),
-                    );
+                        () => SelectedCategoryScreen(
+                              selectedCategory: categories![index],
+                            ), binding: BindingsBuilder(() {
+                      Get.put(ProductCommentController());
+                    }));
                   },
                   category: categories![index],
                 );

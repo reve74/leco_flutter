@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:leco_flutter/model/user.dart';
+import 'package:leco_flutter/screens/login/signgin_screen.dart';
+import 'package:leco_flutter/screens/main/components/message_popup.dart';
 import 'package:leco_flutter/settings/firebase.dart';
 
 class UserController extends GetxController {
@@ -78,9 +80,7 @@ class UserController extends GetxController {
     } on FirebaseAuthException catch (e) {
       print(e);
       if (e.code ==
-          'The password is invalid or the user does not have a password.') {
-        print('시발');
-      }
+          'The password is invalid or the user does not have a password.') {}
       Get.snackbar(
         'LECO',
         'User message',
@@ -123,11 +123,30 @@ class UserController extends GetxController {
     }
   }
 
+  Future<void> deleteUser() async {
+    showDialog(
+        context: Get.context!,
+        builder: (context) => MessagePopUp(
+              title: 'LECO',
+              message: '회원 탈퇴 하시겠습니까',
+              okCallback: () async {
+                await FirebaseFirestore.instance
+                    .collection('users')
+                    .doc(auth.currentUser!.uid)
+                    .delete();
+                auth.currentUser!.delete();
+                print('회원삭제');
+                Get.offAll(const SignInScreen());
+              },
+              cancelCallback: Get.back,
+            ),);
+  }
+
   // 비밀번호 변경
   Future<void> changePassword(String password) async {
     final loggedUser = auth.currentUser;
     // var newPassword = '';
-    try{
+    try {
       await loggedUser!.updatePassword(password);
       await firebaseFirestore.doc('/users/${loggedUser.uid}').update({
         'password': password,
@@ -135,21 +154,18 @@ class UserController extends GetxController {
       });
       print('비밀번호 변경');
       Get.back();
-    }on FirebaseAuthException catch (e) {
+    } on FirebaseAuthException catch (e) {
       print(e.toString());
     }
   }
 
   Future<void> resetPassword(String email) async {
-    if(email != '') {
+    if (email != '') {
       auth.sendPasswordResetEmail(email: email);
-    }else {
+    } else {
       print('이메일을 확인해주세요');
     }
   }
-
-
-
 
   //구글 로그인
   Future<UserCredential?> signInWithGoogle() async {

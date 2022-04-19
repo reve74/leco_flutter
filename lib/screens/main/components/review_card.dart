@@ -1,21 +1,17 @@
-import 'dart:math';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:expandable_text/expandable_text.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:leco_flutter/model/post.dart';
 
 import 'avatar_widget.dart';
 import 'image_data.dart';
 
-class ReviewCard extends StatefulWidget {
-  ReviewCard({Key? key, this.number}) : super(key: key);
-  int? number;
+class ReviewCard extends StatelessWidget {
+  ReviewCard({Key? key, required this.post}) : super(key: key);
 
-  @override
-  _ReviewCardState createState() => _ReviewCardState();
-}
+  final Post post;
 
-class _ReviewCardState extends State<ReviewCard> {
   Widget header() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10.0),
@@ -24,27 +20,25 @@ class _ReviewCardState extends State<ReviewCard> {
         children: [
           AvatarWidget(
             type: AvatarType.TYPE3,
-            nickName: 'jian_chae',
+            nickName: post.userModel!.username,
             thumbPath:
                 'https://mblogthumb-phinf.pstatic.net/MjAxOTExMTJfNDgg/MDAxNTczNTM4MDA3NTg0.9TlIFX298qmFgshn'
-                    'aDaEzIbsjbCv3Vv--lVKXYDncJUg.FDj0vS33LWuKyQGof7MZ0wNHFgCPYTkgtyhGq8fVsLIg.JPEG.b-seol/67169559_300723540773498_6905365256298412426_n.jpg?type=w800',
+                'aDaEzIbsjbCv3Vv--lVKXYDncJUg.FDj0vS33LWuKyQGof7MZ0wNHFgCPYTkgtyhGq8fVsLIg.JPEG.b-seol/67169559_300723540773498_6905365256298412426_n.jpg?type=w800',
             size: 30,
           ),
-          Text('2022-02-23'),
+          IconButton(onPressed: (){}, icon: const Icon(Icons.more_vert))
         ],
       ),
     );
   }
 
   Widget image() {
-    return CachedNetworkImage(
-        imageUrl:
-            'https://www.lego.com/cdn/cs/set/assets/blt62f99776b13a8e94/10297.png?fit=bounds&format=png&width=1500&height=1500&dpr=1');
+    return CachedNetworkImage(imageUrl: post.image!);
   }
 
   Widget _infoDescription() {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 10.0),
+      padding: const EdgeInsets.symmetric(horizontal: 10.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -56,8 +50,8 @@ class _ReviewCardState extends State<ReviewCard> {
             ),
           ),
           ExpandableText(
-            '레고레고레고\n레고레고레고\n레고레고레고\n',
-            prefixText: 'jian_chae',
+            post.content ?? '',
+            prefixText: post.userModel!.username,
             onPrefixTap: () {
               print('jian_chae 페이지 이동');
             },
@@ -82,14 +76,24 @@ class _ReviewCardState extends State<ReviewCard> {
   Widget _replyTextBtn() {
     return GestureDetector(
       onTap: () {},
-      child: const Padding(
-        padding: EdgeInsets.symmetric(horizontal: 10.0),
-        child: Text(
-          '댓글 100개 모두 보기',
-          style: TextStyle(
-            color: Colors.grey,
-            fontSize: 13,
-          ),
+      child:  Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 10.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            const Text(
+              '댓글 100개 모두 보기',
+              style: TextStyle(
+                color: Colors.grey,
+                fontSize: 13,
+              ),
+            ),
+            Text(
+              DateFormat.yMMMd().format(
+                post.created!,
+              ),
+            ),
+          ],
         ),
       ),
     );
@@ -129,6 +133,7 @@ class _ReviewCardState extends State<ReviewCard> {
           ),
           _infoDescription(),
           _replyTextBtn(),
+
         ],
       ),
     );

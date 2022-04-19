@@ -212,7 +212,7 @@
 //                           .FirebaseStorage.instance
 //                           .ref('$date');
 //                       UploadTask uploadTask =
-//                           ref.putFile(controller.image!.absolute);
+//                           ref.putFile(controller.image.absolute);
 //                       await Future.value(uploadTask);
 //                       var newUrl = await ref.getDownloadURL();
 //

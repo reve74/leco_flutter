@@ -1,29 +1,31 @@
-import 'dart:typed_data';
-
-import 'package:firebase_database/firebase_database.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:leco_flutter/controller/post_controller.dart';
+import 'package:leco_flutter/controller/review_controller.dart';
 import 'package:leco_flutter/controller/upload_controller.dart';
 import 'package:leco_flutter/screens/main/components/review_card.dart';
 import 'package:leco_flutter/screens/main/home/create/upload_screen.dart';
+import 'package:leco_flutter/settings/firebase.dart';
 
-class ReviewScreen extends StatefulWidget {
+class ReviewScreen extends GetView<ReviewController> {
+  var refreshKey = GlobalKey<RefreshIndicatorState>();
   ReviewScreen({Key? key}) : super(key: key);
 
-  @override
-  State<ReviewScreen> createState() => _ReviewScreenState();
-}
-
-class _ReviewScreenState extends State<ReviewScreen> {
-  PostController postController = Get.put(PostController());
-
-  final dbRef = FirebaseDatabase.instance.reference().child('posts');
-
+  Widget _postList() {
+    return Obx(
+      () => Column(
+        children: List.generate(
+          controller.postList.length,
+          (index) => ReviewCard(post: controller.postList[index]),
+        ).toList(),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
+    controller.findAll();
+
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         onPressed: () {
@@ -31,68 +33,20 @@ class _ReviewScreenState extends State<ReviewScreen> {
             Get.put(UploadController());
           }));
         },
-        backgroundColor: Color(0xfffffd600),
-        child: Icon(Icons.add),
+        backgroundColor: const Color(0xfffffd600),
+        child: const Icon(Icons.add),
       ),
-      body: CustomScrollView(
-        slivers: [
-          SliverAppBar(
-            title: Text(
-              '리뷰 페이지',
-              style: TextStyle(
-                fontFamily: 'Jua',
-                fontSize: 25,
-                color: Colors.black,
-              ),
-            ),
-            floating: true,
-            // flexibleSpace: Placeholder(),
-            expandedHeight: 50,
-            backgroundColor: Color(0xfffffd600),
-          ),
-          SliverList(
-            delegate: SliverChildBuilderDelegate((context, index) {
-              return Column(
-                children: [
-                  // Expanded(
-                  //     child: FirebaseAnimatedList(
-                  //   physics: NeverScrollableScrollPhysics(),
-                  //   shrinkWrap: false,
-                  //   query: dbRef.child('Pst List'),
-                  //   itemBuilder: (BuildContext context, DataSnapshot snapshot,
-                  //       Animation<double> animation, int index) {
-                  //     return Column(
-                  //       children: [
-                  //         FadeInImage.assetNetwork(
-                  //             placeholder: 'assets/images/spiderman.png',
-                  //             image: snapshot.value['image'])
-                  //       ],
-                  //     );
-                  //   },
-                  // ))
-
-                  ...List.generate(
-                    1,
-                    (index) => ReviewCard(
-                      number: index,
-                    ),
-                  ).toList(),
-                ],
-              );
-            }, childCount: 1),
-          ),
-        ],
+      body: RefreshIndicator(
+        key: refreshKey,
+        onRefresh: () async {
+          await controller.findAll();
+        },
+        child: ListView(
+          children: [
+            _postList(),
+          ],
+        ),
       ),
-      // SingleChildScrollView(
-      //   child: Column(
-      //     children: List.generate(
-      //       20,
-      //       (index) => ReviewCard(
-      //         number: index,
-      //       ),
-      //     ).toList(),
-      //   ),
-      // ),
     );
   }
 }

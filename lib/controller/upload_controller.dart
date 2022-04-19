@@ -138,7 +138,7 @@ class UploadController extends GetxController {
     }
   }
 
-  UploadTask uploadXFile(File file, String filename) {
+  UploadTask uploadXFile(File file, String filename) { // firestorage 업로드
     var f = File(file.path);
     var ref = FirebaseStorage.instance.ref().child('posts').child(filename);
     final metadata = SettableMetadata(
@@ -153,7 +153,7 @@ class UploadController extends GetxController {
     showDialog(
       context: Get.context!,
       builder: (context) => MessagePopUp(
-        title: '포스트',
+        title: 'LECO',
         message: '포스팅이 완료 되었습니다.',
         okCallback: () {
           // Get.until((route) => Get.currentRoute == '/');

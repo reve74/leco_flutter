@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:leco_flutter/controller/auth_controller.dart';
-import 'package:leco_flutter/controller/ProductCommentController.dart';
+import 'package:leco_flutter/controller/product_comment_controller.dart';
 import 'package:leco_flutter/screens/login/signgin_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 

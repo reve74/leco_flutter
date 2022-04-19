@@ -4,7 +4,7 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:leco_flutter/controller/auth_controller.dart';
-import 'package:leco_flutter/controller/ProductCommentController.dart';
+import 'package:leco_flutter/controller/product_comment_controller.dart';
 import 'package:leco_flutter/model/productcomment.dart';
 import 'package:leco_flutter/model/subcategory.dart';
 import 'package:leco_flutter/settings/firebase.dart';
@@ -12,9 +12,8 @@ import 'package:url_launcher/url_launcher.dart';
 
 class DetailsPage extends StatefulWidget {
   SubCategory? subCategory;
-  final snap;
 
-  DetailsPage({this.subCategory, this.snap});
+  DetailsPage({this.subCategory});
 
   @override
   State<DetailsPage> createState() => _DetailsPageState();
@@ -23,32 +22,10 @@ class DetailsPage extends StatefulWidget {
 class _DetailsPageState extends State<DetailsPage> {
   double rating = 0;
   final _comment = TextEditingController();
-  bool isComment = false;
 
   AuthController a = Get.put(AuthController());
   ProductCommentController productCommentController =
-      Get.put(ProductCommentController());
-
-  @override
-  void initState() {
-    super.initState();
-    getComments();
-  }
-
-  void getComments() async {
-    try {
-      QuerySnapshot snap = await firebaseFirestore
-          .collection('productComments')
-          .doc(widget.subCategory!.modelNumber)
-          .collection('comments')
-          .get();
-
-      // isComment = postSnap.
-    } catch (e) {
-      print(e.toString());
-    }
-    setState(() {});
-  }
+  Get.put(ProductCommentController());
 
   Widget _infoCard({String? number, String? title, String? image}) {
     return Expanded(
@@ -103,57 +80,23 @@ class _DetailsPageState extends State<DetailsPage> {
     );
   }
 
-  Widget _comments({final snap}) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 10.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Text(widget.snap['created'].toDate()),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 5.0),
-            child: Text(widget.snap['username']),
-          ),
-          Container(
-            color: Colors.yellow,
-            height: 40,
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 5.0),
-            child: Text(widget.snap['comment']),
-          ),
-          Divider(
-            height: 2,
-            color: Colors.black54.withOpacity(0.6),
-            thickness: 0.3,
-          ),
-        ],
-      ),
-    );
-  }
-
   Widget ratingBar({double rating = 0}) {
     return RatingBar.builder(
       updateOnDrag: true,
-      itemBuilder: (context, _) => const Icon(
+      itemBuilder: (context, _) =>
+      const Icon(
         Icons.star,
         color: Colors.amber,
       ),
-      onRatingUpdate: (rating) => setState(
-        () {
-          this.rating = rating;
-          print(rating);
-          setState(() {});
-        },
-      ),
+      onRatingUpdate: (rating) =>
+          setState(
+                () {
+              this.rating = rating;
+              print(rating);
+              setState(() {});
+            },
+          ),
     );
-  }
-
-  Stream<DocumentSnapshot> _stream() {
-    return firebaseFirestore
-        .collection('productComments')
-        .doc(widget.subCategory!.modelNumber!)
-        .snapshots();
   }
 
   Future<List<QueryDocumentSnapshot<ProductComment>>> findAll() async =>
@@ -162,14 +105,15 @@ class _DetailsPageState extends State<DetailsPage> {
           .doc(widget.subCategory!.modelNumber!)
           .collection('comments')
           .withConverter<ProductComment>(
-              fromFirestore: ((snapshot, options) =>
-                  ProductComment.fromJson(snapshot.data()!)),
-              toFirestore: (productComment, options) => productComment.toJson())
+          fromFirestore: ((snapshot, options) =>
+              ProductComment.fromJson(snapshot.data()!)),
+          toFirestore: (productComment, options) => productComment.toJson())
           .get()
           .then((snapshot) => snapshot.docs);
 
   @override
   Widget build(BuildContext context) {
+    findAll();
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
@@ -263,59 +207,59 @@ class _DetailsPageState extends State<DetailsPage> {
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        isComment
-                            ? Container()
-                            : Column(
-                                crossAxisAlignment: CrossAxisAlignment.stretch,
-                                children: [
-                                  RatingBar.builder(
-                                    updateOnDrag: true,
-                                    itemBuilder: (context, _) => const Icon(
-                                      Icons.star,
-                                      color: Colors.amber,
-                                    ),
-                                    onRatingUpdate: (rating) => setState(
-                                      () {
-                                        this.rating = rating;
-                                      },
-                                    ),
-                                  ),
-                                  Row(
-                                    children: [
-                                      Expanded(
-                                        child: TextField(
-                                          controller: _comment,
-                                          decoration: const InputDecoration(
-                                            hintText: ('제품을 평가해주세요!'),
-                                          ),
-                                        ),
-                                      ),
-                                      ElevatedButton(
-                                        style: ElevatedButton.styleFrom(
-                                            primary: Colors.blueAccent),
-                                        onPressed: () {
-                                          productCommentController.insert(
-                                            username: a
-                                                .firestoreUser.value.username!,
-                                            uid: auth.currentUser!.uid,
-                                            starCount: rating,
-                                            comment: _comment.text.trim(),
-                                            user: AuthController.to
-                                                .firestoreUser(),
-                                            modelNumber: widget
-                                                .subCategory!.modelNumber!,
-                                          );
-                                          setState(() {
-                                            _comment.text = "";
-                                            isComment = true;
-                                          });
-                                        },
-                                        child: Text('등록'),
-                                      ),
-                                    ],
-                                  ),
-                                ],
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            RatingBar.builder(
+                              updateOnDrag: true,
+                              itemBuilder: (context, _) =>
+                              const Icon(
+                                Icons.star,
+                                color: Colors.amber,
                               ),
+                              onRatingUpdate: (rating) =>
+                                  setState(() {
+                                    this.rating = rating;
+                                  }),
+                            ),
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: TextField(
+                                    controller: _comment,
+                                    decoration: const InputDecoration(
+                                      hintText: ('제품을 평가해주세요!'),
+                                      enabledBorder: InputBorder.none,
+                                      disabledBorder: InputBorder.none,
+                                    ),
+                                  ),
+                                ),
+                                ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                      primary: Colors.blueAccent),
+                                  onPressed: () {
+                                    productCommentController.insert(
+                                      username: a.firestoreUser.value.username!,
+                                      uid: auth.currentUser!.uid,
+                                      starCount: rating,
+                                      comment: _comment.text.trim(),
+                                      user: AuthController.to.firestoreUser(),
+                                      modelNumber:
+                                      widget.subCategory!.modelNumber!,
+                                    );
+                                    setState(() {
+                                      _comment.text = '';
+                                    });
+                                  },
+                                  child: Text('등록'),
+                                ),
+                              ],
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                          ],
+                        ),
                         StreamBuilder(
                           stream: firebaseFirestore
                               .collection('productComments')
@@ -324,53 +268,75 @@ class _DetailsPageState extends State<DetailsPage> {
                               .orderBy('created', descending: false)
                               .snapshots(),
                           builder: (context, snapshot) {
-                            if (snapshot.connectionState ==
-                                ConnectionState.waiting) {
-                              return const Center(
-                                child: CircularProgressIndicator(),
-                              );
-                            }
+                            // if (!snapshot.hasData == false) {
+                            //   return Container();
+                            // }else if(snapshot.hasError) {
+                            //   return Container();
+                            // }
+                            final docs = (snapshot.data! as dynamic).docs;
                             return ListView.builder(
                               physics: const NeverScrollableScrollPhysics(),
                               shrinkWrap: true,
-                              itemBuilder: (context, index) => _comments(
-                                  snap: (snapshot.data! as dynamic)
-                                      .docs[index]
-                                      .data()),
-                              itemCount:
-                                  (snapshot.data! as dynamic).docs.length,
+                              itemCount: docs.length,
+                              itemBuilder: (context, index) =>
+                                  Padding(
+                                    padding:
+                                    const EdgeInsets.symmetric(vertical: 10.0),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                      CrossAxisAlignment.stretch,
+                                      children: [
+                                        //TODO: dateformating 필요
+                                        // Text(DateFormat.yMMMd().format(docs[index]['created'])),
+                                        Row(
+                                          children: [
+                                            Text(docs[index]['created']
+                                                .toDate()
+                                                .toString()),
+                                            const Spacer(),
+                                            TextButton(
+                                              onPressed: () {
+                                                productCommentController.delete(
+                                                    modelNumber: widget
+                                                        .subCategory!
+                                                        .modelNumber!,
+                                                    uid: auth.currentUser!.uid);
+                                              },
+                                              child: Text('삭제'),
+                                            ),
+                                          ],
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              vertical: 5.0),
+                                          child: Text(docs[index]['username']),
+                                        ),
+                                        RatingBarIndicator(
+                                          itemBuilder: (context, _) =>
+                                          const Icon(
+                                            Icons.star,
+                                            color: Colors.amber,
+                                          ),
+                                          itemCount: 5,
+                                          rating: docs[index]['starCount'],
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              vertical: 5.0),
+                                          child: Text(docs[index]['comment']),
+                                        ),
+                                        Divider(
+                                          height: 2,
+                                          color: Colors.black54.withOpacity(
+                                              0.6),
+                                          thickness: 0.3,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
                             );
                           },
-                        )
-                        // ...List.generate(
-                        //   5,
-                        //   (index) => _comments(),
-                        // ),
-                        // Obx(
-                        //   () => RefreshIndicator(
-                        //     onRefresh: () async {
-                        //       await findAll();
-                        //     },
-                        //     child: ListView.separated(
-                        //       physics: const NeverScrollableScrollPhysics(),
-                        //       shrinkWrap: true,
-                        //       itemBuilder: (context, index) {
-                        //         return ListTile(
-                        //           onTap: () {
-                        //             findAll();
-                        //           },
-                        //           title: Text(productCommentController
-                        //               .pc[index].comment
-                        //               .toString()),
-                        //         );
-                        //       },
-                        //       separatorBuilder: (context, index) {
-                        //         return Divider();
-                        //       },
-                        //       itemCount: productCommentController.pc.length,
-                        //     ),
-                        //   ),
-                        // ),
+                        ),
                       ],
                     ),
                     SizedBox(
