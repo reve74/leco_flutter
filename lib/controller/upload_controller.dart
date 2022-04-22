@@ -1,42 +1,19 @@
 import 'dart:io';
-
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:leco_flutter/controller/auth_controller.dart';
 import 'package:leco_flutter/model/post.dart';
 import 'package:leco_flutter/repository/post_repository.dart';
 import 'package:leco_flutter/screens/main/app.dart';
 import 'package:leco_flutter/screens/main/components/message_popup.dart';
 import 'package:leco_flutter/screens/main/home/create/upload_description.dart';
-import 'package:leco_flutter/screens/main/home/review_screen.dart';
+import 'package:leco_flutter/settings/firebase.dart';
 import 'package:leco_flutter/util/data_util.dart';
 import 'package:photo_manager/photo_manager.dart';
 
 class UploadController extends GetxController {
-  // final title = TextEditingController();
-  // final content = TextEditingController();
   // File? image;
-  // final picker = ImagePicker();
-  //
-  // Future getImageGallery() async {
-  //   final pickedFile = await picker.pickImage(source: ImageSource.gallery);
-  //   if (pickedFile != null) {
-  //     image = File(pickedFile.path);
-  //   } else {
-  //     print('이미지를 선택해주세요');
-  //   }
-  // }
-  //
-  // Future getCameraImage() async {
-  //   final pickedFile = await picker.pickImage(source: ImageSource.camera);
-  //   if (pickedFile != null) {
-  //     image = File(pickedFile.path);
-  //   } else {
-  //     print('이미지를 선택해주세요');
-  //   }
-  // }
   var albums = <AssetPathEntity>[]; // AssetPathEntity?
   RxString headerTitle = ''.obs;
   RxList<AssetEntity> imageList = <AssetEntity>[].obs; // AssetEntity?
@@ -55,7 +32,7 @@ class UploadController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    post = Post.init(AuthController.to.firestoreUser.value);
+    post = Post.init(AuthController.to.firestoreUser.value!);
     _loadPhoto();
   }
 
@@ -119,7 +96,7 @@ class UploadController extends GetxController {
     unfocusKeyboard();
     var filename = DataUtil.makeFilePath();
     var task = uploadXFile(filteredImage!,
-        '${AuthController.to.firestoreUser.value.uid}/$filename');
+        '${AuthController.to.firestoreUser.value!.uid}/$filename');
     if (task != null) {
       task.snapshotEvents.listen(
         (event) async {
@@ -157,9 +134,17 @@ class UploadController extends GetxController {
         message: '포스팅이 완료 되었습니다.',
         okCallback: () {
           // Get.until((route) => Get.currentRoute == '/');
-          Get.to(() => App());
+          Get.offAll(() => App());
         },
       ),
     );
+  }
+
+  Future<void> deletePost(String id) async{
+    try{
+      await firebaseFirestore.collection('posts').doc(id).delete();
+    }catch(e) {
+      print(e.toString());
+    }
   }
 }

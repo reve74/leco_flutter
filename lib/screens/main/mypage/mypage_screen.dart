@@ -3,15 +3,12 @@ import 'package:get/get.dart';
 import 'package:leco_flutter/controller/auth_controller.dart';
 import 'package:leco_flutter/controller/bottom_nav_controller.dart';
 import 'package:leco_flutter/controller/user_controller.dart';
-import 'package:leco_flutter/model/user.dart';
-import 'package:leco_flutter/screens/login/signgin_screen.dart';
+
 import 'package:leco_flutter/screens/main/components/avatar_widget.dart';
-import 'package:leco_flutter/screens/main/components/message_popup.dart';
+import 'package:leco_flutter/screens/main/mypage/mycomment_screen.dart';
+import 'package:leco_flutter/screens/main/mypage/mypost_screen.dart';
 import 'package:leco_flutter/screens/main/mypage/change_password_screen.dart';
 import 'package:leco_flutter/screens/main/mypage/test.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-
-import 'package:leco_flutter/settings/firebase.dart';
 
 class MypageScreen extends StatelessWidget {
   BottomNavController b = Get.put(BottomNavController());
@@ -19,31 +16,7 @@ class MypageScreen extends StatelessWidget {
   // final _authentication = FirebaseAuth.instance;
   // User? loggedUser;
   // UserModel user = Get.arguments;
-  // AuthController a = Get.put(AuthController());
-
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   getCurrentUser();
-  // }
-
-  // void getCurrentUser() {
-  //   try {
-  //     final user = _authentication.currentUser;
-  //     if (user != null) {
-  //       loggedUser = user;
-  //       print(loggedUser!.email);
-  //     }
-  //   } catch (e) {
-  //     print(e);
-  //   }
-  // }
-
-  // void UserStream() async{
-  //   await for(var snapshot in _authentication.collection())
-  // }
-
-  Widget _mppageTab({String? title, GestureTapCallback? onTap}) {
+  Widget _mypageTab({String? title, GestureTapCallback? onTap}) {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 5),
       margin: const EdgeInsets.symmetric(horizontal: 10),
@@ -70,28 +43,10 @@ class MypageScreen extends StatelessWidget {
     );
   }
 
-  void _deleteUser() {
-    MessagePopUp(
-      title: 'LECO',
-      message: '회원 탈퇴 하시겠습니까?',
-      okCallback: () async {
-        await FirebaseFirestore.instance
-            .collection('user')
-            .doc(auth.currentUser!.email!)
-            .delete();
-        print('회원삭제');
-        Get.offAll(const SignInScreen());
-      },
-      cancelCallback: () {
-        Get.back();
-      },
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     // UserModel user = Get.arguments;
-    AuthController a = Get.put(AuthController());
+    AuthController a = Get.find();
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color(0xfffffd600),
@@ -121,15 +76,15 @@ class MypageScreen extends StatelessWidget {
                           AvatarWidget(
                             type: AvatarType.TYPE3,
                             thumbPath:
-                               'https://p1.hiclipart.com/preview/719/226/483/lego-heads-ep-lego-minecraft-illustration.jpg',
+                                'https://p1.hiclipart.com/preview/719/226/483/lego-heads-ep-lego-minecraft-illustration.jpg',
                           ),
                           const SizedBox(
                             width: 10,
                           ),
                           Obx(
                             () => Text(
-                              '${a.firestoreUser.value.username}',
-                              style: TextStyle(
+                              a.firestoreUser.value!.username!,
+                              style: const TextStyle(
                                   fontWeight: FontWeight.w600, fontSize: 20),
                             ),
                           ),
@@ -141,41 +96,51 @@ class MypageScreen extends StatelessWidget {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
-                          Column(
-                            children: const [
-                              Icon(
-                                Icons.article,
-                                size: 20,
-                              ),
-                              SizedBox(
-                                height: 10,
-                              ),
-                              Text(
-                                '내 게시물',
-                                style: TextStyle(
-                                  fontSize: 18,
-                                  fontFamily: 'Jua',
+                          InkWell(
+                            onTap: () {
+                              Get.to(() => const MyPostScreen());
+                            },
+                            child: Column(
+                              children: const [
+                                Icon(
+                                  Icons.article,
+                                  size: 20,
                                 ),
-                              ),
-                            ],
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                Text(
+                                  '내 게시물',
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    fontFamily: 'Jua',
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
-                          Column(
-                            children: const [
-                              Icon(
-                                Icons.message,
-                                size: 20,
-                              ),
-                              SizedBox(
-                                height: 10,
-                              ),
-                              Text(
-                                '내가 쓴 댓글',
-                                style: TextStyle(
-                                  fontSize: 18,
-                                  fontFamily: 'Jua',
+                          InkWell(
+                            onTap: () {
+                              Get.to(() => MyCommentScreen());
+                            },
+                            child: Column(
+                              children: const [
+                                Icon(
+                                  Icons.message,
+                                  size: 20,
                                 ),
-                              ),
-                            ],
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                Text(
+                                  '제품 리뷰',
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    fontFamily: 'Jua',
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                           Column(
                             children: const [
@@ -209,7 +174,7 @@ class MypageScreen extends StatelessWidget {
             Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                _mppageTab(
+                _mypageTab(
                   title: '회원정보 수정',
                   onTap: () {
                     Get.to(Test());
@@ -223,7 +188,7 @@ class MypageScreen extends StatelessWidget {
                     thickness: 0.5,
                   ),
                 ),
-                _mppageTab(
+                _mypageTab(
                   title: '비밀번호 변경',
                   onTap: () {
                     Get.to(() => ChangePasswordScreen());
@@ -237,7 +202,7 @@ class MypageScreen extends StatelessWidget {
                     thickness: 0.5,
                   ),
                 ),
-                _mppageTab(
+                _mypageTab(
                   // 팝업 추가 필요
                   title: '회원탈퇴  ',
                   onTap: () async {
@@ -252,7 +217,7 @@ class MypageScreen extends StatelessWidget {
                     thickness: 0.5,
                   ),
                 ),
-                _mppageTab(
+                _mypageTab(
                   title: '로그아웃  ',
                   onTap: () {
                     UserController.to.signOut();

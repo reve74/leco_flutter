@@ -25,7 +25,7 @@ class _DetailsPageState extends State<DetailsPage> {
 
   AuthController a = Get.put(AuthController());
   ProductCommentController productCommentController =
-  Get.put(ProductCommentController());
+      Get.put(ProductCommentController());
 
   Widget _infoCard({String? number, String? title, String? image}) {
     return Expanded(
@@ -83,19 +83,17 @@ class _DetailsPageState extends State<DetailsPage> {
   Widget ratingBar({double rating = 0}) {
     return RatingBar.builder(
       updateOnDrag: true,
-      itemBuilder: (context, _) =>
-      const Icon(
+      itemBuilder: (context, _) => const Icon(
         Icons.star,
         color: Colors.amber,
       ),
-      onRatingUpdate: (rating) =>
-          setState(
-                () {
-              this.rating = rating;
-              print(rating);
-              setState(() {});
-            },
-          ),
+      onRatingUpdate: (rating) => setState(
+        () {
+          this.rating = rating;
+          print(rating);
+          setState(() {});
+        },
+      ),
     );
   }
 
@@ -105,9 +103,9 @@ class _DetailsPageState extends State<DetailsPage> {
           .doc(widget.subCategory!.modelNumber!)
           .collection('comments')
           .withConverter<ProductComment>(
-          fromFirestore: ((snapshot, options) =>
-              ProductComment.fromJson(snapshot.data()!)),
-          toFirestore: (productComment, options) => productComment.toJson())
+              fromFirestore: ((snapshot, options) =>
+                  ProductComment.fromJson(snapshot.data()!)),
+              toFirestore: (productComment, options) => productComment.toJson())
           .get()
           .then((snapshot) => snapshot.docs);
 
@@ -212,15 +210,13 @@ class _DetailsPageState extends State<DetailsPage> {
                           children: [
                             RatingBar.builder(
                               updateOnDrag: true,
-                              itemBuilder: (context, _) =>
-                              const Icon(
+                              itemBuilder: (context, _) => const Icon(
                                 Icons.star,
                                 color: Colors.amber,
                               ),
-                              onRatingUpdate: (rating) =>
-                                  setState(() {
-                                    this.rating = rating;
-                                  }),
+                              onRatingUpdate: (rating) => setState(() {
+                                this.rating = rating;
+                              }),
                             ),
                             Row(
                               children: [
@@ -239,13 +235,13 @@ class _DetailsPageState extends State<DetailsPage> {
                                       primary: Colors.blueAccent),
                                   onPressed: () {
                                     productCommentController.insert(
-                                      username: a.firestoreUser.value.username!,
+                                      username: a.firestoreUser.value!.username!,
                                       uid: auth.currentUser!.uid,
                                       starCount: rating,
                                       comment: _comment.text.trim(),
-                                      user: AuthController.to.firestoreUser(),
+                                      user: AuthController.to.firestoreUser()!,
                                       modelNumber:
-                                      widget.subCategory!.modelNumber!,
+                                          widget.subCategory!.modelNumber!,
                                     );
                                     setState(() {
                                       _comment.text = '';
@@ -278,62 +274,60 @@ class _DetailsPageState extends State<DetailsPage> {
                               physics: const NeverScrollableScrollPhysics(),
                               shrinkWrap: true,
                               itemCount: docs.length,
-                              itemBuilder: (context, index) =>
-                                  Padding(
-                                    padding:
+                              itemBuilder: (context, index) => Padding(
+                                padding:
                                     const EdgeInsets.symmetric(vertical: 10.0),
-                                    child: Column(
-                                      crossAxisAlignment:
+                                child: Column(
+                                  crossAxisAlignment:
                                       CrossAxisAlignment.stretch,
+                                  children: [
+                                    //TODO: dateformating 필요
+                                    // Text(DateFormat.yMMMd().format(docs[index]['created'])),
+                                    Row(
                                       children: [
-                                        //TODO: dateformating 필요
-                                        // Text(DateFormat.yMMMd().format(docs[index]['created'])),
-                                        Row(
-                                          children: [
-                                            Text(docs[index]['created']
-                                                .toDate()
-                                                .toString()),
-                                            const Spacer(),
-                                            TextButton(
-                                              onPressed: () {
-                                                productCommentController.delete(
-                                                    modelNumber: widget
-                                                        .subCategory!
-                                                        .modelNumber!,
-                                                    uid: auth.currentUser!.uid);
-                                              },
-                                              child: Text('삭제'),
-                                            ),
-                                          ],
+                                        Text(docs[index]['created']
+                                            .toDate()
+                                            .toString()),
+                                        const Spacer(),
+                                        if(auth.currentUser!.uid == docs[index]['uid'])
+                                        TextButton(
+                                          onPressed: () {
+                                            productCommentController.delete(
+                                                modelNumber: widget
+                                                    .subCategory!.modelNumber!,
+                                                uid: auth.currentUser!.uid);
+                                          },
+                                          child: Text('삭제'),
                                         ),
-                                        Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                              vertical: 5.0),
-                                          child: Text(docs[index]['username']),
-                                        ),
-                                        RatingBarIndicator(
-                                          itemBuilder: (context, _) =>
-                                          const Icon(
-                                            Icons.star,
-                                            color: Colors.amber,
-                                          ),
-                                          itemCount: 5,
-                                          rating: docs[index]['starCount'],
-                                        ),
-                                        Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                              vertical: 5.0),
-                                          child: Text(docs[index]['comment']),
-                                        ),
-                                        Divider(
-                                          height: 2,
-                                          color: Colors.black54.withOpacity(
-                                              0.6),
-                                          thickness: 0.3,
-                                        ),
+
                                       ],
                                     ),
-                                  ),
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 5.0),
+                                      child: Text(docs[index]['username']),
+                                    ),
+                                    RatingBarIndicator(
+                                      itemBuilder: (context, _) => const Icon(
+                                        Icons.star,
+                                        color: Colors.amber,
+                                      ),
+                                      itemCount: 5,
+                                      rating: docs[index]['starCount'],
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 5.0),
+                                      child: Text(docs[index]['comment']),
+                                    ),
+                                    Divider(
+                                      height: 2,
+                                      color: Colors.black54.withOpacity(0.6),
+                                      thickness: 0.3,
+                                    ),
+                                  ],
+                                ),
+                              ),
                             );
                           },
                         ),

@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:leco_flutter/model/user.dart';
@@ -41,15 +42,15 @@ class UserController extends GetxController {
         Get.snackbar(
           'LECO',
           'User message',
-          backgroundColor: Colors.red,
+          backgroundColor: Colors.white,
           snackPosition: SnackPosition.TOP,
           titleText: const Text(
             '회원가입 실패',
-            style: TextStyle(color: Colors.white),
+            style: TextStyle(color: Colors.black),
           ),
           messageText: const Text(
             '회원가입 형식을 확인해주세요.',
-            style: TextStyle(color: Colors.white),
+            style: TextStyle(color: Colors.black),
           ),
         );
       } else if (e.code == 'email-already-in-use') {
@@ -82,18 +83,18 @@ class UserController extends GetxController {
       if (e.code ==
           'The password is invalid or the user does not have a password.') {}
       Get.snackbar(
-        'LECO',
-        'User message',
-        backgroundColor: Colors.red,
+        '로그인 실패',
+        '이메일 또는 비밀번호를 확인해주세요',
+        backgroundColor: Colors.white,
         snackPosition: SnackPosition.TOP,
-        titleText: const Text(
-          'Login failed',
-          style: TextStyle(color: Colors.white),
-        ),
-        messageText: Text(
-          e.toString(),
-          style: const TextStyle(color: Colors.white),
-        ),
+        // titleText: const Text(
+        //   'Login failed',
+        //   style: TextStyle(color: Colors.white),
+        // ),
+        // messageText: Text(
+        //   e.toString(),
+        //   style: const TextStyle(color: Colors.white),
+        // ),
       );
     }
   }
@@ -125,21 +126,22 @@ class UserController extends GetxController {
 
   Future<void> deleteUser() async {
     showDialog(
-        context: Get.context!,
-        builder: (context) => MessagePopUp(
-              title: 'LECO',
-              message: '회원 탈퇴 하시겠습니까',
-              okCallback: () async {
-                await FirebaseFirestore.instance
-                    .collection('users')
-                    .doc(auth.currentUser!.uid)
-                    .delete();
-                auth.currentUser!.delete();
-                print('회원삭제');
-                Get.offAll(const SignInScreen());
-              },
-              cancelCallback: Get.back,
-            ),);
+      context: Get.context!,
+      builder: (context) => MessagePopUp(
+        title: 'LECO',
+        message: '회원 탈퇴 하시겠습니까',
+        okCallback: () async {
+          await FirebaseFirestore.instance
+              .collection('users')
+              .doc(auth.currentUser!.uid)
+              .delete();
+          auth.currentUser!.delete();
+          print('회원삭제');
+          Get.offAll(const SignInScreen());
+        },
+        cancelCallback: Get.back,
+      ),
+    );
   }
 
   // 비밀번호 변경
@@ -177,13 +179,13 @@ class UserController extends GetxController {
     }
 
     // Obtain the auth details from the request
-    final GoogleSignInAuthentication? googleAuth =
-        await googleUser?.authentication;
+    final GoogleSignInAuthentication googleAuth =
+        await googleUser!.authentication;
 
     // Create a new credential
     final credential = GoogleAuthProvider.credential(
-      accessToken: googleAuth?.accessToken,
-      idToken: googleAuth?.idToken,
+      accessToken: googleAuth.accessToken,
+      idToken: googleAuth.idToken,
     );
 
     // Once signed in, return the UserCredential
@@ -192,10 +194,10 @@ class UserController extends GetxController {
     try {
       await FirebaseFirestore.instance
           // .collection('user')
-          .doc('/users/${userCredential.user!.email}') //newUser.user!.uid
+          .doc('/users/${userCredential.user!.uid}') //newUser.user!.uid
           .set({
-        // 'username': username,
         'email': userCredential.user!.email,
+        'username': userCredential.user!.displayName,
         // 'password': password,
         'uid': userCredential.user!.uid,
       });
@@ -203,4 +205,38 @@ class UserController extends GetxController {
       print(e);
     }
   }
+
+
+  // 페이스북 로그인
+  Future<UserCredential?> signInWithFacebook() async {
+    // Trigger the sign-in flow
+
+    final LoginResult loginResult = await FacebookAuth.instance.login();
+    // Create a credential from the access token
+    final OAuthCredential facebookAuthCredential =
+        FacebookAuthProvider.credential(loginResult.accessToken!.token);
+
+    UserCredential userCredential = await FirebaseAuth.instance
+        .signInWithCredential(facebookAuthCredential);
+
+    try {
+      await FirebaseFirestore.instance
+          // .collection('user')
+          .doc('/users/${userCredential.user!.uid}') //newUser.user!.uid
+          .set({
+        'username': userCredential.user!.displayName,
+        'email': userCredential.user!.email,
+        // 'password': password,
+        'uid': userCredential.user!.uid,
+      });
+    } catch (e) {
+      print(e);
+    }
+    // Once signed in, return the UserCredential
+    return FirebaseAuth.instance.signInWithCredential(facebookAuthCredential);
+  }
+
+
+
+
 }

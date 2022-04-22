@@ -32,7 +32,8 @@ class AuthController extends GetxController {
   // }
 
   Rxn<User> firebaseUser = Rxn<User>();
-  Rx<UserModel> firestoreUser = UserModel().obs;
+  Rxn<UserModel> firestoreUser = Rxn<UserModel>();
+  // Rx<UserModel> firestoreUser = UserModel().obs;
   RxBool isLoggedIn = false.obs;
 
   @override

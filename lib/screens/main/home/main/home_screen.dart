@@ -1,13 +1,16 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:leco_flutter/model/category.dart';
 import 'package:leco_flutter/model/utils.dart';
-import 'package:leco_flutter/screens/main/home/main/category_screen.dart';
 import 'package:leco_flutter/screens/main/home/main/categorylist_screen.dart';
 import 'package:leco_flutter/screens/main/home/main/selectedcategory_screen.dart';
 import 'package:leco_flutter/screens/main/home/main/widgets/maincategorycard.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
+import 'package:http/http.dart' as http;
+import 'package:html/dom.dart' as dom;
+import 'package:html/parser.dart' as parser;
+import 'package:url_launcher/url_launcher.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -18,9 +21,50 @@ class _HomeScreenState extends State<HomeScreen> {
   late TabController tabController;
   List<Category>? categories = Utils.getMockedCategories();
 
+  var title = <String?>[];
+  var post = <String?>[];
+  var link = <String?>[];
+  var image = <String?>[];
+
+  void _getDataFromWeb() async {
+    final response = await http
+        .get(Uri.parse('https://www.lego.com/en-us/aboutus/newsroom/'));
+    dom.Document document = parser.parse(response.body);
+
+    final link2 = document.getElementsByClassName('entry-title');
+
+    final content = document.getElementsByClassName(
+        'post-32884 post type-post status-publish format-standard has-post-thumbnail category-news tag-3674 tag-75341-luke-skywalkers-landspeeder tag-cesar-carvalhosa-soares tag-landspeeder tag-lego-star-wars tag-may-2022 tag-may-the-4th tag-star-wars tag-ucs tag-ultimate-collectors-series entry gfwa-1 gfwa-odd');
+    final elements =
+        document.getElementsByClassName('entry-header blog-entry-header');
+    final imageElement = document.getElementsByClassName(
+        'post-32884 post type-post status-publish format-standard has-post-thumbnail category-news tag-3674 tag-75341-luke-skywalkers-landspeeder tag-cesar-carvalhosa-soares tag-landspeeder tag-lego-star-wars tag-may-2022 tag-may-the-4th tag-star-wars tag-ucs tag-ultimate-collectors-series entry gfwa-1 gfwa-odd');
+
+    setState(() {
+      title = elements
+          .map((e) => e.getElementsByTagName("a")[0].innerHtml)
+          .toList();
+
+      post =
+          content.map((e) => e.getElementsByTagName("a")[0].innerHtml).toList();
+
+      link = link2
+          .map((e) => e.getElementsByTagName("a")[0].attributes['href'])
+          .toList(); // href 링크
+
+      image = imageElement
+          .map((e) => e
+              .getElementsByTagName("img")[0]
+              .attributes['jetpack-lazy-image jetpack-lazy-image--handled'])
+          .toList();
+    });
+  }
+
   @override
   void initState() {
     super.initState();
+    _getDataFromWeb();
+    // print(post.length);
   }
 
   Widget _menuTab({String? title, Function()? onPressed}) {
@@ -96,10 +140,12 @@ class _HomeScreenState extends State<HomeScreen> {
         itemCount: categories!.length,
         itemBuilder: (BuildContext context, int index) {
           return MainCategoryCard(
-            category: categories![index],
-            onCardClick: () {
-              Get.to(() => SelectedCategoryScreen(selectedCategory: categories![index],));
-            });
+              category: categories![index],
+              onCardClick: () {
+                Get.to(() => SelectedCategoryScreen(
+                      selectedCategory: categories![index],
+                    ));
+              });
         },
       ),
     );
@@ -149,7 +195,72 @@ class _HomeScreenState extends State<HomeScreen> {
             ],
           ),
         ),
-        _newsCard(),
+        post.length == 0
+            ? const Text(
+                'No data',
+                style: TextStyle(color: Colors.black),
+              )
+            : ListView.builder(
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
+                itemCount: post.length,
+                itemBuilder: (context, index) {
+                  return AnimationConfiguration.staggeredList(
+                    position: index,
+                    duration: const Duration(milliseconds: 375),
+                    child: SlideAnimation(
+                      child: FadeInAnimation(
+                        child: GestureDetector(
+                          onTap: () async {},
+                          child: Card(
+                            child: Container(
+                              color: Colors.black,
+                              child: Column(
+                                children: [
+                                  Container(
+                                    child: Image.network(
+                                      image[index]!,
+                                      scale: 0.1,
+                                    ),
+                                  ),
+                                  // Align(
+                                  //   alignment: Alignment.centerLeft,
+                                  //   child: Text(
+                                  //     title[index]!,
+                                  //     style: TextStyle(
+                                  //       color: Colors.red,
+                                  //     ),
+                                  //   ),
+                                  // ),
+                                  const SizedBox(height: 15),
+                                  Text(
+                                    post[index]!,
+                                    style: TextStyle(color: Colors.white),
+                                  ),
+                                  // ElevatedButton(
+                                  //   onPressed: () async {
+                                  //     dynamic url = link[index];
+                                  //     if (await canLaunch(url)) {
+                                  //       launch(url);
+                                  //       print(launch);
+                                  //     } else {
+                                  //       print('error');
+                                  //     }
+                                  //   },
+                                  //   child: Text('View in website'),
+                                  //   style: ElevatedButton.styleFrom(),
+                                  // )
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  );
+                },
+              ),
+        // _newsCard(),
       ],
     );
   }
@@ -234,9 +345,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    print(post.length);
     Size size = MediaQuery.of(context).size;
-    double height = size.height;
-
     return Scaffold(
       appBar: AppBar(
         elevation: 0,

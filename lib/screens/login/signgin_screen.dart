@@ -190,7 +190,7 @@ class _SignInScreenState extends State<SignInScreen> {
                       ),
                       GestureDetector(
                         onTap: () {
-                          Get.to(() => App);
+                          userController.signInWithFacebook();
                         },
                         child: Image.asset(
                           'assets/images/facebook.png',

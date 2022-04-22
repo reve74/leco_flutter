@@ -1,13 +1,17 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:expandable_text/expandable_text.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:leco_flutter/controller/upload_controller.dart';
 import 'package:leco_flutter/model/post.dart';
+import 'package:leco_flutter/settings/firebase.dart';
 
 import 'avatar_widget.dart';
 import 'image_data.dart';
 
 class ReviewCard extends StatelessWidget {
+  UploadController u = Get.put(UploadController());
   ReviewCard({Key? key, required this.post}) : super(key: key);
 
   final Post post;
@@ -26,7 +30,35 @@ class ReviewCard extends StatelessWidget {
                 'aDaEzIbsjbCv3Vv--lVKXYDncJUg.FDj0vS33LWuKyQGof7MZ0wNHFgCPYTkgtyhGq8fVsLIg.JPEG.b-seol/67169559_300723540773498_6905365256298412426_n.jpg?type=w800',
             size: 30,
           ),
-          IconButton(onPressed: (){}, icon: const Icon(Icons.more_vert))
+          if(auth.currentUser!.uid == post.userModel!.uid)
+          IconButton(
+              onPressed: () {
+                showDialog(
+                  context: Get.context!,
+                  builder: (context) => Dialog(
+                    child: ListView(
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      shrinkWrap: true,
+                      children: ['삭제하기']
+                          .map(
+                            (e) => InkWell(
+                              onTap: () async {
+                                u.deletePost(post.id!);
+                                Get.back();
+                              },
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: 12, horizontal: 16),
+                                child: Text(e),
+                              ),
+                            ),
+                          )
+                          .toList(),
+                    ),
+                  ),
+                );
+              },
+              icon: const Icon(Icons.more_vert))
         ],
       ),
     );
@@ -76,7 +108,7 @@ class ReviewCard extends StatelessWidget {
   Widget _replyTextBtn() {
     return GestureDetector(
       onTap: () {},
-      child:  Padding(
+      child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 10.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -133,7 +165,6 @@ class ReviewCard extends StatelessWidget {
           ),
           _infoDescription(),
           _replyTextBtn(),
-
         ],
       ),
     );
