@@ -7,7 +7,7 @@ import 'package:leco_flutter/screens/main/home/main/home_screen.dart';
 import 'package:leco_flutter/screens/main/home/review_screen.dart';
 import 'package:leco_flutter/screens/main/mypage/mypage_screen.dart';
 import 'package:leco_flutter/screens/main/search_screen.dart';
-import 'package:leco_flutter/screens/main/mypage/test.dart';
+import 'package:leco_flutter/screens/main/mypage/change_userinfo_screen.dart';
 import 'package:leco_flutter/screens/main/test1.dart';
 import 'components/image_data.dart';
 import 'package:leco_flutter/model/user.dart';

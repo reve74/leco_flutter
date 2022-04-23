@@ -4,14 +4,14 @@ import 'package:get/get.dart';
 import 'package:leco_flutter/controller/user_controller.dart';
 import 'package:leco_flutter/screens/login/components/login_textformfield.dart';
 
-class Test extends StatefulWidget {
-  const Test({Key? key}) : super(key: key);
+class ChangeUserInfoScreen extends StatefulWidget {
+  const ChangeUserInfoScreen({Key? key}) : super(key: key);
 
   @override
-  State<Test> createState() => _TestState();
+  State<ChangeUserInfoScreen> createState() => _ChangeUserInfoScreen();
 }
 
-class _TestState extends State<Test> {
+class _ChangeUserInfoScreen extends State<ChangeUserInfoScreen> {
   final _formKey = GlobalKey<FormState>();
   final username = TextEditingController();
   final password = TextEditingController();
@@ -51,8 +51,9 @@ class _TestState extends State<Test> {
         title: const Text(
           '회원정보 수정',
           style: TextStyle(
+            height: 1.5,
             fontFamily: 'Jua',
-            fontSize: 25,
+            fontSize: 30,
             color: Colors.black,
           ),
         ),

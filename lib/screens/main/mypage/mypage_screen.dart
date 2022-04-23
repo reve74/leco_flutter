@@ -8,7 +8,7 @@ import 'package:leco_flutter/screens/main/components/avatar_widget.dart';
 import 'package:leco_flutter/screens/main/mypage/mycomment_screen.dart';
 import 'package:leco_flutter/screens/main/mypage/mypost_screen.dart';
 import 'package:leco_flutter/screens/main/mypage/change_password_screen.dart';
-import 'package:leco_flutter/screens/main/mypage/test.dart';
+import 'package:leco_flutter/screens/main/mypage/change_userinfo_screen.dart';
 
 class MypageScreen extends StatelessWidget {
   BottomNavController b = Get.put(BottomNavController());
@@ -53,11 +53,12 @@ class MypageScreen extends StatelessWidget {
         automaticallyImplyLeading: false,
         elevation: 0,
         title: const Text(
-          '마이 페이지',
+          'MY PAGE',
           style: TextStyle(
             fontFamily: 'Jua',
-            fontSize: 25,
-            color: Colors.black,
+            fontSize: 35,
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
           ),
         ),
       ),
@@ -177,7 +178,7 @@ class MypageScreen extends StatelessWidget {
                 _mypageTab(
                   title: '회원정보 수정',
                   onTap: () {
-                    Get.to(Test());
+                    Get.to(const ChangeUserInfoScreen());
                   },
                 ),
                 Container(

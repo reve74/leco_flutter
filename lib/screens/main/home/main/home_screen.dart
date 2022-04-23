@@ -1,16 +1,17 @@
+import 'dart:math';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:leco_flutter/model/category.dart';
+import 'package:leco_flutter/model/news.dart';
 import 'package:leco_flutter/model/utils.dart';
 import 'package:leco_flutter/screens/main/home/main/categorylist_screen.dart';
+import 'package:leco_flutter/screens/main/home/main/news_screen.dart';
 import 'package:leco_flutter/screens/main/home/main/selectedcategory_screen.dart';
 import 'package:leco_flutter/screens/main/home/main/widgets/maincategorycard.dart';
-import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:http/http.dart' as http;
-import 'package:html/dom.dart' as dom;
 import 'package:html/parser.dart' as parser;
-import 'package:url_launcher/url_launcher.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -21,51 +22,55 @@ class _HomeScreenState extends State<HomeScreen> {
   late TabController tabController;
   List<Category>? categories = Utils.getMockedCategories();
 
-  var title = <String?>[];
-  var post = <String?>[];
-  var link = <String?>[];
-  var image = <String?>[];
+  void _newScreen() {
+    Get.to(()=>NewsScreen());
+  }
 
-  void _getDataFromWeb() async {
-    final response = await http
-        .get(Uri.parse('https://www.lego.com/en-us/aboutus/newsroom/'));
-    dom.Document document = parser.parse(response.body);
+  var url = Uri.parse("https://www.toysnbricks.com/");
+  List<News> news = [];
+  bool isLoading = false;
 
-    final link2 = document.getElementsByClassName('entry-title');
-
-    final content = document.getElementsByClassName(
-        'post-32884 post type-post status-publish format-standard has-post-thumbnail category-news tag-3674 tag-75341-luke-skywalkers-landspeeder tag-cesar-carvalhosa-soares tag-landspeeder tag-lego-star-wars tag-may-2022 tag-may-the-4th tag-star-wars tag-ucs tag-ultimate-collectors-series entry gfwa-1 gfwa-odd');
-    final elements =
-        document.getElementsByClassName('entry-header blog-entry-header');
-    final imageElement = document.getElementsByClassName(
-        'post-32884 post type-post status-publish format-standard has-post-thumbnail category-news tag-3674 tag-75341-luke-skywalkers-landspeeder tag-cesar-carvalhosa-soares tag-landspeeder tag-lego-star-wars tag-may-2022 tag-may-the-4th tag-star-wars tag-ucs tag-ultimate-collectors-series entry gfwa-1 gfwa-odd');
-
+  Future getData() async {
     setState(() {
-      title = elements
-          .map((e) => e.getElementsByTagName("a")[0].innerHtml)
-          .toList();
-
-      post =
-          content.map((e) => e.getElementsByTagName("a")[0].innerHtml).toList();
-
-      link = link2
-          .map((e) => e.getElementsByTagName("a")[0].attributes['href'])
-          .toList(); // href 링크
-
-      image = imageElement
-          .map((e) => e
-              .getElementsByTagName("img")[0]
-              .attributes['jetpack-lazy-image jetpack-lazy-image--handled'])
-          .toList();
+      isLoading = true;
+    });
+    var res = await http.get(url);
+    final body = res.body;
+    final document = parser.parse(body);
+    var response = document
+        .getElementsByClassName("posts-loop standard-grid-style")[0]
+        .getElementsByClassName("grid-post")
+        .forEach((element) {
+      setState(() {
+        news.add(
+          News(
+              image: element.children[0].children[0].children[0].children[0]
+                  .attributes['src']
+                  .toString(),
+              subtitle: element.children[0].children[1].text.toString(),
+              title:
+                  element.children[0].children[1].children[1].text.toString(),
+              content:
+                  element.children[0].children[2].children[0].text.toString(),
+              link: element
+                  .children[0].children[0].children[0].attributes['href']
+                  .toString()),
+        );
+      });
+    });
+    setState(() {
+      isLoading = false;
     });
   }
 
   @override
   void initState() {
     super.initState();
-    _getDataFromWeb();
-    // print(post.length);
+    getData();
   }
+
+  final TextStyle _style = const TextStyle(
+      color: Colors.black, fontSize: 15, fontWeight: FontWeight.w500);
 
   Widget _menuTab({String? title, Function()? onPressed}) {
     // 메뉴 탭
@@ -171,7 +176,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
               TextButton(
-                onPressed: () {},
+                onPressed: _newScreen,
                 child: Container(
                   width: 50,
                   height: 25,
@@ -184,6 +189,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: Text(
                       '더 보기',
                       style: TextStyle(
+                        height: 1.5,
                         color: Colors.black,
                         fontSize: 15,
                         fontFamily: 'Jua',
@@ -195,126 +201,64 @@ class _HomeScreenState extends State<HomeScreen> {
             ],
           ),
         ),
-        post.length == 0
-            ? const Text(
-                'No data',
-                style: TextStyle(color: Colors.black),
+        news.length == 0
+            ? const Center(
+                child: CircularProgressIndicator(),
               )
-            : ListView.builder(
+            : GridView.builder(
                 shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
-                itemCount: post.length,
-                itemBuilder: (context, index) {
-                  return AnimationConfiguration.staggeredList(
-                    position: index,
-                    duration: const Duration(milliseconds: 375),
-                    child: SlideAnimation(
-                      child: FadeInAnimation(
-                        child: GestureDetector(
-                          onTap: () async {},
-                          child: Card(
-                            child: Container(
-                              color: Colors.black,
-                              child: Column(
-                                children: [
-                                  Container(
-                                    child: Image.network(
-                                      image[index]!,
-                                      scale: 0.1,
-                                    ),
-                                  ),
-                                  // Align(
-                                  //   alignment: Alignment.centerLeft,
-                                  //   child: Text(
-                                  //     title[index]!,
-                                  //     style: TextStyle(
-                                  //       color: Colors.red,
-                                  //     ),
-                                  //   ),
-                                  // ),
-                                  const SizedBox(height: 15),
-                                  Text(
-                                    post[index]!,
-                                    style: TextStyle(color: Colors.white),
-                                  ),
-                                  // ElevatedButton(
-                                  //   onPressed: () async {
-                                  //     dynamic url = link[index];
-                                  //     if (await canLaunch(url)) {
-                                  //       launch(url);
-                                  //       print(launch);
-                                  //     } else {
-                                  //       print('error');
-                                  //     }
-                                  //   },
-                                  //   child: Text('View in website'),
-                                  //   style: ElevatedButton.styleFrom(),
-                                  // )
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  );
-                },
+                physics: const NeverScrollableScrollPhysics(),
+                padding: const EdgeInsets.symmetric(horizontal: 5),
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    childAspectRatio: 0.9,
+                    mainAxisSpacing: 10,
+                    crossAxisSpacing: 10),
+                itemCount: 4,
+                itemBuilder: (context, index) => _newsCard(index),
               ),
-        // _newsCard(),
       ],
     );
   }
 
-  Widget _newsCard() {
-    // 뉴스 카드
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
-      children: [
-        Expanded(
-          child: Column(
-            children: [
-              Container(
-                width: 170,
-                height: 120,
-                color: Colors.grey.withOpacity(0.5),
+  Widget _newsCard(index) {
+    return Card(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+      elevation: 6,
+      color: Colors.primaries[Random().nextInt(Colors.primaries.length)],
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              height: 100,
+              width: 200,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(10),
               ),
-              const Padding(
-                padding: EdgeInsets.all(5.0),
-                child: Text(
-                  'The LEGO Foundation has announced it will donate 600 LEGO® MRI Scanners to hospitals worldwide to help children',
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis, // 글자 넘어갈때 '...'처리 해주는 속성
-                  style: TextStyle(
-                    fontSize: 13,
-                  ),
-                ),
+              child: ClipRRect(
+                // borderRadius: BorderRadius.circular(10),
+                child: Image.network(news[index].image),
               ),
-            ],
-          ),
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            // Text(
+            //   "subtitle: ${news[index].subtitle}",
+            //   style: _style,
+            // ),
+            Text(
+              news[index].title,
+              overflow: TextOverflow.ellipsis,
+              maxLines: 3,
+              style: _style,
+            ),
+          ],
         ),
-        Expanded(
-          child: Column(
-            children: [
-              Container(
-                width: 170,
-                height: 120,
-                color: Colors.grey.withOpacity(0.5),
-              ),
-              const Padding(
-                padding: EdgeInsets.all(5.0),
-                child: Text(
-                  'An Italian Style Icon: An Italian Style Icon: The elegance of the 1960’s with the new LEGO® Vespa 125',
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis, // 글자 넘어갈때 '...'처리 해주는 속성
-                  style: TextStyle(
-                    fontSize: 13,
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ],
+      ),
     );
   }
 
@@ -345,7 +289,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    print(post.length);
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
