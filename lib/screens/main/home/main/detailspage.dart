@@ -120,12 +120,12 @@ class _DetailsPageState extends State<DetailsPage> {
               Stack(
                 children: [
                   Container(
-                    height: 280,
+                    height: MediaQuery.of(context).size.height * .5,
                     decoration: BoxDecoration(
                       image: DecorationImage(
-                          image: AssetImage('assets/category/' +
+                          image: AssetImage('assets/subcategory/' +
                               widget.subCategory!.imgName! +
-                              '.png'),
+                              '.jpeg'),
                           fit: BoxFit.cover),
                     ),
                   ),
@@ -134,7 +134,7 @@ class _DetailsPageState extends State<DetailsPage> {
                       onPressed: Get.back,
                       icon: SvgPicture.asset(
                         'assets/icons/back_arrow.svg',
-                        width: 40,
+                        width: 45,
                         color: Colors.black.withOpacity(0.5),
                       ),
                     ),
@@ -192,9 +192,8 @@ class _DetailsPageState extends State<DetailsPage> {
                       ),
                     ),
                     _infoCardList(),
-                    Container(
-                      child: Text(widget.subCategory!.description!),
-                    ),
+                    Text(widget.subCategory!.description!),
+                    const SizedBox(height: 10),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
@@ -235,7 +234,8 @@ class _DetailsPageState extends State<DetailsPage> {
                                       primary: Colors.blueAccent),
                                   onPressed: () {
                                     productCommentController.insert(
-                                      username: a.firestoreUser.value!.username!,
+                                      username:
+                                          a.firestoreUser.value!.username!,
                                       uid: auth.currentUser!.uid,
                                       starCount: rating,
                                       comment: _comment.text.trim(),
@@ -251,7 +251,7 @@ class _DetailsPageState extends State<DetailsPage> {
                                 ),
                               ],
                             ),
-                            SizedBox(
+                            const SizedBox(
                               height: 10,
                             ),
                           ],
@@ -289,17 +289,18 @@ class _DetailsPageState extends State<DetailsPage> {
                                             .toDate()
                                             .toString()),
                                         const Spacer(),
-                                        if(auth.currentUser!.uid == docs[index]['uid'])
-                                        TextButton(
-                                          onPressed: () {
-                                            productCommentController.delete(
-                                                modelNumber: widget
-                                                    .subCategory!.modelNumber!,
-                                                uid: auth.currentUser!.uid);
-                                          },
-                                          child: Text('삭제'),
-                                        ),
-
+                                        if (auth.currentUser!.uid ==
+                                            docs[index]['uid'])
+                                          TextButton(
+                                            onPressed: () {
+                                              productCommentController.delete(
+                                                  modelNumber: widget
+                                                      .subCategory!
+                                                      .modelNumber!,
+                                                  uid: auth.currentUser!.uid);
+                                            },
+                                            child: Text('삭제'),
+                                          ),
                                       ],
                                     ),
                                     Padding(

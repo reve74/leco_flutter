@@ -17,6 +17,13 @@ class _SearchScreenState extends State<SearchScreen> {
     SubCategory(
         name: '디스커버리 우주왕복선', imgName: 'discovery', modelNumber: '10283'),
     SubCategory(name: '레고® 타이타닉', imgName: 'titanic', modelNumber: '10294'),
+    SubCategory(
+        name: '미키와 미니의 우주 로켓', imgName: 'mickey_rocket', modelNumber: '10774'),
+    SubCategory(name: '미키의 비행기', imgName: 'mickey_plane', modelNumber: '10772'),
+    SubCategory(
+        name: '디즈니 미키 마우스와 미니 마우스', imgName: 'mickey_minnie', modelNumber: '43179'),
+    SubCategory(name: '디즈니 캐슬', imgName: 'disney_castle', modelNumber: '71040'),
+    SubCategory(name: '곰돌이 푸', imgName: 'pooh', modelNumber: '21326'),
   ];
 
   List<SubCategory> _foundedModel = [];
@@ -98,7 +105,7 @@ class _SearchScreenState extends State<SearchScreen> {
             child: ClipRRect(
               borderRadius: BorderRadius.circular(50),
               child: Image.asset(
-                  'assets/category/' + subCategory.imgName! + '.png'),
+                  'assets/subcategory/' + subCategory.imgName! + '.jpeg'),
             ),
           ),
           const SizedBox(width: 10),

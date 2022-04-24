@@ -82,13 +82,13 @@ class MypageScreen extends StatelessWidget {
                           const SizedBox(
                             width: 10,
                           ),
-                          Obx(
-                            () => Text(
-                              a.firestoreUser.value!.username!,
-                              style: const TextStyle(
-                                  fontWeight: FontWeight.w600, fontSize: 20),
-                            ),
-                          ),
+                          // Obx(
+                          //   () => Text(
+                          //     a.firestoreUser.value!.username!,
+                          //     style: const TextStyle(
+                          //         fontWeight: FontWeight.w600, fontSize: 20),
+                          //   ),
+                          // ),
                         ],
                       ),
                       const SizedBox(

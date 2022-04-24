@@ -23,7 +23,7 @@ class _HomeScreenState extends State<HomeScreen> {
   List<Category>? categories = Utils.getMockedCategories();
 
   void _newScreen() {
-    Get.to(()=>NewsScreen());
+    Get.to(() => NewsScreen());
   }
 
   var url = Uri.parse("https://www.toysnbricks.com/");
@@ -202,8 +202,11 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
         news.length == 0
-            ? const Center(
-                child: CircularProgressIndicator(),
+            ? const SizedBox(
+                height: 200,
+                child: Center(
+                  child: CircularProgressIndicator(),
+                ),
               )
             : GridView.builder(
                 shrinkWrap: true,

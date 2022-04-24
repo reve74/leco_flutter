@@ -28,18 +28,6 @@ class CategoryListScreen extends StatelessWidget {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          // const Padding(
-          //   padding: EdgeInsets.symmetric(vertical: 8.0),
-          //   child: Text(
-          //     '카테고리를 선택하세요',
-          //     style: TextStyle(
-          //       fontFamily: 'JUA',
-          //       color: Colors.black,
-          //       fontSize: 20,
-          //     ),
-          //     textAlign: TextAlign.center,
-          //   ),
-          // ),
           Expanded(
             child: ListView.builder(
               itemCount: categories!.length,
@@ -47,11 +35,15 @@ class CategoryListScreen extends StatelessWidget {
                 return CategoryCard(
                   onCardClick: () {
                     Get.to(
-                        () => SelectedCategoryScreen(
-                              selectedCategory: categories![index],
-                            ), binding: BindingsBuilder(() {
-                      Get.put(ProductCommentController());
-                    }));
+                      () => SelectedCategoryScreen(
+                        selectedCategory: categories![index],
+                      ),
+                      binding: BindingsBuilder(
+                        () {
+                          Get.put(ProductCommentController());
+                        },
+                      ),
+                    );
                   },
                   category: categories![index],
                 );

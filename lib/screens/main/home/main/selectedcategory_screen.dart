@@ -40,9 +40,9 @@ class SelectedCategoryScreen extends StatelessWidget {
                       children: [
                         ClipOval(
                           child: Image.asset(
-                            'assets/category/' +
+                            'assets/subcategory/' +
                                 selectedCategory!.subCategories![index].imgName! +
-                                '.png',
+                                '.jpeg',
                             width: 100,
                             height: 100,
                             fit: BoxFit.cover,
