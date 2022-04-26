@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:leco_flutter/controller/auth_controller.dart';
 import 'package:leco_flutter/controller/product_comment_controller.dart';
 import 'package:leco_flutter/model/productcomment.dart';
@@ -21,6 +22,7 @@ class DetailsPage extends StatefulWidget {
 
 class _DetailsPageState extends State<DetailsPage> {
   double rating = 0;
+  bool uploaded = false;
   final _comment = TextEditingController();
 
   AuthController a = Get.put(AuthController());
@@ -37,10 +39,10 @@ class _DetailsPageState extends State<DetailsPage> {
             style: const TextStyle(fontSize: 25),
           ),
           Padding(
-            padding: EdgeInsets.only(top: 5.0),
+            padding: const EdgeInsets.only(top: 5.0),
             child: Text(
               title!,
-              style: TextStyle(fontSize: 15),
+              style: const TextStyle(fontSize: 15),
             ),
           ),
         ],
@@ -80,7 +82,7 @@ class _DetailsPageState extends State<DetailsPage> {
     );
   }
 
-  Widget ratingBar({double rating = 0}) {
+  Widget _ratingBar({double rating = 0}) {
     return RatingBar.builder(
       updateOnDrag: true,
       itemBuilder: (context, _) => const Icon(
@@ -108,6 +110,12 @@ class _DetailsPageState extends State<DetailsPage> {
               toFirestore: (productComment, options) => productComment.toJson())
           .get()
           .then((snapshot) => snapshot.docs);
+
+  void ratingupdate(rating) {
+    setState(() {
+      this.rating = rating;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -213,9 +221,7 @@ class _DetailsPageState extends State<DetailsPage> {
                                 Icons.star,
                                 color: Colors.amber,
                               ),
-                              onRatingUpdate: (rating) => setState(() {
-                                this.rating = rating;
-                              }),
+                              onRatingUpdate: ratingupdate,
                             ),
                             Row(
                               children: [
@@ -245,6 +251,7 @@ class _DetailsPageState extends State<DetailsPage> {
                                     );
                                     setState(() {
                                       _comment.text = '';
+                                      ratingupdate(0.0);
                                     });
                                   },
                                   child: Text('등록'),
@@ -264,30 +271,27 @@ class _DetailsPageState extends State<DetailsPage> {
                               .orderBy('created', descending: false)
                               .snapshots(),
                           builder: (context, snapshot) {
-                            // if (!snapshot.hasData == false) {
-                            //   return Container();
-                            // }else if(snapshot.hasError) {
-                            //   return Container();
-                            // }
+                            if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              return const Center(
+                                child: CircularProgressIndicator(),
+                              );
+                            }
                             final docs = (snapshot.data! as dynamic).docs;
                             return ListView.builder(
                               physics: const NeverScrollableScrollPhysics(),
                               shrinkWrap: true,
                               itemCount: docs.length,
                               itemBuilder: (context, index) => Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 10.0),
+                                padding: const EdgeInsets.only(top: 5.0),
                                 child: Column(
                                   crossAxisAlignment:
                                       CrossAxisAlignment.stretch,
                                   children: [
-                                    //TODO: dateformating 필요
-                                    // Text(DateFormat.yMMMd().format(docs[index]['created'])),
                                     Row(
                                       children: [
-                                        Text(docs[index]['created']
-                                            .toDate()
-                                            .toString()),
+                                        Text(DateFormat('yyyy.MM.dd').format(
+                                            docs[index]['created'].toDate())),
                                         const Spacer(),
                                         if (auth.currentUser!.uid ==
                                             docs[index]['uid'])
@@ -321,11 +325,6 @@ class _DetailsPageState extends State<DetailsPage> {
                                           vertical: 5.0),
                                       child: Text(docs[index]['comment']),
                                     ),
-                                    Divider(
-                                      height: 2,
-                                      color: Colors.black54.withOpacity(0.6),
-                                      thickness: 0.3,
-                                    ),
                                   ],
                                 ),
                               ),
@@ -334,8 +333,8 @@ class _DetailsPageState extends State<DetailsPage> {
                         ),
                       ],
                     ),
-                    SizedBox(
-                      height: 100,
+                    const SizedBox(
+                      height: 50,
                     ),
                   ],
                 ),

@@ -26,8 +26,7 @@ class ReviewCard extends StatelessWidget {
             type: AvatarType.TYPE3,
             nickName: post.userModel!.username,
             thumbPath:
-                'https://mblogthumb-phinf.pstatic.net/MjAxOTExMTJfNDgg/MDAxNTczNTM4MDA3NTg0.9TlIFX298qmFgshn'
-                'aDaEzIbsjbCv3Vv--lVKXYDncJUg.FDj0vS33LWuKyQGof7MZ0wNHFgCPYTkgtyhGq8fVsLIg.JPEG.b-seol/67169559_300723540773498_6905365256298412426_n.jpg?type=w800',
+                'https://p1.hiclipart.com/preview/719/226/483/lego-heads-ep-lego-minecraft-illustration.jpg',
             size: 30,
           ),
           if(auth.currentUser!.uid == post.userModel!.uid)
@@ -74,19 +73,16 @@ class ReviewCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          const Text(
-            '좋아요 200개',
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 13,
-            ),
+           ExpandableText(
+            post.title!,
+             prefixText: post.userModel!.username,
+             prefixStyle: const TextStyle(
+               fontWeight: FontWeight.bold,
+             ),
+             expandText: '',
           ),
           ExpandableText(
             post.content ?? '',
-            prefixText: post.userModel!.username,
-            onPrefixTap: () {
-              print('jian_chae 페이지 이동');
-            },
             prefixStyle: const TextStyle(
               fontWeight: FontWeight.bold,
             ),
@@ -113,13 +109,13 @@ class ReviewCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            const Text(
-              '댓글 100개 모두 보기',
-              style: TextStyle(
-                color: Colors.grey,
-                fontSize: 13,
-              ),
-            ),
+            // const Text(
+            //   '댓글 100개 모두 보기',
+            //   style: TextStyle(
+            //     color: Colors.grey,
+            //     fontSize: 13,
+            //   ),
+            // ),
             Text(
               DateFormat.yMMMd().format(
                 post.created!,

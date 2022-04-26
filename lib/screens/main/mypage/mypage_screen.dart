@@ -43,6 +43,17 @@ class MypageScreen extends StatelessWidget {
     );
   }
 
+  Widget divide() {
+    return const Padding(
+      padding: EdgeInsets.symmetric(horizontal: 10.0),
+      child: Divider(
+        height: 1,
+        thickness: 0.5,
+        color: Colors.black,
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     // UserModel user = Get.arguments;
@@ -82,13 +93,13 @@ class MypageScreen extends StatelessWidget {
                           const SizedBox(
                             width: 10,
                           ),
-                          // Obx(
-                          //   () => Text(
-                          //     a.firestoreUser.value!.username!,
-                          //     style: const TextStyle(
-                          //         fontWeight: FontWeight.w600, fontSize: 20),
-                          //   ),
-                          // ),
+                          Obx(
+                            () => Text(
+                              a.firestoreUser.value!.username!,
+                              style: const TextStyle(
+                                  fontWeight: FontWeight.w600, fontSize: 20),
+                            ),
+                          ),
                         ],
                       ),
                       const SizedBox(
@@ -181,42 +192,19 @@ class MypageScreen extends StatelessWidget {
                     Get.to(const ChangeUserInfoScreen());
                   },
                 ),
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 10),
-                  height: 4,
-                  child: const Divider(
-                    color: Colors.black38,
-                    thickness: 0.5,
-                  ),
-                ),
                 _mypageTab(
                   title: '비밀번호 변경',
                   onTap: () {
                     Get.to(() => ChangePasswordScreen());
                   },
                 ),
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 10),
-                  height: 4,
-                  child: const Divider(
-                    color: Colors.black38,
-                    thickness: 0.5,
-                  ),
-                ),
+
                 _mypageTab(
                   // 팝업 추가 필요
                   title: '회원탈퇴  ',
                   onTap: () async {
                     UserController.to.deleteUser();
                   },
-                ),
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 10),
-                  height: 4,
-                  child: const Divider(
-                    color: Colors.black38,
-                    thickness: 0.5,
-                  ),
                 ),
                 _mypageTab(
                   title: '로그아웃  ',

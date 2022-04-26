@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:leco_flutter/model/category.dart';
@@ -12,6 +13,7 @@ import 'package:leco_flutter/screens/main/home/main/selectedcategory_screen.dart
 import 'package:leco_flutter/screens/main/home/main/widgets/maincategorycard.dart';
 import 'package:http/http.dart' as http;
 import 'package:html/parser.dart' as parser;
+import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -277,18 +279,91 @@ class _HomeScreenState extends State<HomeScreen> {
           },
         ),
         _menuCard(),
-        _menuTab(
-          title: '신제품',
-          onPressed: () {
-            // Get.to(() => CategoryScreen(
-            //       selectedCategory: Utils.getMockedCategories()[0],
-            //     ));
-          },
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 10),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: const [
+              Text(
+                '신제품',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontFamily: 'Jua',
+                ),
+              ),
+              SizedBox(),
+            ],
+          ),
         ),
-        _menuCard(),
+        _homeScreenList(),
       ],
     );
   }
+
+  Widget _homeScreenList() {
+    return ListView(
+      physics: const NeverScrollableScrollPhysics(),
+      shrinkWrap: true,
+      children: [
+        Container(
+          // padding: const EdgeInsets.symmetric(horizontal: 10),
+          width: double.infinity,
+          child: Column(
+            children: [
+              CarouselSlider.builder(
+                itemCount: urlImages.length,
+                itemBuilder: (context, index, realIndex) {
+                  final urlImage = urlImages[index];
+                  return buildImage(urlImage, index);
+                },
+                options: CarouselOptions(
+                  height: 200,
+                  // viewportFraction: 1,
+                  // autoPlay: true,
+                  enlargeCenterPage: true,
+                  enlargeStrategy: CenterPageEnlargeStrategy.height,
+                  autoPlayInterval: const Duration(seconds: 5),
+                  onPageChanged: (index, reason) =>
+                      setState(() => activeIndex = index),
+                ),
+              ),
+              SizedBox(
+                height: 20,
+                child: buildIndicator(),
+              )
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  int activeIndex = 0;
+
+  final urlImages = [
+    'https://www.lego.com/cdn/cs/set/assets/blt054743e11f8ee2d1/75329.png?fit=bounds&format=webply&quality=80&width=320&height=320&dpr=1',
+    'https://www.lego.com/cdn/cs/set/assets/bltb94f536295aefebf/75330.png?fit=bounds&format=webply&quality=80&width=320&height=320&dpr=1',
+    'https://www.lego.com/cdn/cs/set/assets/blt86423e4ec25d4312/10276.jpg?fit=bounds&format=webply&quality=80&width=320&height=320&dpr=1',
+    'https://www.lego.com/cdn/cs/set/assets/blte226ac95a59d6b48/10299.png?fit=bounds&format=webply&quality=80&width=320&height=320&dpr=1',
+  ];
+
+  Widget buildImage(String urlImage, int index) => Container(
+        color: Colors.white,
+        child: Image.network(
+          urlImage,
+          fit: BoxFit.cover,
+        ),
+      );
+
+  Widget buildIndicator() => AnimatedSmoothIndicator(
+        activeIndex: activeIndex,
+        count: urlImages.length,
+        effect: const JumpingDotEffect(
+          dotWidth: 10,
+          dotHeight: 10,
+          activeDotColor: Colors.blue,
+        ),
+      );
 
   @override
   Widget build(BuildContext context) {

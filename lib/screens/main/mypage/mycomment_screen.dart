@@ -20,6 +20,11 @@ class MyCommentScreen extends GetView<ProductCommentController> {
             .snapshots(),
         builder: (context, snapshot) {
           final docs = (snapshot.data! as dynamic).docs;
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
           return ListView.builder(
             physics: const NeverScrollableScrollPhysics(),
             shrinkWrap: true,

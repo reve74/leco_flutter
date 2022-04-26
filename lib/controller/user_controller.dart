@@ -192,15 +192,26 @@ class UserController extends GetxController {
     UserCredential userCredential =
         await FirebaseAuth.instance.signInWithCredential(credential);
     try {
-      await FirebaseFirestore.instance
-          // .collection('user')
-          .doc('/users/${userCredential.user!.uid}') //newUser.user!.uid
-          .set({
-        'email': userCredential.user!.email,
-        'username': userCredential.user!.displayName,
-        // 'password': password,
-        'uid': userCredential.user!.uid,
-      });
+      UserModel _newUser = UserModel(
+        uid: userCredential.user!.uid,
+        email: userCredential.user!.email,
+        password: '',
+        username: userCredential.user!.displayName,
+        // photoUrl: "photoUrl",
+      );
+      await firebaseFirestore
+          .doc('/users/${userCredential.user!.uid}')
+          .set(_newUser.toJson());
+
+      // await FirebaseFirestore.instance
+      //     // .collection('user')
+      //     .doc('/users/${userCredential.user!.uid}') //newUser.user!.uid
+      //     .set({
+      //   'email': userCredential.user!.email,
+      //   'username': userCredential.user!.displayName,
+      //   // 'password': password,
+      //   'uid': userCredential.user!.uid,
+      // });
     } catch (e) {
       print(e);
     }
