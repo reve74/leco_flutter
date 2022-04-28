@@ -4,7 +4,9 @@ import 'package:leco_flutter/controller/upload_controller.dart';
 import 'package:leco_flutter/screens/main/components/image_data.dart';
 
 class UploadDescription extends GetView<UploadController> {
-  const UploadDescription({Key? key}) : super(key: key);
+  UploadDescription({Key? key}) : super(key: key);
+
+  final _formKey = GlobalKey<FormState>();
 
   Widget _description(BuildContext context) {
     return Padding(
@@ -23,49 +25,72 @@ class UploadDescription extends GetView<UploadController> {
             ),
           ),
           const SizedBox(height: 20),
-          TextField(
-            maxLines: 1,
-            controller: controller.title,
-            decoration: const InputDecoration(
-              hintText: '글 제목',
-              enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(
-                  width: 2,
-                  color: Colors.amber,
+
+          Form(
+            key: _formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  '제목',
+                  style: TextStyle(fontSize: 15),
                 ),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(width: 2, color: Colors.amber),
-              ),
-              border: OutlineInputBorder(),
-              hintStyle:
-                  TextStyle(color: Colors.grey, fontWeight: FontWeight.normal),
-              labelStyle:
-                  TextStyle(color: Colors.grey, fontWeight: FontWeight.normal),
-            ),
-          ),
-          const SizedBox(height: 20),
-          TextField(
-            maxLines: null,
-            controller: controller.content,
-            decoration: const InputDecoration(
-              contentPadding:
-                  EdgeInsets.symmetric(vertical: 40, horizontal: 10),
-              hintText: '글 내용',
-              enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(
-                  width: 2,
-                  color: Colors.amber,
+                TextFormField(
+                  validator: (value) {
+                    if(value!.isEmpty || value.length < 2 ) {
+                      return '2글자 이상 입력해주세요';
+                    }
+                    return null;
+                  },
+                  maxLines: 1,
+                  controller: controller.title,
+                  decoration: const InputDecoration(
+                    hintText: '제목을 입력하세요',
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        width: 2,
+                        color: Colors.amber,
+                      ),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(width: 2, color: Colors.amber),
+                    ),
+                    border: OutlineInputBorder(),
+                    hintStyle:
+                        TextStyle(color: Colors.grey, fontWeight: FontWeight.normal),
+                    labelStyle:
+                        TextStyle(color: Colors.grey, fontWeight: FontWeight.normal),
+                  ),
                 ),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(width: 2, color: Colors.amber),
-              ),
-              border: OutlineInputBorder(),
-              hintStyle:
-                  TextStyle(color: Colors.grey, fontWeight: FontWeight.normal),
-              labelStyle:
-                  TextStyle(color: Colors.grey, fontWeight: FontWeight.normal),
+                const SizedBox(height: 20),
+                const Text(
+                  '내용',
+                  style: TextStyle(fontSize: 15),
+                ),
+                TextFormField(
+                  maxLines: null,
+                  controller: controller.content,
+                  decoration: const InputDecoration(
+                    contentPadding:
+                    EdgeInsets.symmetric(vertical: 40, horizontal: 10),
+                    hintText: '내용을 입력하세요',
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        width: 2,
+                        color: Colors.amber,
+                      ),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(width: 2, color: Colors.amber),
+                    ),
+                    border: OutlineInputBorder(),
+                    hintStyle:
+                    TextStyle(color: Colors.grey, fontWeight: FontWeight.normal),
+                    labelStyle:
+                    TextStyle(color: Colors.grey, fontWeight: FontWeight.normal),
+                  ),
+                ),
+              ],
             ),
           ),
         ],

@@ -92,7 +92,7 @@ class UploadController extends GetxController {
     FocusManager.instance.primaryFocus?.unfocus();
   }
 
-  void uploadPost() {
+  void uploadPost() { //벨리데이터 수정 필요
     unfocusKeyboard();
     var filename = DataUtil.makeFilePath();
     var task = uploadXFile(filteredImage!,

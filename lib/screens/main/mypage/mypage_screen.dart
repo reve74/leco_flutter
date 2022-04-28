@@ -12,6 +12,7 @@ import 'package:leco_flutter/screens/main/mypage/change_userinfo_screen.dart';
 
 class MypageScreen extends StatelessWidget {
   BottomNavController b = Get.put(BottomNavController());
+  AuthController a = Get.put(AuthController());
 
   // final _authentication = FirebaseAuth.instance;
   // User? loggedUser;
@@ -68,6 +69,7 @@ class MypageScreen extends StatelessWidget {
           style: TextStyle(
             fontFamily: 'Jua',
             fontSize: 35,
+            height: 1.5,
             fontWeight: FontWeight.bold,
             color: Colors.white,
           ),
@@ -94,10 +96,14 @@ class MypageScreen extends StatelessWidget {
                             width: 10,
                           ),
                           Obx(
-                            () => Text(
-                              a.firestoreUser.value!.username!,
-                              style: const TextStyle(
-                                  fontWeight: FontWeight.w600, fontSize: 20),
+                            () => Column(
+                              children: [
+                                Text(
+                                  a.firestoreUser.value!.username!,
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.w600, fontSize: 20),
+                                ),
+                              ],
                             ),
                           ),
                         ],
@@ -210,7 +216,7 @@ class MypageScreen extends StatelessWidget {
                   title: '로그아웃  ',
                   onTap: () {
                     UserController.to.signOut();
-                    b.deleteBottomHistory();
+                    // b.deleteBottomHistory();
                     // _authentication.signOut();
                     // Get.offAll(const SignInScreen());
                   },

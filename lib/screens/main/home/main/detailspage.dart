@@ -82,23 +82,6 @@ class _DetailsPageState extends State<DetailsPage> {
     );
   }
 
-  Widget _ratingBar({double rating = 0}) {
-    return RatingBar.builder(
-      updateOnDrag: true,
-      itemBuilder: (context, _) => const Icon(
-        Icons.star,
-        color: Colors.amber,
-      ),
-      onRatingUpdate: (rating) => setState(
-        () {
-          this.rating = rating;
-          print(rating);
-          setState(() {});
-        },
-      ),
-    );
-  }
-
   Future<List<QueryDocumentSnapshot<ProductComment>>> findAll() async =>
       await firebaseFirestore
           .collection('productComments')
@@ -180,22 +163,22 @@ class _DetailsPageState extends State<DetailsPage> {
                               },
                               child: const Text(
                                 '공식 홈페이지',
-                                style: TextStyle(color: Colors.black),
+                                style: TextStyle(color: Colors.black, fontSize: 15),
                               ),
                             ),
                           ),
-                          const SizedBox(
-                            width: 10,
-                          ),
-                          IconButton(
-                            onPressed: () {
-                              // Get.to(() => Stars());
-                            },
-                            icon: const Icon(
-                              Icons.favorite_border_outlined,
-                              color: Colors.blue,
-                            ),
-                          ),
+                          // const SizedBox(
+                          //   width: 10,
+                          // ),
+                          // IconButton(
+                          //   onPressed: () {
+                          //     // Get.to(() => Stars());
+                          //   },
+                          //   icon: const Icon(
+                          //     Icons.favorite_border_outlined,
+                          //     color: Colors.blue,
+                          //   ),
+                          // ),
                         ],
                       ),
                     ),
@@ -205,59 +188,116 @@ class _DetailsPageState extends State<DetailsPage> {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        const Text(
-                          '상품평',
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                          ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            const Text(
+                              '상품평',
+                              style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            ElevatedButton(
+                              child: const Text('새로운 상품평 올리기'),
+                              onPressed: () {
+                                showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return AlertDialog(
+                                        title: const Text('제품 평점'),
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(10.0)),
+                                        content: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            RatingBar.builder(
+                                              updateOnDrag: true,
+                                              itemBuilder: (context, _) =>
+                                                  const Icon(
+                                                Icons.star,
+                                                color: Colors.amber,
+                                              ),
+                                              onRatingUpdate: ratingupdate,
+                                            ),
+                                            Row(
+                                              children: [
+                                                Expanded(
+                                                  child: TextField(
+                                                    controller: _comment,
+                                                    decoration:
+                                                        const InputDecoration(
+                                                      hintText: ('제품을 평가해주세요!'),
+                                                      enabledBorder:
+                                                          InputBorder.none,
+                                                      disabledBorder:
+                                                          InputBorder.none,
+                                                      contentPadding:
+                                                          EdgeInsets.symmetric(
+                                                              vertical: 30),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                            Row(
+                                              children: [
+                                                Expanded(child: Container()),
+                                                ElevatedButton(
+                                                  style:
+                                                      ElevatedButton.styleFrom(
+                                                          primary: Colors
+                                                              .blueAccent),
+                                                  onPressed: () {
+                                                    productCommentController
+                                                        .insert(
+                                                      username: a.firestoreUser
+                                                          .value!.username!,
+                                                      uid:
+                                                          auth.currentUser!.uid,
+                                                      starCount: rating,
+                                                      comment:
+                                                          _comment.text.trim(),
+                                                      user: AuthController.to
+                                                          .firestoreUser()!,
+                                                      modelNumber: widget
+                                                          .subCategory!
+                                                          .modelNumber!,
+                                                    );
+                                                    setState(() {
+                                                      _comment.text = '';
+                                                    });
+                                                    Get.back();
+                                                  },
+                                                  child: Text('등록'),
+                                                ),
+                                                SizedBox(
+                                                  width: 5,
+                                                ),
+                                                ElevatedButton(
+                                                  style:
+                                                      ElevatedButton.styleFrom(
+                                                    primary: Colors.grey,
+                                                  ),
+                                                  onPressed: Get.back,
+                                                  child: Text('취소'),
+                                                ),
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+                                      );
+                                    });
+                              },
+                            ),
+                          ],
                         ),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
-                            RatingBar.builder(
-                              updateOnDrag: true,
-                              itemBuilder: (context, _) => const Icon(
-                                Icons.star,
-                                color: Colors.amber,
-                              ),
-                              onRatingUpdate: ratingupdate,
-                            ),
-                            Row(
-                              children: [
-                                Expanded(
-                                  child: TextField(
-                                    controller: _comment,
-                                    decoration: const InputDecoration(
-                                      hintText: ('제품을 평가해주세요!'),
-                                      enabledBorder: InputBorder.none,
-                                      disabledBorder: InputBorder.none,
-                                    ),
-                                  ),
-                                ),
-                                ElevatedButton(
-                                  style: ElevatedButton.styleFrom(
-                                      primary: Colors.blueAccent),
-                                  onPressed: () {
-                                    productCommentController.insert(
-                                      username:
-                                          a.firestoreUser.value!.username!,
-                                      uid: auth.currentUser!.uid,
-                                      starCount: rating,
-                                      comment: _comment.text.trim(),
-                                      user: AuthController.to.firestoreUser()!,
-                                      modelNumber:
-                                          widget.subCategory!.modelNumber!,
-                                    );
-                                    setState(() {
-                                      _comment.text = '';
-                                      ratingupdate(0.0);
-                                    });
-                                  },
-                                  child: Text('등록'),
-                                ),
-                              ],
-                            ),
                             const SizedBox(
                               height: 10,
                             ),
@@ -282,52 +322,62 @@ class _DetailsPageState extends State<DetailsPage> {
                               physics: const NeverScrollableScrollPhysics(),
                               shrinkWrap: true,
                               itemCount: docs.length,
-                              itemBuilder: (context, index) => Padding(
-                                padding: const EdgeInsets.only(top: 5.0),
-                                child: Column(
-                                  crossAxisAlignment:
-                                      CrossAxisAlignment.stretch,
-                                  children: [
-                                    Row(
-                                      children: [
-                                        Text(DateFormat('yyyy.MM.dd').format(
-                                            docs[index]['created'].toDate())),
-                                        const Spacer(),
-                                        if (auth.currentUser!.uid ==
-                                            docs[index]['uid'])
-                                          TextButton(
-                                            onPressed: () {
-                                              productCommentController.delete(
-                                                  modelNumber: widget
-                                                      .subCategory!
-                                                      .modelNumber!,
-                                                  uid: auth.currentUser!.uid);
-                                            },
-                                            child: Text('삭제'),
+                              itemBuilder: (context, index) => docs.length == 0
+                                  ? Center(
+                                      child: Text('등록된 상품평이 없습니다.'),
+                                    )
+                                  : Padding(
+                                      padding: const EdgeInsets.only(top: 5.0),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.stretch,
+                                        children: [
+                                          Row(
+                                            children: [
+                                              Text(DateFormat('yyyy.MM.dd')
+                                                  .format(docs[index]['created']
+                                                      .toDate())),
+                                              const Spacer(),
+                                              if (auth.currentUser!.uid ==
+                                                  docs[index]['uid'])
+                                                TextButton(
+                                                  onPressed: () {
+                                                    productCommentController
+                                                        .delete(
+                                                            modelNumber: widget
+                                                                .subCategory!
+                                                                .modelNumber!,
+                                                            uid: auth
+                                                                .currentUser!
+                                                                .uid);
+                                                  },
+                                                  child: Text('삭제'),
+                                                ),
+                                            ],
                                           ),
-                                      ],
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          vertical: 5.0),
-                                      child: Text(docs[index]['username']),
-                                    ),
-                                    RatingBarIndicator(
-                                      itemBuilder: (context, _) => const Icon(
-                                        Icons.star,
-                                        color: Colors.amber,
+                                          Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                vertical: 5.0),
+                                            child:
+                                                Text(docs[index]['username']),
+                                          ),
+                                          RatingBarIndicator(
+                                            itemBuilder: (context, _) =>
+                                                const Icon(
+                                              Icons.star,
+                                              color: Colors.amber,
+                                            ),
+                                            itemCount: 5,
+                                            rating: docs[index]['starCount'],
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                vertical: 5.0),
+                                            child: Text(docs[index]['comment']),
+                                          ),
+                                        ],
                                       ),
-                                      itemCount: 5,
-                                      rating: docs[index]['starCount'],
                                     ),
-                                    Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          vertical: 5.0),
-                                      child: Text(docs[index]['comment']),
-                                    ),
-                                  ],
-                                ),
-                              ),
                             );
                           },
                         ),

@@ -141,24 +141,24 @@ class ReviewCard extends StatelessWidget {
             height: size.height * 0.01,
           ),
           image(),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10.0),
-            child: Row(
-              children: [
-                ImageData(
-                  IconsPath.likeOffIcon,
-                  width: 65,
-                ),
-                const SizedBox(
-                  width: 10,
-                ),
-                ImageData(
-                  IconsPath.replyIcon,
-                  width: 60,
-                ),
-              ],
-            ),
-          ),
+          // Padding(
+          //   padding: const EdgeInsets.symmetric(horizontal: 10.0),
+          //   child: Row(
+          //     children: [
+          //       ImageData(
+          //         IconsPath.likeOffIcon,
+          //         width: 65,
+          //       ),
+          //       const SizedBox(
+          //         width: 10,
+          //       ),
+          //       ImageData(
+          //         IconsPath.replyIcon,
+          //         width: 60,
+          //       ),
+          //     ],
+          //   ),
+          // ),
           _infoDescription(),
           _replyTextBtn(),
         ],

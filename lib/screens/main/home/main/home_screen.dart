@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:leco_flutter/model/category.dart';
 import 'package:leco_flutter/model/news.dart';
+import 'package:leco_flutter/model/url.dart';
 import 'package:leco_flutter/model/utils.dart';
 import 'package:leco_flutter/screens/main/home/main/categorylist_screen.dart';
 import 'package:leco_flutter/screens/main/home/main/news_screen.dart';
@@ -14,6 +15,7 @@ import 'package:leco_flutter/screens/main/home/main/widgets/maincategorycard.dar
 import 'package:http/http.dart' as http;
 import 'package:html/parser.dart' as parser;
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -227,41 +229,42 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _newsCard(index) {
-    return Card(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-      elevation: 6,
-      color: Colors.primaries[Random().nextInt(Colors.primaries.length)],
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              height: 100,
-              width: 200,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(10),
+    return GestureDetector(
+      onTap: () async{
+        await launch(news[index].link);
+      },
+      child: Card(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+        elevation: 6,
+        color: Colors.primaries[Random().nextInt(Colors.primaries.length)],
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                height: 100,
+                width: 200,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: ClipRRect(
+                  // borderRadius: BorderRadius.circular(10),
+                  child: Image.network(news[index].image),
+                ),
               ),
-              child: ClipRRect(
-                // borderRadius: BorderRadius.circular(10),
-                child: Image.network(news[index].image),
+              const SizedBox(
+                height: 10,
               ),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            // Text(
-            //   "subtitle: ${news[index].subtitle}",
-            //   style: _style,
-            // ),
-            Text(
-              news[index].title,
-              overflow: TextOverflow.ellipsis,
-              maxLines: 3,
-              style: _style,
-            ),
-          ],
+              Text(
+                news[index].title,
+                overflow: TextOverflow.ellipsis,
+                maxLines: 3,
+                style: _style,
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -311,10 +314,10 @@ class _HomeScreenState extends State<HomeScreen> {
           child: Column(
             children: [
               CarouselSlider.builder(
-                itemCount: urlImages.length,
+                itemCount: urlImages2.length,
                 itemBuilder: (context, index, realIndex) {
-                  final urlImage = urlImages[index];
-                  return buildImage(urlImage, index);
+                  final urlImage = urlImages2[index];
+                  return buildImage(urlImage.imageUrl!,urlImage.url!,  index);
                 },
                 options: CarouselOptions(
                   height: 200,
@@ -340,24 +343,29 @@ class _HomeScreenState extends State<HomeScreen> {
 
   int activeIndex = 0;
 
-  final urlImages = [
-    'https://www.lego.com/cdn/cs/set/assets/blt054743e11f8ee2d1/75329.png?fit=bounds&format=webply&quality=80&width=320&height=320&dpr=1',
-    'https://www.lego.com/cdn/cs/set/assets/bltb94f536295aefebf/75330.png?fit=bounds&format=webply&quality=80&width=320&height=320&dpr=1',
-    'https://www.lego.com/cdn/cs/set/assets/blt86423e4ec25d4312/10276.jpg?fit=bounds&format=webply&quality=80&width=320&height=320&dpr=1',
-    'https://www.lego.com/cdn/cs/set/assets/blte226ac95a59d6b48/10299.png?fit=bounds&format=webply&quality=80&width=320&height=320&dpr=1',
+  final List<Url> urlImages2 = [
+    Url(imageUrl: 'https://www.lego.com/cdn/cs/set/assets/blt054743e11f8ee2d1/75329.png?fit=bounds&format=webply&quality=80&width=320&height=320&dpr=1',url: 'https://www.lego.com/ko-kr/product/death-star-trench-run-diorama-75329'),
+    Url(imageUrl: 'https://www.lego.com/cdn/cs/set/assets/bltb94f536295aefebf/75330.png?fit=bounds&format=webply&quality=80&width=320&height=320&dpr=1',url: 'https://www.lego.com/ko-kr/product/dagobah-jedi-training-diorama-75330'),
+    Url(imageUrl: 'https://www.lego.com/cdn/cs/set/assets/blt86423e4ec25d4312/10276.jpg?fit=bounds&format=webply&quality=80&width=320&height=320&dpr=1',url: 'https://www.lego.com/ko-kr/product/colosseum-10276'),
+    Url(imageUrl: 'https://www.lego.com/cdn/cs/set/assets/blte226ac95a59d6b48/10299.png?fit=bounds&format=webply&quality=80&width=320&height=320&dpr=1',url: 'https://www.lego.com/ko-kr/product/real-madrid-santiago-bernabeu-stadium-10299'),
   ];
 
-  Widget buildImage(String urlImage, int index) => Container(
-        color: Colors.white,
-        child: Image.network(
-          urlImage,
-          fit: BoxFit.cover,
+  Widget buildImage(String urlImage,String url, int index) => InkWell(
+    onTap: () async{
+      launch(url);
+    },
+    child: Container(
+          color: Colors.white,
+          child: Image.network(
+            urlImage,
+            fit: BoxFit.cover,
+          ),
         ),
-      );
+  );
 
   Widget buildIndicator() => AnimatedSmoothIndicator(
         activeIndex: activeIndex,
-        count: urlImages.length,
+        count: urlImages2.length,
         effect: const JumpingDotEffect(
           dotWidth: 10,
           dotHeight: 10,
@@ -381,12 +389,12 @@ class _HomeScreenState extends State<HomeScreen> {
             fontWeight: FontWeight.w700,
           ),
         ),
-        actions: const [
-          Padding(
-            padding: EdgeInsets.only(right: 10.0),
-            child: Icon(Icons.settings),
-          ),
-        ],
+        // actions: const [
+        //   Padding(
+        //     padding: EdgeInsets.only(right: 10.0),
+        //     child: Icon(Icons.settings),
+        //   ),
+        // ],
         // bottom: _tabMenu(),
       ),
       body: ListView(

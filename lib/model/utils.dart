@@ -152,7 +152,7 @@ class Utils {
       Category(name: 'Starwars', imgName: 'starwars', subCategories: []),
       Category(
           name: 'Architecture', imgName: 'architecture', subCategories: []),
-      Category(name: 'Minifigure', imgName: 'minifigure', subCategories: []),
+      // Category(name: 'Minifigure', imgName: 'minifigure', subCategories: []),
     ];
   }
 }
