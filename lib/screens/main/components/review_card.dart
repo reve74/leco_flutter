@@ -26,7 +26,7 @@ class ReviewCard extends StatelessWidget {
             type: AvatarType.TYPE3,
             nickName: post.userModel!.username,
             thumbPath:
-                'https://p1.hiclipart.com/preview/719/226/483/lego-heads-ep-lego-minecraft-illustration.jpg',
+                'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
             size: 30,
           ),
           if(auth.currentUser!.uid == post.userModel!.uid)
@@ -73,14 +73,12 @@ class ReviewCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-           ExpandableText(
-            post.title!,
-             prefixText: post.userModel!.username,
-             prefixStyle: const TextStyle(
-               fontWeight: FontWeight.bold,
-             ),
-             expandText: '',
+           Text(
+            post.title!, style: const TextStyle(
+             fontWeight: FontWeight.w600
+           ),
           ),
+          SizedBox(height: 5,),
           ExpandableText(
             post.content ?? '',
             prefixStyle: const TextStyle(

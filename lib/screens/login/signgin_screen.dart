@@ -62,7 +62,7 @@ class _SignInScreenState extends State<SignInScreen> {
                             bottomRight: Radius.circular(30),
                           ),
                           child: Image.asset(
-                            'assets/images/login_img.jpg',
+                            'assets/images/backimg.png',
                             fit: BoxFit.cover,
                           ),
                         ),

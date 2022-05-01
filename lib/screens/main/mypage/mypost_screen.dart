@@ -8,10 +8,10 @@ class MyPostScreen extends GetView<ReviewController> {
 
   Widget _postList() {
     return Obx(
-          () => Column(
+      () => Column(
         children: List.generate(
           controller.myPostList.length,
-              (index) => ReviewCard(post: controller.myPostList[index]),
+          (index) => ReviewCard(post: controller.myPostList[index]),
         ).toList(),
       ),
     );
@@ -21,10 +21,28 @@ class MyPostScreen extends GetView<ReviewController> {
   Widget build(BuildContext context) {
     controller.findMyPost();
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        leading: IconButton(
+          onPressed: () {
+            Get.back();
+          },
+          icon: Icon(
+            Icons.arrow_back,
+            color: Colors.black,
+          ),
+        ),
+        title: Text(
+          '내 게시물',
+          style: TextStyle(
+              fontSize: 20,
+              color: Colors.black,
+              fontFamily: 'Jua',
+              height: 1.5),
+        ),
+      ),
       body: ListView(
-        children: [
-          _postList()
-        ],
+        children: [_postList()],
       ),
     );
   }

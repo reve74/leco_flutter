@@ -25,7 +25,6 @@ class UploadDescription extends GetView<UploadController> {
             ),
           ),
           const SizedBox(height: 20),
-
           Form(
             key: _formKey,
             child: Column(
@@ -37,29 +36,30 @@ class UploadDescription extends GetView<UploadController> {
                 ),
                 TextFormField(
                   validator: (value) {
-                    if(value!.isEmpty || value.length < 2 ) {
+                    if (value!.isEmpty || value.length < 2) {
                       return '2글자 이상 입력해주세요';
                     }
                     return null;
                   },
                   maxLines: 1,
                   controller: controller.title,
-                  decoration: const InputDecoration(
+                  decoration: InputDecoration(
                     hintText: '제목을 입력하세요',
                     enabledBorder: OutlineInputBorder(
                       borderSide: BorderSide(
                         width: 2,
-                        color: Colors.amber,
+                        color: Colors.grey.withOpacity(0.6),
                       ),
                     ),
                     focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(width: 2, color: Colors.amber),
+                      borderSide: BorderSide(
+                          width: 2, color: Colors.grey.withOpacity(0.6)),
                     ),
                     border: OutlineInputBorder(),
-                    hintStyle:
-                        TextStyle(color: Colors.grey, fontWeight: FontWeight.normal),
-                    labelStyle:
-                        TextStyle(color: Colors.grey, fontWeight: FontWeight.normal),
+                    hintStyle: TextStyle(
+                        color: Colors.grey, fontWeight: FontWeight.normal),
+                    labelStyle: TextStyle(
+                        color: Colors.grey, fontWeight: FontWeight.normal),
                   ),
                 ),
                 const SizedBox(height: 20),
@@ -68,26 +68,33 @@ class UploadDescription extends GetView<UploadController> {
                   style: TextStyle(fontSize: 15),
                 ),
                 TextFormField(
+                  validator: (value) {
+                    if (value!.isEmpty || value.length < 5) {
+                      return '5글자 이상 입력해주세요';
+                    }
+                    return null;
+                  },
                   maxLines: null,
                   controller: controller.content,
-                  decoration: const InputDecoration(
+                  decoration: InputDecoration(
                     contentPadding:
-                    EdgeInsets.symmetric(vertical: 40, horizontal: 10),
+                        const EdgeInsets.symmetric(vertical: 40, horizontal: 10),
                     hintText: '내용을 입력하세요',
                     enabledBorder: OutlineInputBorder(
                       borderSide: BorderSide(
                         width: 2,
-                        color: Colors.amber,
+                        color: Colors.grey.withOpacity(0.6),
                       ),
                     ),
                     focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(width: 2, color: Colors.amber),
+                      borderSide: BorderSide(
+                          width: 2, color: Colors.grey.withOpacity(0.6)),
                     ),
-                    border: OutlineInputBorder(),
-                    hintStyle:
-                    TextStyle(color: Colors.grey, fontWeight: FontWeight.normal),
-                    labelStyle:
-                    TextStyle(color: Colors.grey, fontWeight: FontWeight.normal),
+                    border: const OutlineInputBorder(),
+                    hintStyle: const TextStyle(
+                        color: Colors.grey, fontWeight: FontWeight.normal),
+                    labelStyle: const TextStyle(
+                        color: Colors.grey, fontWeight: FontWeight.normal),
                   ),
                 ),
               ],
@@ -122,7 +129,11 @@ class UploadDescription extends GetView<UploadController> {
         ),
         actions: [
           GestureDetector(
-            onTap: controller.uploadPost,
+            onTap: () {
+              if (_formKey.currentState!.validate()) {
+                controller.uploadPost();
+              }
+            },
             child: Padding(
               padding: const EdgeInsets.all(15),
               child: ImageData(

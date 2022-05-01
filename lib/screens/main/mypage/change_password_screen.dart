@@ -6,7 +6,7 @@ import 'package:leco_flutter/screens/login/components/login_textformfield.dart';
 
 class ChangePasswordScreen extends StatelessWidget {
   ChangePasswordScreen({Key? key}) : super(key: key);
-
+  final _formKey = GlobalKey<FormState>();
   final _changePassword = TextEditingController();
 
   @override
@@ -33,10 +33,19 @@ class ChangePasswordScreen extends StatelessWidget {
           SvgPicture.asset('assets/icons/password.svg',
               width: MediaQuery.of(context).size.height * 0.3),
           const SizedBox(height: 50),
-          LoginTextFormfield(
-            controller: _changePassword,
-            hint: '변경할 비밀번호',
-            icon: Icons.lock_open_rounded,
+          Form(
+            key: _formKey,
+            child: LoginTextFormfield(
+              validator: (value) {
+                if (value!.isEmpty || value.length < 6) {
+                  return '        6자리 이상 입력해주세요';
+                }
+                return null;
+              },
+              controller: _changePassword,
+              hint: '변경할 비밀번호',
+              icon: Icons.lock_open_rounded,
+            ),
           ),
           const SizedBox(height: 20),
           Container(
@@ -51,9 +60,11 @@ class ChangePasswordScreen extends StatelessWidget {
                 ),
               ),
               onPressed: () {
-                UserController.to.changePassword(_changePassword.text.trim());
-                print('비밀번호 변경');
-                Get.back();
+                if (_formKey.currentState!.validate()) {
+                  UserController.to.changePassword(_changePassword.text.trim());
+                  print('비밀번호 변경');
+                  Get.back();
+                }
               },
               child: const Text(
                 '변경하기',

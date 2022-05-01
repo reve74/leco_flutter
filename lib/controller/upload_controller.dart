@@ -7,6 +7,7 @@ import 'package:leco_flutter/model/post.dart';
 import 'package:leco_flutter/repository/post_repository.dart';
 import 'package:leco_flutter/screens/main/app.dart';
 import 'package:leco_flutter/screens/main/components/message_popup.dart';
+import 'package:leco_flutter/screens/main/components/post_message_popup.dart';
 import 'package:leco_flutter/screens/main/home/create/upload_description.dart';
 import 'package:leco_flutter/settings/firebase.dart';
 import 'package:leco_flutter/util/data_util.dart';
@@ -129,7 +130,7 @@ class UploadController extends GetxController {
     await PostRepository.updatePost(postData);
     showDialog(
       context: Get.context!,
-      builder: (context) => MessagePopUp(
+      builder: (context) => PostMessagePopUp(
         title: 'LECO',
         message: '포스팅이 완료 되었습니다.',
         okCallback: () {

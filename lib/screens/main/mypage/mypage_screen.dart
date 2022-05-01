@@ -5,6 +5,7 @@ import 'package:leco_flutter/controller/bottom_nav_controller.dart';
 import 'package:leco_flutter/controller/user_controller.dart';
 
 import 'package:leco_flutter/screens/main/components/avatar_widget.dart';
+import 'package:leco_flutter/screens/main/mypage/inquire_screen.dart';
 import 'package:leco_flutter/screens/main/mypage/mycomment_screen.dart';
 import 'package:leco_flutter/screens/main/mypage/mypost_screen.dart';
 import 'package:leco_flutter/screens/main/mypage/change_password_screen.dart';
@@ -88,9 +89,10 @@ class MypageScreen extends StatelessWidget {
                       Row(
                         children: [
                           AvatarWidget(
+                            size: 80,
                             type: AvatarType.TYPE3,
                             thumbPath:
-                                'https://p1.hiclipart.com/preview/719/226/483/lego-heads-ep-lego-minecraft-illustration.jpg',
+                                'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
                           ),
                           const SizedBox(
                             width: 10,
@@ -99,9 +101,10 @@ class MypageScreen extends StatelessWidget {
                             () => Column(
                               children: [
                                 Text(
-                                  a.firestoreUser.value!.username!,
+                                  '${a.firestoreUser.value!.username!}',
                                   style: const TextStyle(
-                                      fontWeight: FontWeight.w600, fontSize: 20),
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 20),
                                 ),
                               ],
                             ),
@@ -139,7 +142,7 @@ class MypageScreen extends StatelessWidget {
                           ),
                           InkWell(
                             onTap: () {
-                              Get.to(() => MyCommentScreen());
+                              Get.to(() => InquireScreen());
                             },
                             child: Column(
                               children: const [
@@ -151,7 +154,7 @@ class MypageScreen extends StatelessWidget {
                                   height: 10,
                                 ),
                                 Text(
-                                  '제품 리뷰',
+                                  '문의하기',
                                   style: TextStyle(
                                     fontSize: 18,
                                     fontFamily: 'Jua',
@@ -160,24 +163,24 @@ class MypageScreen extends StatelessWidget {
                               ],
                             ),
                           ),
-                          Column(
-                            children: const [
-                              Icon(
-                                Icons.thumb_up,
-                                size: 20,
-                              ),
-                              SizedBox(
-                                height: 10,
-                              ),
-                              Text(
-                                '좋아요',
-                                style: TextStyle(
-                                  fontSize: 18,
-                                  fontFamily: 'Jua',
-                                ),
-                              ),
-                            ],
-                          ),
+                          // Column(
+                          //   children: const [
+                          //     Icon(
+                          //       Icons.thumb_up,
+                          //       size: 20,
+                          //     ),
+                          //     SizedBox(
+                          //       height: 10,
+                          //     ),
+                          //     Text(
+                          //       '좋아요',
+                          //       style: TextStyle(
+                          //         fontSize: 18,
+                          //         fontFamily: 'Jua',
+                          //       ),
+                          //     ),
+                          //   ],
+                          // ),
                         ],
                       ),
                     ],
@@ -193,9 +196,9 @@ class MypageScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 _mypageTab(
-                  title: '회원정보 수정',
+                  title: '닉네임 변경',
                   onTap: () {
-                    Get.to(const ChangeUserInfoScreen());
+                    Get.to(ChangeUserInfoScreen());
                   },
                 ),
                 _mypageTab(

@@ -105,7 +105,7 @@ class UserController extends GetxController {
   }
 
   // 정보 업데이트 (비밀번호 수정 불가);
-  Future<void> updateUserDetail(String username, password) async {
+  Future<void> updateUserDetail(String username) async {
     final loggedUser = auth.currentUser;
     print(loggedUser);
     try {
@@ -116,7 +116,6 @@ class UserController extends GetxController {
       // );
       await firebaseFirestore.doc('/users/${loggedUser!.uid}').update({
         'username': username,
-        // 'password': password,
         // 'photoUrl': "photoUrl",
       });
     } on FirebaseAuthException catch (e) {
