@@ -20,7 +20,7 @@ class ResetEmailScreen extends StatelessWidget {
             children: [
               SignupImagewithText(
                 title: '비밀번호 찾기',
-                color: Colors.teal,
+                color: Colors.black,
               ),
               LoginTextFormfield(
                 controller: _email,
@@ -49,6 +49,7 @@ class ResetEmailScreen extends StatelessWidget {
                   child: const Text(
                     '이메일로 전송',
                     style: TextStyle(
+                      height: 1.5,
                       fontFamily: 'Jua',
                       fontSize: 25,
                       color: Colors.black,
