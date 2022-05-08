@@ -20,7 +20,7 @@ class UploadScreen extends GetView<UploadController> {
         color: Colors.grey,
         child: _photoWidget(
           controller.selectedImage.value,
-          width.toInt(),
+          ThumbnailSize(width.toInt(), width.toInt()),
           builder: (data) {
             return Image.memory(
               data,
@@ -135,7 +135,7 @@ class UploadScreen extends GetView<UploadController> {
         ),
         itemCount: controller.imageList.length,
         itemBuilder: (BuildContext context, int index) {
-          return _photoWidget(controller.imageList[index], 200,
+          return _photoWidget(controller.imageList[index], ThumbnailSize(200, 200),
               builder: (data) {
             return GestureDetector(
               onTap: () {
@@ -160,10 +160,10 @@ class UploadScreen extends GetView<UploadController> {
     );
   }
 
-  Widget _photoWidget(AssetEntity asset, int size,
+  Widget _photoWidget(AssetEntity asset, ThumbnailSize size,
       {required Widget Function(Uint8List) builder}) {
     return FutureBuilder(
-      future: asset.thumbDataWithSize(size, size),
+      future: asset.thumbnailDataWithSize(size),
       builder: (_, AsyncSnapshot<Uint8List?> snapshot) {
         if (snapshot.hasData) {
           // 데이터가 있으면

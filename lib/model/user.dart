@@ -9,15 +9,6 @@ class UserModel {
 
 
   // TODO: 파이어베이스 업로드 시 uid로 값이 모두 업로드 되는 현상
-  // factory UserModel.fromMap(Map<String, dynamic> json) {
-  //   return UserModel(
-  //     uid: json['uid']== null ? '' : json['uid'] as String,
-  //     email: json['email'] == null ? '' : json['uid'] as String,
-  //     password: json['password'] == null ? '' : json['uid'] as String,
-  //     username: json['username'] == null ? '' : json['uid'] as String,
-  //     // photoUrl: data['photoUrl'] ?? '',
-  //   );
-  // }
 
   factory UserModel.fromMap(Map data) {
     return UserModel(
